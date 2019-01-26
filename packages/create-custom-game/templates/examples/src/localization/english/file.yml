@@ -1,0 +1,17 @@
+Dota_Tooltip_ability_df: DF
+ability:
+  _: Ability
+  property: Value
+# my_custom_ability:
+#   name: Name
+#   description: text
+#   Specials:
+#     key: value
+
+#   modifiers:
+#     _:
+#       name: xxx
+#       description: yyy
+#     damage:
+#       name: damage
+#       description: '${MODIFIER_PROPERTY_DAMAGE}'

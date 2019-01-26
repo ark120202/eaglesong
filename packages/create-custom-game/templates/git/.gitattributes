@@ -1,0 +1,8 @@
+* text=auto
+
+*.{css,scss,sass,xml}       linguist-detectable
+*.vpcf                      binary linguist-generated
+*.vmat                      binary linguist-generated
+*.vtex                      binary linguist-generated
+*.vmdl                      binary linguist-generated
+src/maps/overviews/**/*.txt binary linguist-generated

@@ -1,0 +1,7 @@
+Arena.Hero_Stargazer.GammaRay.Cast:
+  volume_min: 3.5
+  pitch: 1
+  soundlevel: 100
+  files:
+    - ./test.mp3
+    - ./test2.wav

@@ -1,0 +1,8 @@
+node_modules
+/packages/*/lib
+*.tsbuildinfo
+
+.vscode
+yarn-error.log
+lerna-debug.log
+/example

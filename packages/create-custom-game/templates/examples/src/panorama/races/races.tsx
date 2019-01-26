@@ -1,0 +1,1 @@
+import 'panorama-polyfill';

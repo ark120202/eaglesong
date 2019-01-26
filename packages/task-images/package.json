@@ -1,0 +1,25 @@
+{
+  "name": "@eaglesong/task-images",
+  "version": "0.0.0",
+  "description": "Dota 2 Images Builder",
+  "keywords": [
+    "dota 2",
+    "eaglesong"
+  ],
+  "homepage": "https://github.com/ark120202/eaglesong#readme",
+  "bugs": "https://github.com/ark120202/eaglesong/issues",
+  "repository": "https://github.com/ark120202/eaglesong/tree/master/packages/task-images",
+  "license": "Apache-2.0",
+  "author": "ark120202",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "dependencies": {
+    "@eaglesong/helper-task": "^0.0.0",
+    "@types/fs-extra": "^5.0.5",
+    "@types/image-size": "^0.7.0",
+    "fs-extra": "^7.0.1",
+    "image-size": "^0.7.3",
+    "tslib": "^1.9.3",
+    "upath": "^1.1.0"
+  }
+}

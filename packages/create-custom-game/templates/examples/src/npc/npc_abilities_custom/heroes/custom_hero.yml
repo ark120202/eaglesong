@@ -1,0 +1,3 @@
+custom_hero_ability_1:
+  BaseClass: ability_lua
+  ScriptFile: ssd

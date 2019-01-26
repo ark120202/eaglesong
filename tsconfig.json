@@ -1,0 +1,16 @@
+{
+  "extends": "@ark120202/typescript-config/node/10.json",
+  "compilerOptions": {
+    "noEmit": true,
+
+    // FIXME:
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "webpack": ["types/webpack.d.ts"],
+      "html-webpack-plugin": ["types/html-webpack-plugin.d.ts"],
+      "tapable": ["packages/task-panorama/node_modules/tapable"]
+    }
+  },
+  "include": ["scripts/*", "types/*"]
+}

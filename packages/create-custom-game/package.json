@@ -1,0 +1,29 @@
+{
+  "name": "@eaglesong/create-custom-game",
+  "version": "0.0.0",
+  "description": "Create a new Dota 2 Custom Game with Eaglesong",
+  "keywords": [
+    "dota 2",
+    "eaglesong"
+  ],
+  "homepage": "https://github.com/ark120202/eaglesong#readme",
+  "bugs": "https://github.com/ark120202/eaglesong/issues",
+  "repository": "https://github.com/ark120202/eaglesong/tree/master/packages/create-custom-game",
+  "license": "Apache-2.0",
+  "author": "ark120202",
+  "bin": "lib/index.js",
+  "dependencies": {
+    "@types/execa": "^0.9.0",
+    "@types/fs-extra": "^5.0.5",
+    "@types/inquirer": "^6.0.0",
+    "@types/yargs": "^13.0.0",
+    "execa": "^1.0.0",
+    "fs-extra": "^7.0.1",
+    "globby": "^9.2.0",
+    "inquirer": "^6.3.1",
+    "yargs": "^13.2.2"
+  },
+  "engines": {
+    "node": ">=10"
+  }
+}

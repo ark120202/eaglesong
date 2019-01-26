@@ -1,0 +1,96 @@
+import { Task, TaskState } from '@eaglesong/helper-task';
+import PQueue from 'p-queue';
+
+export interface AddonInfoMap {
+  MaxPlayers: number;
+  TeamCount: number;
+}
+
+export interface DefaultKey {
+  Key: string;
+  Command: string;
+  Name: string;
+}
+
+// FIXME: check
+export interface Options {
+  /**
+   * Enables check for AFK / Fountain idling players.
+   *
+   * Disabled by default.
+   */
+  CheckAFKPlayers?: boolean;
+  /**
+   * Enables leave penalties.
+   *
+   * Disabled by default.
+   */
+  PenaltiesEnabled?: boolean;
+  /** Enabled by default. */
+  HeroGuidesSupported?: boolean;
+  /** Enabled by default. */
+  ShouldForceDefaultGuide?: boolean;
+  /**
+   * Enables ban phase.
+   *
+   * Disabled by default.
+   */
+  EnablePickRules?: boolean;
+  /**
+   * Binds keys to console commands.
+   *
+   * Prefer to use `Game.CreateCustomKeyBind` whenever possible.
+   */
+  Default_Keys?: DefaultKey[];
+}
+
+export default class AddonInfoTask extends Task<Options> {
+  private maps: Record<string, AddonInfoMap> = {};
+  private queue = new PQueue({ concurrency: 1 });
+
+  public constructor(options: Options = {}) {
+    super(options);
+  }
+
+  public apply() {
+    this.hooks.build.tapPromise(this.constructor.name, () => this.queueEmit());
+  }
+
+  public setMaps(maps: Record<string, AddonInfoMap>) {
+    this.maps = maps;
+    // tslint:disable-next-line: no-floating-promises
+    this.queueEmit();
+  }
+
+  private async queueEmit() {
+    return this.queue.add(async () => {
+      if (this.state !== TaskState.Working) this.start();
+      await Promise.resolve();
+      await this.emit();
+      this.finish();
+    });
+  }
+
+  private async emit() {
+    const content: Record<string, any> = {
+      maps: Object.keys(this.maps).join(' '),
+      ...this.maps,
+    };
+
+    (Object.keys(this.options) as (keyof Options)[]).forEach(key => {
+      if (key === 'Default_Keys' && this.options.Default_Keys != null) {
+        content.Default_Keys = this.options.Default_Keys.reduce<Record<string, DefaultKey>>(
+          (acc, x, i) => ({ ...acc, [String(i + 1)]: x }),
+          {},
+        );
+        return;
+      }
+
+      const value = this.options[key];
+      if (value != null) content[key] = value ? '1' : '0';
+    });
+
+    if (this.dotaPath == null) return;
+    await this.outputKV1(this.resolvePath('game', 'addoninfo.txt'), { '': content });
+  }
+}

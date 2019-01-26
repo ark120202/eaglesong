@@ -1,0 +1,3 @@
+{
+  "extends": "../panorama/tslint.json"
+}

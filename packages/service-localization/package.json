@@ -1,0 +1,35 @@
+{
+  "name": "@eaglesong/service-localization",
+  "version": "0.0.0",
+  "description": "Dota 2 Localization provider service",
+  "keywords": [
+    "dota 2",
+    "eaglesong"
+  ],
+  "homepage": "https://github.com/ark120202/eaglesong#readme",
+  "bugs": "https://github.com/ark120202/eaglesong/issues",
+  "repository": "https://github.com/ark120202/eaglesong/tree/master/packages/service-localization",
+  "license": "Apache-2.0",
+  "author": "ark120202",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "dependencies": {
+    "@eaglesong/helper-service": "^0.0.0",
+    "@types/dedent": "^0.7.0",
+    "@types/lodash": "^4.14.123",
+    "@types/request-promise-native": "^1.0.15",
+    "dedent": "^0.7.0",
+    "lodash": "^4.17.11",
+    "p-props": "^2.0.0",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.5",
+    "tapable": "^2.0.0-beta.2",
+    "tslib": "^1.9.3"
+  },
+  "devDependencies": {
+    "@dota-data/localization": "^0.1.2"
+  },
+  "peerDependencies": {
+    "@dota-data/localization": "^0.1.2"
+  }
+}

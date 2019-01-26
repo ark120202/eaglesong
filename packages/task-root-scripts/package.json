@@ -1,0 +1,20 @@
+{
+  "name": "@eaglesong/task-root-scripts",
+  "version": "0.0.0",
+  "description": "Validate root TypeScript files",
+  "keywords": [
+    "dota 2",
+    "eaglesong"
+  ],
+  "homepage": "https://github.com/ark120202/eaglesong#readme",
+  "bugs": "https://github.com/ark120202/eaglesong/issues",
+  "repository": "https://github.com/ark120202/eaglesong/tree/master/packages/task-root-scripts",
+  "license": "Apache-2.0",
+  "author": "ark120202",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "dependencies": {
+    "@eaglesong/helper-task": "^0.0.0",
+    "tslib": "^1.9.3"
+  }
+}

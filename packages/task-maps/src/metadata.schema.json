@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "description": "The information about maps which appears in addoninfo file.",
+  "additionalProperties": false,
+  "required": ["maps"],
+  "properties": {
+    "order": {
+      "description": "Order of maps as they appear in map list.\nUse `...` for all not specified maps.",
+      "minItems": 1,
+      "uniqueItems": true,
+      "default": ["..."],
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "separator": { "type": "string", "default": "_" },
+    "maps": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "teams": { "type": "integer", "minimum": 0 },
+          "players": { "type": "integer", "minimum": 0 },
+          "modifications": {
+            "description": "A list of map modifications, used to construct combinations.\n`_` will evaluate to name without any modifier.",
+            "minItems": 1,
+            "uniqueItems": true,
+            "default": ["_"],
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        },
+        "additionalProperties": false,
+        "required": ["players", "teams"]
+      }
+    },
+    "$schema": { "type": "string" }
+  }
+}

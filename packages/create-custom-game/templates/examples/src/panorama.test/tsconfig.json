@@ -1,0 +1,19 @@
+{
+  "extends": "@ark120202/typescript-config/base.json",
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["es5", "es6", "es7", "esnext"],
+    "module": "esnext",
+    "allowJs": true,
+
+    "jsx": "react",
+    "jsxFactory": "h",
+    "types": ["node", "jest", "panorama-polyfill", "types-dota-panorama"],
+    "baseUrl": ".",
+    "paths": {
+      "@@/*": ["../common/*"],
+      "!/*": ["../panorama/*"]
+    }
+  },
+  "include": ["./**/*", "../common/**/*"]
+}

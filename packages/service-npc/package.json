@@ -1,0 +1,34 @@
+{
+  "name": "@eaglesong/service-npc",
+  "version": "0.0.0",
+  "description": "Dota 2 NPC provider service",
+  "keywords": [
+    "dota 2",
+    "eaglesong"
+  ],
+  "homepage": "https://github.com/ark120202/eaglesong#readme",
+  "bugs": "https://github.com/ark120202/eaglesong/issues",
+  "repository": "https://github.com/ark120202/eaglesong/tree/master/packages/service-npc",
+  "license": "Apache-2.0",
+  "author": "ark120202",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "dependencies": {
+    "@eaglesong/helper-service": "^0.0.0",
+    "@types/fs-extra": "^5.0.5",
+    "@types/lodash": "^4.14.123",
+    "ajv": "^6.7.0",
+    "fs-extra": "^7.0.1",
+    "lodash": "^4.17.11",
+    "p-props": "^2.0.0",
+    "tapable": "^2.0.0-beta.2",
+    "tslib": "^1.9.3",
+    "vdf-extra": "^2.2.2"
+  },
+  "devDependencies": {
+    "@dota-data/scripts": "^0.1.2"
+  },
+  "peerDependencies": {
+    "@dota-data/scripts": "^0.1.2"
+  }
+}

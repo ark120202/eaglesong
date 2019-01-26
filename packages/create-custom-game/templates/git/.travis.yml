@@ -1,0 +1,3 @@
+script:
+  - yarn ci
+  - yarn test

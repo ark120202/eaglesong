@@ -1,0 +1,4 @@
+node_modules
+yarn-error.log
+/src/maps/*.vmap
+/eaglesong.config.local.ts

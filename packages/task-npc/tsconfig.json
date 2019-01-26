@@ -1,0 +1,11 @@
+{
+  "extends": "../tsconfig.settings.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "lib"
+  },
+  "references": [
+    { "path": "../helper-task" },
+    { "path": "../service-npc" }
+  ]
+}

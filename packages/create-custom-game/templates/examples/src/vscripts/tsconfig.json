@@ -1,0 +1,16 @@
+{
+  "extends": "@ark120202/typescript-config/base.json",
+  "compilerOptions": {
+    "target": "es2017",
+    "types": ["node", "types-dota-vscripts"],
+    "lib": ["es2015", "es2016", "es2017"],
+    "baseUrl": ".",
+    "paths": {
+      "@@/*": ["../common/*"]
+    },
+
+    // FIXME:
+    "resolveJsonModule": false
+  },
+  "include": ["**/*", "../common/**/*"]
+}

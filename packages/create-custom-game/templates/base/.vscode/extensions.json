@@ -1,0 +1,7 @@
+{
+  "recommendations": [
+    "redhat.vscode-yaml",
+    "esbenp.prettier-vscode" // if git: ,
+    // if git: "GitHub.vscode-pull-request-github"
+  ]
+}

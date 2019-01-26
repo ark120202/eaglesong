@@ -1,0 +1,24 @@
+{
+  "name": "@eaglesong/task-localization",
+  "version": "0.0.0",
+  "description": "Dota 2 VScripts Localization Builder",
+  "keywords": [
+    "dota 2",
+    "eaglesong"
+  ],
+  "homepage": "https://github.com/ark120202/eaglesong#readme",
+  "bugs": "https://github.com/ark120202/eaglesong/issues",
+  "repository": "https://github.com/ark120202/eaglesong/tree/master/packages/task-localization",
+  "license": "Apache-2.0",
+  "author": "ark120202",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "dependencies": {
+    "@eaglesong/helper-task": "^0.0.0",
+    "@eaglesong/service-localization": "^0.0.0",
+    "@types/fs-extra": "^5.0.5",
+    "fs-extra": "^7.0.1",
+    "p-props": "^2.0.0",
+    "tslib": "^1.9.3"
+  }
+}

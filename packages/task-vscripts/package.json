@@ -1,0 +1,28 @@
+{
+  "name": "@eaglesong/task-vscripts",
+  "version": "0.0.0",
+  "description": "Dota 2 VScripts Builder",
+  "keywords": [
+    "dota 2",
+    "eaglesong",
+    "lua",
+    "typescript"
+  ],
+  "homepage": "https://github.com/ark120202/eaglesong#readme",
+  "bugs": "https://github.com/ark120202/eaglesong/issues",
+  "repository": "https://github.com/ark120202/eaglesong/tree/master/packages/task-vscripts",
+  "license": "Apache-2.0",
+  "author": "ark120202",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "dependencies": {
+    "@eaglesong/helper-task": "^0.0.0",
+    "@eaglesong/helper-tstl": "^0.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^3.4.3"
+  },
+  "peerDependencies": {
+    "typescript": "^3.0.0"
+  }
+}

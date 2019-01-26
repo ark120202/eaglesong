@@ -1,0 +1,22 @@
+{
+  "files": [],
+  "references": [
+    { "path": "create-custom-game" },
+    { "path": "eaglesong" },
+    { "path": "helper-service" },
+    { "path": "helper-task" },
+    { "path": "helper-tstl" },
+    { "path": "service-localization" },
+    { "path": "service-npc" },
+    { "path": "task-images" },
+    { "path": "task-localization" },
+    { "path": "task-maps" },
+    { "path": "task-npc" },
+    { "path": "task-panorama" },
+    { "path": "task-resources" },
+    { "path": "task-root-scripts" },
+    { "path": "task-sounds" },
+    { "path": "task-vscripts" },
+    { "path": "tasks" }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "files.associations": {
+    "./src/npc/**/*.json": "jsonc",
+    "./src/localization/**/*.json": "jsonc"
+  },
+
+  "typescript.tsdk": "node_modules\\typescript\\lib"
+}

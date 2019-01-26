@@ -1,0 +1,7 @@
+<root>
+  <dependency src="./loading-screen.scss" />
+  <dependency src="./loading-screen.tsx" />
+  <Panel class="loading-screen">
+    <Label text="It's a loading screen!" />
+  </Panel>
+</root>

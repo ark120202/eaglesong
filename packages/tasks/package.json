@@ -1,0 +1,30 @@
+{
+  "name": "@eaglesong/tasks",
+  "version": "0.0.0",
+  "description": "Standard build tasks for Eaglesong",
+  "keywords": [
+    "dota 2",
+    "eaglesong"
+  ],
+  "homepage": "https://github.com/ark120202/eaglesong#readme",
+  "bugs": "https://github.com/ark120202/eaglesong/issues",
+  "repository": "https://github.com/ark120202/eaglesong/tree/master/packages/tasks",
+  "license": "Apache-2.0",
+  "author": "ark120202",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "dependencies": {
+    "@eaglesong/helper-task": "^0.0.0",
+    "@eaglesong/task-addoninfo": "^0.0.0",
+    "@eaglesong/task-images": "^0.0.0",
+    "@eaglesong/task-localization": "^0.0.0",
+    "@eaglesong/task-maps": "^0.0.0",
+    "@eaglesong/task-npc": "^0.0.0",
+    "@eaglesong/task-panorama": "^0.0.0",
+    "@eaglesong/task-resources": "^0.0.0",
+    "@eaglesong/task-root-scripts": "^0.0.0",
+    "@eaglesong/task-sounds": "^0.0.0",
+    "@eaglesong/task-vscripts": "^0.0.0",
+    "tslib": "^1.9.3"
+  }
+}

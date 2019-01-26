@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": { "$schema": { "type": "string" } },
+  "additionalProperties": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["files"],
+    "properties": {
+      "type": { "type": "string", "default": "dota_update_default" },
+      "files": {
+        "anyOf": [{ "type": "string" }, { "type": "array", "items": { "type": "string" } }]
+      },
+      "mixgroup": { "type": "string" },
+      "start": { "type": "number" },
+      "volume": { "type": "number" },
+      "volume_min": { "type": "number" },
+      "volume_max": { "type": "number" },
+      "volume_fade_in": { "type": "number" },
+      "volume_fade_out": { "type": "number" },
+      "volume_move_vel": { "type": "number" },
+      "volume_move_vol": { "type": "number" },
+      "volume_move_filter_vel": { "type": "number" },
+      "volume_falloff_min": { "type": "number" },
+      "volume_falloff_max": { "type": "number" },
+      "level_min": { "type": "number" },
+      "level_max": { "type": "number" },
+      "delay": { "type": "number" },
+      "pitch": { "type": "number" },
+      "pitch_min": { "type": "number" },
+      "pitch_max": { "type": "number" },
+      "soundlevel": { "type": "number" },
+      "soundlevel_min": { "type": "number" },
+      "soundlevel_max": { "type": "number" },
+      "spread_radius": { "type": "number" }
+    }
+  }
+}

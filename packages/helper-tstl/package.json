@@ -1,0 +1,26 @@
+{
+  "name": "@eaglesong/helper-tstl",
+  "version": "0.0.0",
+  "description": "TypeScriptToLua Dota helpers",
+  "keywords": [
+    "dota 2",
+    "eaglesong"
+  ],
+  "homepage": "https://github.com/ark120202/eaglesong#readme",
+  "bugs": "https://github.com/ark120202/eaglesong/issues",
+  "repository": "https://github.com/ark120202/eaglesong/tree/master/packages/helper-tstl",
+  "license": "Apache-2.0",
+  "author": "ark120202",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "dependencies": {
+    "@types/luaparse": "^0.0.29",
+    "@types/resolve": "^0.0.8",
+    "dota-lua-types": "^2.1.0",
+    "luaparse": "^0.2.1",
+    "resolve": "^1.10.0",
+    "tslib": "^1.9.3",
+    "typescript-to-lua": "^0.18.0",
+    "upath": "^1.1.0"
+  }
+}

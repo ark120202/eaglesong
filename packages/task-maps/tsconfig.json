@@ -1,0 +1,9 @@
+{
+  "extends": "../tsconfig.settings.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "lib"
+  },
+  "references": [{ "path": "../helper-task" }, { "path": "../task-addoninfo" }],
+  "include": ["src/**/*", "src/**/*.json"]
+}
