@@ -14,7 +14,7 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "dependencies": {
-    "@eaglesong/helper-service": "^0.0.0",
+    "@eaglesong/helper-service": "link:../helper-service",
     "@types/dedent": "^0.7.0",
     "@types/lodash": "^4.14.123",
     "@types/request-promise-native": "^1.0.15",

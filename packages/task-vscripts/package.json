@@ -16,8 +16,8 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "dependencies": {
-    "@eaglesong/helper-task": "^0.0.0",
-    "@eaglesong/helper-tstl": "^0.0.0"
+    "@eaglesong/helper-task": "link:../helper-task",
+    "@eaglesong/helper-tstl": "link:../helper-tstl"
   },
   "devDependencies": {
     "typescript": "^3.4.3"

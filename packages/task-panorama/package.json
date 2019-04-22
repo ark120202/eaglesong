@@ -14,7 +14,7 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "dependencies": {
-    "@eaglesong/helper-task": "^0.0.0",
+    "@eaglesong/helper-task": "link:../helper-task",
     "@posthtml/esm": "^1.0.0",
     "@types/copy-webpack-plugin": "^4.4.4",
     "@types/fs-extra": "^5.0.5",

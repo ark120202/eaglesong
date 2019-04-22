@@ -14,8 +14,8 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "dependencies": {
-    "@eaglesong/helper-task": "^0.0.0",
-    "@eaglesong/service-npc": "^0.0.0",
+    "@eaglesong/helper-task": "link:../helper-task",
+    "@eaglesong/service-npc": "link:../service-npc",
     "@types/fs-extra": "^5.0.5",
     "@types/lodash": "^4.14.123",
     "fs-extra": "^7.0.1",

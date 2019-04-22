@@ -14,7 +14,7 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "dependencies": {
-    "@eaglesong/helper-task": "^0.0.0",
+    "@eaglesong/helper-task": "link:../helper-task",
     "p-queue": "^5.0.0",
     "tslib": "^1.9.3"
   }

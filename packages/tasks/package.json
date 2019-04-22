@@ -14,17 +14,17 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "dependencies": {
-    "@eaglesong/helper-task": "^0.0.0",
-    "@eaglesong/task-addoninfo": "^0.0.0",
-    "@eaglesong/task-images": "^0.0.0",
-    "@eaglesong/task-localization": "^0.0.0",
-    "@eaglesong/task-maps": "^0.0.0",
-    "@eaglesong/task-npc": "^0.0.0",
-    "@eaglesong/task-panorama": "^0.0.0",
-    "@eaglesong/task-resources": "^0.0.0",
-    "@eaglesong/task-root-scripts": "^0.0.0",
-    "@eaglesong/task-sounds": "^0.0.0",
-    "@eaglesong/task-vscripts": "^0.0.0",
+    "@eaglesong/helper-task": "link:../helper-task",
+    "@eaglesong/task-addoninfo": "link:../task-addoninfo",
+    "@eaglesong/task-images": "link:../task-images",
+    "@eaglesong/task-localization": "link:../task-localization",
+    "@eaglesong/task-maps": "link:../task-maps",
+    "@eaglesong/task-npc": "link:../task-npc",
+    "@eaglesong/task-panorama": "link:../task-panorama",
+    "@eaglesong/task-resources": "link:../task-resources",
+    "@eaglesong/task-root-scripts": "link:../task-root-scripts",
+    "@eaglesong/task-sounds": "link:../task-sounds",
+    "@eaglesong/task-vscripts": "link:../task-vscripts",
     "tslib": "^1.9.3"
   }
 }

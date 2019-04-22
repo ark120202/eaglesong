@@ -14,7 +14,7 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "dependencies": {
-    "@eaglesong/helper-service": "^0.0.0",
+    "@eaglesong/helper-service": "link:../helper-service",
     "@types/fs-extra": "^5.0.5",
     "@types/lodash": "^4.14.123",
     "ajv": "^6.7.0",
