@@ -1,5 +1,5 @@
-import { Options } from '@eaglesong/cli';
 import { buildTasks } from '@eaglesong/tasks';
+import { Options } from 'eaglesong';
 // if examples: import { CustomHeroesPlugin } from './eaglesong/npc';
 
 const config: Options = {

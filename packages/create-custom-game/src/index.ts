@@ -1,20 +1,25 @@
 #!/usr/bin/env node
-
 import execa from 'execa';
 import fs from 'fs-extra';
 import globby from 'globby';
 import inquirer from 'inquirer';
 import path from 'path';
+import sortPackageJson from 'sort-package-json';
 import yargs from 'yargs';
 
-async function prompt<T = string>(question: inquirer.Question) {
-  const { value } = await inquirer.prompt<{ value: T }>([{ ...question, name: 'value' }]);
+async function prompt(question: inquirer.Question) {
+  const { value } = await inquirer.prompt<{ value: any }>([{ ...question, name: 'value' }]);
   await new Promise<void>(resolve => setImmediate(resolve));
   return value;
 }
 
-async function promptConfirmation(message: string, defaultValue?: boolean) {
-  return prompt<boolean>({ type: 'confirm', message, default: defaultValue });
+type Omit<T, K> = Pick<T, Exclude<keyof T, K>>;
+async function promptString(question: Omit<inquirer.Question, 'type'>): Promise<string> {
+  return prompt(question);
+}
+
+async function promptConfirmation(message: string, defaultValue?: boolean): Promise<boolean> {
+  return prompt({ type: 'confirm', message, default: defaultValue });
 }
 
 const isYarnAvailable = (() => {
@@ -40,36 +45,21 @@ const isGitAvailable = (() => {
     .alias('h', 'help')
     .alias('v', 'version')
     .locale('en')
-    .usage('Usage: $0 <project-name> [options]')
-    .string('internal-name')
-    .describe('internal-name', 'Package and directory name')
+    .usage('Usage: $0')
     .boolean('use-npm')
     .default('use-npm', false)
     .describe('use-npm', 'Use npm to install dependencies even if `yarn` is found')
     .boolean('no-git')
     .default('no-git', false)
     .describe('no-git', "Don't initialize git repository even if `git` is found")
-
-    .boolean('conventional-commits')
-    .describe('conventional-commits', 'Use conventional commits')
-    .boolean('eul')
-    .describe('eul', 'Add Eul framework')
-    .boolean('examples')
-    .describe('examples', 'Include examples')
     .strict()
     .parse();
-
-  let displayName = argv._[0];
-  if (!displayName) {
-    displayName = await prompt({ message: 'Display Name:' });
-  }
 
   const transformInternalName = (input: string) =>
     input
       .toLowerCase()
-      .replace(/ /g, '-')
-      .replace(/_/g, '-')
-      .replace(/ ?& ?/g, ' and ')
+      .replace(/ ?& ?/g, '-and-')
+      .replace(/[_ ]/g, '-')
       .replace(/[^a-z\d-]/g, '');
 
   const validateInternalName = async (name: string) => {
@@ -87,43 +77,16 @@ const isGitAvailable = (() => {
     return true;
   };
 
-  let internalName = argv['internal-name'] || '';
-  if (!internalName) {
-    internalName = await prompt({
-      message: 'Internal Name:',
-      validate: validateInternalName,
-      transformer: transformInternalName,
-      default: transformInternalName(displayName),
-    });
-  } else {
-    const validName = transformInternalName(internalName);
-    if (internalName !== validName) {
-      const canContinue = await promptConfirmation(
-        `Provided name "${internalName}" is invalid, use "${validName}" instead?`,
-        true,
-      );
-      if (!canContinue) return;
-    }
+  const displayName = await promptString({ message: 'Display Name:' });
+  const internalName = await promptString({
+    message: 'Internal Name:',
+    validate: validateInternalName,
+    transformer: transformInternalName,
+    default: transformInternalName(displayName),
+  });
 
-    internalName = validName;
-    const validationResult = await validateInternalName(internalName);
-    if (validationResult !== true) throw new Error(validationResult);
-  }
-
-  let conventionalCommits = argv['conventional-commits'];
-  if (conventionalCommits == null) {
-    conventionalCommits = await promptConfirmation('Use conventional commits?', true);
-  }
-
-  let useEul = argv.eul;
-  if (useEul == null) {
-    useEul = await promptConfirmation('Use Eul framework?', true);
-  }
-
-  let includeExamples = argv.examples;
-  if (includeExamples == null) {
-    includeExamples = await promptConfirmation('Include examples?', true);
-  }
+  const conventionalCommits = await promptConfirmation('Use conventional commits?', true);
+  const includeExamples = await promptConfirmation('Include examples?', true);
 
   const useGit = isGitAvailable && !argv['no-git'];
 
@@ -153,16 +116,11 @@ const isGitAvailable = (() => {
   const dependencies = [
     '@types/node',
     'types-dota-panorama',
-    'types-dota-vscripts',
+    'dota-lua-types',
     'link:D:/dev/dota/_modules/panorama-polyfill',
   ];
 
-  const devDependencies = [
-    'typescript',
-    'tslint',
-    'tslint-config-prettier',
-    'tslint-plugin-prettier',
-  ];
+  const devDependencies = ['typescript', 'tslint', 'tslint-config-prettier'];
 
   const templates = new Set(['base']);
 
@@ -173,11 +131,15 @@ const isGitAvailable = (() => {
 
   if (!true) {
     templates.add('test');
-    devDependencies.push('jest', 'ts-jest');
+    devDependencies.push('jest', '@types/jest', 'ts-jest');
     packageJson.scripts.test = 'jest';
     packageJson.jest = {
       projects: ['<rootDir>/src/vscripts.test', '<rootDir>/src/panorama.test'],
     };
+
+    if (includeExamples) {
+      templates.add('test-examples');
+    }
   }
 
   if (conventionalCommits) {
@@ -199,7 +161,7 @@ const isGitAvailable = (() => {
       await Promise.all(
         files.map(async fileName => {
           let fileContent = await fs.readFile(path.join(rootPath, fileName), 'utf8');
-          if (path.extname(fileName) === '.ts') {
+          if (fileName.endsWith('.ts')) {
             fileContent = fileContent.replace(/\/\/ if (.+?): (.+)/g, (_, condition, expression) =>
               templates.has(condition) ? expression : '',
             );
@@ -213,10 +175,11 @@ const isGitAvailable = (() => {
     }),
   );
 
-  await outputJson('package.json', packageJson);
+  packageJson.dependencies = dependencies;
+  packageJson.devDependencies = devDependencies;
+  await outputJson('package.json', sortPackageJson(packageJson));
   try {
-    await runPackageManager(['add', ...dependencies]);
-    await runPackageManager(['add', '-D', ...devDependencies]);
+    await runPackageManager(['install']);
   } catch {
     throw { message: 'Failed to install dependencies' };
   }
