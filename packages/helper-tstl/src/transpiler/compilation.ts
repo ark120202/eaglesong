@@ -34,16 +34,16 @@ export class Compilation {
   }
 
   protected used = false;
-  public emit(files: Map<string, tstl.TranspiledFile>) {
+  public emit(files: tstl.TranspiledFile[]) {
     if (this.used) throw new Error('Compilation can be used only once');
     this.used = true;
 
     [...files]
-      .filter(([, { lua }]) => lua !== undefined)
-      .forEach(([fileName]) => this.files.add(fileName));
+      .filter(({ lua }) => lua !== undefined)
+      .forEach(({ fileName }) => this.files.add(fileName));
 
     const emitBOM = this.options.emitBOM || false;
-    for (const [fileName, { lua, sourceMap, declaration, declarationMap }] of files) {
+    for (const { fileName, lua, sourceMap, declaration, declarationMap } of files) {
       const pathWithoutExtension = this.toAbsolutePath(
         this.toOutputStructure(this.getRelativeToRootPath(path.trimExt(fileName))),
       );
