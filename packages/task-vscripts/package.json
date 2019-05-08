@@ -20,7 +20,7 @@
     "@eaglesong/helper-tstl": "link:../helper-tstl"
   },
   "devDependencies": {
-    "typescript": "^3.4.3"
+    "typescript": "^3.4.5"
   },
   "peerDependencies": {
     "typescript": "^3.0.0"

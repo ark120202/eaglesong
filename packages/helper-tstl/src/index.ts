@@ -40,7 +40,7 @@ export function transpileProgram(
   program: ts.Program,
   commonRoot?: string,
 ): { diagnostics: ts.Diagnostic[]; errors: ModuleLoadingError[] } {
-  const transformer = new CustomLuaTransformer(program, program.getCompilerOptions());
+  const transformer = new CustomLuaTransformer(program);
   const { diagnostics: emitDiagnostics, transpiledFiles } = tstl.transpile({
     program,
     customTransformers: { before: [createDotaTransformer(), createImportElideTransformer()] },

@@ -15,11 +15,10 @@
   "types": "lib/index.d.ts",
   "dependencies": {
     "@eaglesong/helper-service": "link:../helper-service",
-    "@types/fs-extra": "^5.0.5",
+    "@types/fs-extra": "^5.1.0",
     "@types/js-yaml": "^3.12.1",
     "@types/json-parse-better-errors": "^1.0.0",
     "@types/lodash": "^4.14.123",
-    "@types/strip-json-comments": "^0.0.30",
     "chokidar": "^2.1.5",
     "fs-extra": "^7.0.1",
     "globby": "^9.2.0",
@@ -29,17 +28,17 @@
     "lodash": "^4.17.11",
     "p-queue": "^5.0.0",
     "prettier-linter-helpers": "^1.0.0",
-    "strip-json-comments": "^2.0.1",
+    "strip-json-comments": "^3.0.1",
     "tapable": "^2.0.0-beta.2",
     "tslib": "^1.9.3",
     "upath": "^1.1.0",
     "vdf-extra": "^2.2.2"
   },
   "devDependencies": {
-    "@types/prettier": "^1.16.2",
+    "@types/prettier": "^1.16.3",
     "prettier": "^1.17.0",
     "tslint": "^5.16.0",
-    "typescript": "^3.4.3"
+    "typescript": "^3.4.5"
   },
   "peerDependencies": {
     "prettier": "^1.16.0",

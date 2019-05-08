@@ -15,7 +15,7 @@
   "types": "lib/index.d.ts",
   "dependencies": {
     "@eaglesong/helper-task": "link:../helper-task",
-    "@types/fs-extra": "^5.0.5",
+    "@types/fs-extra": "^5.1.0",
     "@types/image-size": "^0.7.0",
     "fs-extra": "^7.0.1",
     "image-size": "^0.7.3",
