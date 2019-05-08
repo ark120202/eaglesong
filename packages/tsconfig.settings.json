@@ -9,7 +9,7 @@
     "paths": {
       "webpack": ["types/webpack.d.ts"],
       "html-webpack-plugin": ["types/html-webpack-plugin.d.ts"],
-      "tapable": ["packages/task-panorama/node_modules/tapable"]
+      "tapable": ["types/tapable.d.ts"]
     },
     "skipLibCheck": true
   }
