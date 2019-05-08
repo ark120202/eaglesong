@@ -740,11 +740,12 @@
     lodash "^4.17.11"
     to-fast-properties "^2.0.0"
 
-"@dota-data/localization@^0.1.2":
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/@dota-data/localization/-/localization-0.1.2.tgz#9c5d09e7856db15ca31e83ec589467319eb24ba0"
-  integrity sha512-H7Qp8JxP12jmRVKj98ScRBmTDEqYuLbHcpgmaq8q/TgpRkRyBcUbVNsz22ae0GwdUqqpcfIc+cow/HoDg0Ljzg==
+"@dota-data/localization@^0.1.4":
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/@dota-data/localization/-/localization-0.1.4.tgz#7b13b819cd1b418f271a8a1e338455b65c61f6e5"
+  integrity sha512-g9mQX2POFYVCSOGG2EQ+DdnYsBq1PchU/GuwIXs+BVc3FoOv4AZAAICV7Uk3AdMEDs+i9xt0Uqs0nvSScsYk4w==
   dependencies:
+    fs-extra "^7.0.1"
     got "^9.6.0"
     lodash "^4.17.10"
     tslib "^1.9.3"

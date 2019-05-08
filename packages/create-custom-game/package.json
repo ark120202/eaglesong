@@ -14,8 +14,8 @@
   "bin": "lib/index.js",
   "dependencies": {
     "@types/execa": "^0.9.0",
-    "@types/fs-extra": "^5.0.5",
-    "@types/inquirer": "^6.0.0",
+    "@types/fs-extra": "^5.1.0",
+    "@types/inquirer": "^6.0.1",
     "@types/yargs": "^13.0.0",
     "execa": "^1.0.0",
     "fs-extra": "^7.0.1",

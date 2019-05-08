@@ -27,7 +27,7 @@
     "tslib": "^1.9.3"
   },
   "devDependencies": {
-    "@dota-data/localization": "^0.1.2"
+    "@dota-data/localization": "^0.1.4"
   },
   "peerDependencies": {
     "@dota-data/localization": "^0.1.2"
