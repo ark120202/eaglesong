@@ -1,7 +1,7 @@
 {
   "extends": "@ark120202/typescript-config/node/10.json",
   "compilerOptions": {
-    "types": ["../../types"],
+    "types": ["node", "../../types"],
     "composite": true,
 
     // FIXME:

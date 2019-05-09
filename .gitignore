@@ -1,8 +1,9 @@
 node_modules
+.pnp*
+.yarn
 /packages/*/lib
 *.tsbuildinfo
 
 .vscode
-yarn-error.log
 lerna-debug.log
 /example
