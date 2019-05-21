@@ -1,0 +1,36 @@
+jobs:
+  - job: Lint
+    pool:
+      vmImage: ubuntu-latest
+
+    steps:
+      - task: NodeTool@0
+        inputs:
+          versionSpec: '10.x'
+        displayName: Install Node.js
+
+      - script: |
+          yarn --frozen-lockfile
+          yarn bootstrap
+        displayName: Install dependencies
+
+      - script: yarn lint
+        displayName: Lint
+
+  - job: Test
+    pool:
+      vmImage: ubuntu-latest
+
+    steps:
+      - task: NodeTool@0
+        inputs:
+          versionSpec: '10.x'
+        displayName: Install Node.js
+
+      - script: |
+          yarn --frozen-lockfile
+          yarn bootstrap
+        displayName: Install dependencies
+
+      - script: yarn build
+        displayName: Build
