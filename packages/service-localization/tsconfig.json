@@ -4,7 +4,5 @@
     "rootDir": "src",
     "outDir": "lib"
   },
-  "references": [
-    { "path": "../helper-service" }
-  ]
+  "references": [{ "path": "../helper-service" }]
 }

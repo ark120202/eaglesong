@@ -4,8 +4,5 @@
     "rootDir": "src",
     "outDir": "lib"
   },
-  "references": [
-    { "path": "../helper-task" },
-    { "path": "../service-localization" }
-  ]
+  "references": [{ "path": "../helper-task" }, { "path": "../service-localization" }]
 }
