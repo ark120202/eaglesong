@@ -1,5 +1,5 @@
 jobs:
-  - job: Lint
+  - job: Main
     pool:
       vmImage: ubuntu-latest
 
@@ -15,22 +15,24 @@ jobs:
         displayName: Install dependencies
 
       - script: yarn lint
+        # continueOnError: true
+        condition: always()
         displayName: Lint
 
-  - job: Test
-    pool:
-      vmImage: ubuntu-latest
-
-    steps:
-      - task: NodeTool@0
-        inputs:
-          versionSpec: '10.x'
-        displayName: Install Node.js
-
-      - script: |
-          yarn --frozen-lockfile
-          yarn bootstrap
-        displayName: Install dependencies
-
       - script: yarn build
+        condition: always()
         displayName: Build
+  # - job: Test
+  #   pool:
+  #     vmImage: ubuntu-latest
+  #   steps:
+  #     - task: NodeTool@0
+  #       inputs:
+  #         versionSpec: '10.x'
+  #       displayName: Install Node.js
+  #     - script: |
+  #         yarn --frozen-lockfile
+  #         yarn bootstrap
+  #       displayName: Install dependencies
+  #     - script: yarn build
+  #       displayName: Build
