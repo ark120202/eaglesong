@@ -4,7 +4,6 @@
     "packages/*"
   ],
   "scripts": {
-    "bootstrap": "lerna bootstrap",
     "build": "run-s build:clean build:tsc",
     "build:clean": "rimraf packages/*/lib packages/*/tsconfig.tsbuildinfo",
     "build:tsc": "tsc-pnp -b packages",
