@@ -30,13 +30,13 @@ export interface PublishPreset {
     | {
         /**
          * Default: vX.Y.Z
-         * @default trur
+         * @default true
          */
         commit?: boolean | ((version: string) => string);
 
         /**
          * Default: vX.Y.Z
-         * @default trur
+         * @default true
          */
         tag?: boolean | ((version: string) => string);
 
@@ -45,7 +45,7 @@ export interface PublishPreset {
       };
 
   build?: {
-    /** @deafult true */
+    /** @default true */
     clean?: boolean;
   };
 
