@@ -29,6 +29,6 @@ export class ResourceCompiler {
 
     const fileListPath = await tempWrite(files.join('\n'));
     args.push('-filelist', fileListPath);
-    await execa(executable, args);
+    await execa(executable, args, { cwd: this.contentPath });
   }
 }
