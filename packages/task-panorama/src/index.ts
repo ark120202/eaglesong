@@ -4,9 +4,8 @@ import _ from 'lodash';
 import MemoryFS from 'memory-fs';
 import path from 'path';
 import webpack from 'webpack';
-import WebpackChain from 'webpack-chain';
 import { Cache, Common, getDirtyCommons, loadCache, makeConfigs, runCompiler } from './cache';
-import { defaultConfig } from './config';
+import { createWebpackConfig } from './config';
 import { UseCommonsPlugin } from './plugins/UseCommonsPlugin';
 
 interface RealWebpackStats extends webpack.Stats {
@@ -43,8 +42,8 @@ function isForkTsCheckerError(err: any): err is ForkTsCheckerError {
 
 export interface Options {
   common?: Record<string, Common>;
-  commonConfig?(w: WebpackChain): void;
-  mainConfig?(w: WebpackChain): void;
+  commonConfig?(config: webpack.Configuration): webpack.Configuration;
+  mainConfig?(config: webpack.Configuration): webpack.Configuration;
 }
 
 export default class PanoramaTask extends Task<Options> {
@@ -100,12 +99,12 @@ export default class PanoramaTask extends Task<Options> {
   private async build() {
     const commons = await this.buildCommons();
 
-    const chain = new WebpackChain();
-    defaultConfig(chain, this);
-    if (this.options.mainConfig) this.options.mainConfig(chain);
-    chain.plugin('commons').use(UseCommonsPlugin, [commons]);
+    let webpackConfig = createWebpackConfig(this);
+    if (this.options.mainConfig) webpackConfig = this.options.mainConfig(webpackConfig);
+    if (!webpackConfig.plugins) webpackConfig.plugins = [];
+    webpackConfig.plugins.push(new UseCommonsPlugin(commons));
 
-    const compiler = webpack(chain.toConfig());
+    const compiler = webpack(webpackConfig);
     if (this.dotaPath == null) {
       // @ts-ignore
       compiler.outputFileSystem = new MemoryFS();

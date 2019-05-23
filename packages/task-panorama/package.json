@@ -27,6 +27,7 @@
     "@types/resolve-from": "^5.0.1",
     "@types/sass": "^1.16.0",
     "@types/webpack": "^4.4.31",
+    "@types/webpack-merge": "^4.1.5",
     "@webpack-contrib/schema-utils": "^1.0.0-beta.0",
     "copy-webpack-plugin": "^5.0.2",
     "file-loader": "^3.0.1",
@@ -49,7 +50,7 @@
     "tslib": "^1.9.3",
     "upath": "^1.1.0",
     "webpack": "^4.30.0",
-    "webpack-chain": "^5.2.4",
+    "webpack-merge": "^4.2.1",
     "yml-loader": "^2.1.0"
   },
   "devDependencies": {
