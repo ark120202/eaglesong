@@ -35,7 +35,6 @@ export function createConfigFileUpdater() {
   };
 }
 
-// @ts-ignore TODO: FIXME:
 export function transpileProgram(
   program: ts.Program,
   commonRoot?: string,

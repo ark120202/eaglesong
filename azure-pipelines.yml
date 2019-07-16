@@ -6,22 +6,29 @@ jobs:
     steps:
       - task: NodeTool@0
         inputs:
-          versionSpec: '10.x'
+          versionSpec: 10
         displayName: Install Node.js
 
-      - script: |
-          yarn --frozen-lockfile
-          yarn bootstrap
+      - script: yarn --frozen-lockfile
         displayName: Install dependencies
 
-      - script: yarn lint
-        # continueOnError: true
-        condition: always()
+      - script: |
+          yarn lint:prettier
+          yarn --silent lint:tslint:root --format junit > junit.xml
+          # TODO:
+          yarn --silent lint:tslint:packages --format junit
         displayName: Lint
 
       - script: yarn build
-        condition: always()
         displayName: Build
+
+      - task: PublishTestResults@2
+        inputs:
+          testRunTitle: Lint
+          testResultsFiles: junit.xml
+        condition: succeededOrFailed()
+        displayName: Publish lint results
+
   # - job: Test
   #   pool:
   #     vmImage: ubuntu-latest
