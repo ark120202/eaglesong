@@ -6,8 +6,8 @@
   "scripts": {
     "build": "run-s build:clean build:tsc",
     "build:clean": "rimraf packages/*/lib packages/*/tsconfig.tsbuildinfo",
-    "build:tsc": "tsc-pnp -b packages",
-    "dev": "tsc-pnp -b packages --watch",
+    "build:tsc": "tsc -b packages",
+    "dev": "tsc -b packages --watch",
     "lint": "run-p lint:prettier lint:tslint:root lint:tslint:packages",
     "lint:prettier": "prettier --check **/*.{ts,md,yml,json}",
     "lint:tslint:packages": "lerna exec --no-bail -- tslint -p .",
@@ -38,6 +38,6 @@
     "typescript": "^3.5.3"
   },
   "installConfig": {
-    "pnp": true
+    "pnp": false
   }
 }
