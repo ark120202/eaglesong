@@ -12,15 +12,15 @@ jobs:
       - script: yarn --frozen-lockfile
         displayName: Install dependencies
 
+      - script: yarn build
+        displayName: Build
+
       - script: |
           yarn lint:prettier
           yarn --silent lint:tslint:root --format junit > junit.xml
           # TODO:
-          yarn --silent lint:tslint:packages --format junit
+          yarn --silent lint:tslint:packages
         displayName: Lint
-
-      - script: yarn build
-        displayName: Build
 
       - task: PublishTestResults@2
         inputs:
