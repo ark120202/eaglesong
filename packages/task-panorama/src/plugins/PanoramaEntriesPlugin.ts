@@ -66,11 +66,11 @@ export class PanoramaEntriesPlugin {
       }
 
       await Promise.all(
-        entries.map(({ source, name }) => {
+        entries.map(async ({ source, name }) => {
           const dep = new PanoramaEntryDependency(source);
           // @ts-ignore
           dep.loc = { name };
-          return new Promise<void>(resolve => compilation.addEntry(context, dep, name, resolve));
+          await new Promise<void>(resolve => compilation.addEntry(context, dep, name, resolve));
         }),
       );
 

@@ -74,10 +74,10 @@ export const createImportElideTransformer = (): ts.TransformerFactory<ts.SourceF
   ): ts.VisitResult<ts.NamedImportBindings> {
     if (node.kind === ts.SyntaxKind.NamespaceImport) {
       return resolver.isReferencedAliasDeclaration(node) ? node : undefined;
-    } else {
-      const elements = typedVisitNodes(node.elements, visitImportSpecifier, ts.isImportSpecifier);
-      return elements.length > 0 ? ts.updateNamedImports(node, elements) : undefined;
     }
+
+    const elements = typedVisitNodes(node.elements, visitImportSpecifier, ts.isImportSpecifier);
+    return elements.length > 0 ? ts.updateNamedImports(node, elements) : undefined;
   }
 
   function visitImportSpecifier(node: ts.ImportSpecifier): ts.VisitResult<ts.ImportSpecifier> {

@@ -17,7 +17,8 @@
   "types": "lib/index.d.ts",
   "dependencies": {
     "@eaglesong/helper-task": "link:../helper-task",
-    "@eaglesong/helper-tstl": "link:../helper-tstl"
+    "@eaglesong/helper-tstl": "link:../helper-tstl",
+    "fs-extra": "^8.1.0"
   },
   "devDependencies": {
     "typescript": "^3.4.5"
