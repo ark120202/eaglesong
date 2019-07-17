@@ -134,13 +134,12 @@ export function AbilitySpecialsPlugin(hooks: Hooks, { error }: NpcPluginApi) {
     _.each(files, file => {
       _.each(file, ability => {
         if (ability.AbilitySpecial == null) return;
-        const specials = Object.entries(ability.AbilitySpecial)
+        ability.Specials = Object.entries<any>(ability.AbilitySpecial)
           .sort(([a], [b]) => Number(a) - Number(b))
           .map(([, special]) => {
             // TODO:
             return _.omit(special, 'var_type');
           });
-        ability.Specials = specials;
       });
     });
   });

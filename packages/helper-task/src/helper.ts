@@ -39,7 +39,7 @@ export const createHooks = () => ({
         write(message: string): void;
         oldTaskProvider: TaskProvider;
         oldServiceProvider: ServiceProvider;
-      }
+      },
     ]
   >(['options']),
 });

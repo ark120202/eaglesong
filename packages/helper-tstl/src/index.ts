@@ -4,7 +4,6 @@ import * as ts from 'typescript';
 import * as tstl from 'typescript-to-lua';
 import { AppCompilation } from './app-compilation';
 import { ModuleLoadingError } from './transpiler/compilation';
-import { createImportElideTransformer } from './transpiler/import-transformer';
 import { CustomLuaTransformer } from './transpiler/tstl';
 
 export function createConfigFileUpdater() {
@@ -42,7 +41,7 @@ export function transpileProgram(
   const transformer = new CustomLuaTransformer(program);
   const { diagnostics: emitDiagnostics, transpiledFiles } = tstl.transpile({
     program,
-    customTransformers: { before: [createDotaTransformer(), createImportElideTransformer()] },
+    customTransformers: { before: [createDotaTransformer()] },
     transformer,
   });
 

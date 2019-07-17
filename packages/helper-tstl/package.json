@@ -14,14 +14,14 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "dependencies": {
-    "@types/luaparse": "^0.0.29",
+    "@types/luaparse": "^0.2.0",
     "@types/resolve": "^0.0.8",
     "dota-lua-types": "^2.1.1",
     "luaparse": "^0.2.1",
-    "resolve": "^1.10.1",
-    "tslib": "^1.9.3",
+    "resolve": "^1.11.1",
+    "tslib": "^1.10.0",
     "typescript": "^3.5.3",
-    "typescript-to-lua": "^0.19.0",
+    "typescript-to-lua": "^0.24.0",
     "upath": "^1.1.0"
   }
 }

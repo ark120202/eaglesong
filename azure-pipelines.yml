@@ -28,7 +28,6 @@ jobs:
           testResultsFiles: junit.xml
         condition: succeededOrFailed()
         displayName: Publish lint results
-
   # - job: Test
   #   pool:
   #     vmImage: ubuntu-latest

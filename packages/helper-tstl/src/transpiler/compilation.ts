@@ -23,7 +23,8 @@ export interface CompilationHost {
   readFile(fileName: string, encoding?: string): string | undefined;
 }
 
-type PackageLuaField = string | Record<'5.1' | '5.2' | '5.3' | 'jit', string>;
+// TODO: JIT -> jit?
+type PackageLuaField = string | Record<tstl.LuaTarget, string>;
 
 export class Compilation {
   protected errors: ModuleLoadingError[] = [];

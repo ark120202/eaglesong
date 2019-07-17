@@ -13,8 +13,7 @@ async function prompt(question: inquirer.Question) {
   return value;
 }
 
-type Omit<T, K> = Pick<T, Exclude<keyof T, K>>;
-async function promptString(question: Omit<inquirer.Question, 'type'>): Promise<string> {
+async function promptString(question: inquirer.InputQuestion<inquirer.Answers>): Promise<string> {
   return prompt(question);
 }
 
@@ -126,7 +125,7 @@ const isGitAvailable = (() => {
 
   if (useGit) {
     templates.add('git');
-    execa.sync('git', ['init'], { cwd: internalName });
+    await execa('git', ['init'], { cwd: internalName });
   }
 
   if (!true) {

@@ -110,12 +110,10 @@ export default class MapsTask extends Task<void> {
 
       this.addonInfoTask.setMaps(
         _.fromPairs(
-          this.getSortedMapCombinations().map(
-            ({ name, players, teams }): [string, AddonInfoMap] => [
-              name,
-              { MaxPlayers: players, TeamCount: teams },
-            ],
-          ),
+          this.getSortedMapCombinations().map(({ name, players, teams }): [
+            string,
+            AddonInfoMap,
+          ] => [name, { MaxPlayers: players, TeamCount: teams }]),
         ),
       );
     } else {

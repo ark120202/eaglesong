@@ -26,7 +26,12 @@ async function getGuardCode() {
 export async function uploadToSteam(metadataPath: string, workshopId: number) {
   let login = process.env.STEAMCMD_LOGIN;
   if (login == null && process.stdin.isTTY) {
-    login = await prompt({ message: 'Login:', validate: x => x !== '' });
+    login = await prompt({
+      // FIXME: TS can't choose between InputQuestion and NumberQuestion for validate
+      type: 'input',
+      message: 'Login:',
+      validate: x => x !== '',
+    });
   } else if (login == null || login === '') {
     throw new Error('Provide a Steam login with a STEAMCMD_LOGIN environment variable');
   }
@@ -54,7 +59,7 @@ export async function uploadToSteam(metadataPath: string, workshopId: number) {
   try {
     await child;
   } catch (err) {
-    const { stdout } = err as execa.ExecaReturns;
+    const { stdout } = err as execa.ExecaError;
 
     if (stdout.includes('Login Failure: Invalid Password')) throw new Error('Invalid Password');
     if (stdout.includes('ERROR! Failed to update workshop item (Access Denied)')) {

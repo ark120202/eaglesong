@@ -32,6 +32,8 @@ export const askForNewVersion = async (oldVersion: string) =>
       pageSize: version.RELEASE_TYPES.length + 2,
     },
     {
+      // FIXME: TS can't choose between InputQuestion and NumberQuestion for validate
+      type: 'input',
       name: 'version',
       message: 'Version',
       validate(input) {

@@ -25,6 +25,6 @@
     "@eaglesong/task-root-scripts": "link:../task-root-scripts",
     "@eaglesong/task-sounds": "link:../task-sounds",
     "@eaglesong/task-vscripts": "link:../task-vscripts",
-    "tslib": "^1.9.3"
+    "tslib": "^1.10.0"
   }
 }

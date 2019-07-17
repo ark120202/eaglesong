@@ -96,9 +96,7 @@ export default class NpcTask extends LintedTransformTask<Options> {
       const currentFiles = await this.service.emit();
 
       write(
-        `${oldFiles.npc_abilities_custom.df.MaxLevel} => ${
-          currentFiles.npc_abilities_custom.df.MaxLevel
-        }`,
+        `${oldFiles.npc_abilities_custom.df.MaxLevel} => ${currentFiles.npc_abilities_custom.df.MaxLevel}`,
       );
     });
 

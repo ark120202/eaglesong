@@ -15,13 +15,13 @@
   "types": "lib/index.d.ts",
   "dependencies": {
     "@eaglesong/helper-task": "link:../helper-task",
-    "@types/fs-extra": "^5.1.0",
-    "@types/lodash": "^4.14.123",
-    "ajv": "^6.7.0",
-    "fs-extra": "^7.0.1",
-    "lodash": "^4.17.11",
-    "p-props": "^3.0.0",
-    "tslib": "^1.9.3",
+    "@types/fs-extra": "^8.0.0",
+    "@types/lodash": "^4.14.136",
+    "ajv": "^6.10.2",
+    "fs-extra": "^8.1.0",
+    "lodash": "^4.17.14",
+    "p-props": "^3.0.1",
+    "tslib": "^1.10.0",
     "upath": "^1.1.0"
   }
 }
