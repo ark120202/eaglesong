@@ -30,7 +30,7 @@ Here's the example content of a module we're going to test:
 src/vscripts/math.ts:
 
 ```ts
-export const plus = (a, b) => a + b;
+export const plus = (a: number, b: number) => a + b;
 ```
 
 And a representative test file:
