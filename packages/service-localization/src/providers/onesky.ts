@@ -62,10 +62,14 @@ export interface ProviderOptionsOneSky {
 
 export class OneSky implements Provider {
   public name = this.constructor.name;
-  private projectID = this._opts.projectID;
-  private apiKey = this._opts.apiKey;
-  private secret = this._opts.secret != null ? this._opts.secret : process.env.ONESKY_SECRET;
-  public constructor(private _opts: ProviderOptionsOneSky) {}
+  private readonly projectID: number;
+  private readonly apiKey: string;
+  private readonly secret?: string;
+  constructor(options: ProviderOptionsOneSky) {
+    this.projectID = options.projectID;
+    this.apiKey = options.apiKey;
+    this.secret = options.secret != null ? options.secret : process.env.ONESKY_SECRET;
+  }
 
   public async fetchFiles() {
     const result: StringsOutputResponse = await this.request({

@@ -18,6 +18,7 @@ export class HtmlWebpackXmlPlugin implements webpack.Plugin {
       hooks.htmlWebpackPluginBeforeHtmlGeneration.tap(this.constructor.name, args => {
         const xmlAssets: XmlAsset[] = [];
 
+        // eslint-disable-next-line prefer-destructuring
         const chunks: XmlChunk[] = compilation.chunks;
         chunks.forEach(chunk => {
           chunk.files.forEach((file: string) => {

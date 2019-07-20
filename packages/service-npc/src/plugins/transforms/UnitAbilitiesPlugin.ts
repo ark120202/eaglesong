@@ -20,8 +20,11 @@ export function UnitAbilitiesPlugin(hooks: Hooks) {
     if (!fileFilter.has(group)) return;
     _.each(files, file =>
       _.each(file, unit => {
-        if (_.isPlainObject(unit) && 'Abilities' in unit && Array.isArray(unit.Abilities)) {
-          (unit.Abilities as string[]).forEach((ability, i) => (unit[`Ability${i + 1}`] = ability));
+        if (_.isPlainObject(unit) && Array.isArray(unit.Abilities)) {
+          for (const [index, ability] of (unit.Abilities as string[]).entries()) {
+            unit[`Ability${index + 1}`] = ability;
+          }
+
           delete unit.Abilities;
         }
       }),

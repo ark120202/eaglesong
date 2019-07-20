@@ -39,8 +39,8 @@ export async function uploadToSteam(metadataPath: string, workshopId: number) {
   let child: execa.ExecaChildProcess;
   try {
     child = execa('steamcmd', ['+login', login, '+workshop_build_item', metadataPath, '+quit']);
-  } catch (err) {
-    throw err.code === 'ENOENT' ? new Error('SteamCMD binary not found') : err;
+  } catch (error) {
+    throw error.code === 'ENOENT' ? new Error('SteamCMD binary not found') : error;
   }
 
   let childStdout = '';
@@ -48,18 +48,18 @@ export async function uploadToSteam(metadataPath: string, workshopId: number) {
     childStdout += buf.toString();
 
     if (childStdout.trimRight().endsWith('password:')) {
-      child.stdin!.write((await getPassword()) + '\n');
+      child.stdin!.write(`${await getPassword()}\n`);
     }
 
     if (childStdout.trimRight().endsWith('Steam Guard code:')) {
-      child.stdin!.write((await getGuardCode()) + '\n');
+      child.stdin!.write(`${await getGuardCode()}\n`);
     }
   });
 
   try {
     await child;
-  } catch (err) {
-    const { stdout } = err as execa.ExecaError;
+  } catch (error) {
+    const { stdout } = error as execa.ExecaError;
 
     if (stdout.includes('Login Failure: Invalid Password')) throw new Error('Invalid Password');
     if (stdout.includes('ERROR! Failed to update workshop item (Access Denied)')) {
@@ -69,6 +69,6 @@ export async function uploadToSteam(metadataPath: string, workshopId: number) {
       );
     }
 
-    throw err;
+    throw error;
   }
 }

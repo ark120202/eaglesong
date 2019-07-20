@@ -6,14 +6,14 @@ export interface TaskGroup<T> extends Task<T> {
 }
 
 export function createTaskGroup<T>(
-  taskConstructors: TaskConstructor<T>[],
+  childTasks: TaskConstructor<T>[],
 ): new (...args: any[]) => TaskGroup<T> {
   return class extends Task<T> {
-    private subtasks: Task<T>[];
-    private runningTasks = new Set<Task<T>>();
-    public constructor(options: T) {
+    private readonly subtasks: Task<T>[];
+    private readonly runningTasks = new Set<Task<T>>();
+    constructor(options: T) {
       super(options);
-      this.subtasks = taskConstructors.map(t => new t(options));
+      this.subtasks = childTasks.map(ChildTask => new ChildTask(options));
     }
 
     public get errors() {
@@ -21,7 +21,7 @@ export function createTaskGroup<T>(
     }
 
     public set errors(_value) {
-      return;
+      throw new Error("Task group errors can't be updated");
     }
 
     public removeErrors() {

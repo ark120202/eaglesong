@@ -13,6 +13,7 @@ export function pitch(this: webpack.loader.LoaderContext, request: string) {
 
   const module: webpack.compilation.Module = this._module;
   // @ts-ignore
+  // eslint-disable-next-line prefer-destructuring
   const issuer = module.issuer;
   if (issuer == null) return;
   if (!issuer.resource.endsWith('.xml')) return;
@@ -34,9 +35,9 @@ export function pitch(this: webpack.loader.LoaderContext, request: string) {
 
 function runCompiler(compiler: webpack.Compiler, callback: webpack.loader.loaderCallback) {
   // @ts-ignore
-  compiler.runAsChild((err: Error | undefined, chunks: webpack.compilation.Chunk[]) => {
-    if (err) {
-      callback(err);
+  compiler.runAsChild((error: Error | undefined, chunks: webpack.compilation.Chunk[]) => {
+    if (error) {
+      callback(error);
     } else if (chunks.length > 0) {
       const url = chunks[0].files[0];
       callback(null, `module.exports = __webpack_public_path__ + ${JSON.stringify(url)};`);
@@ -78,6 +79,7 @@ function createCompiler(
     { ...oldOutputOptions, filename },
     plugins,
   );
+  // eslint-disable-next-line prefer-destructuring
   const rawRequest: string = loader._module.rawRequest;
   new SingleEntryPlugin(loader.context, rawRequest, 'main').apply(childCompiler);
 

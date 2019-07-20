@@ -26,21 +26,21 @@ async function safeSymlink(srcpath: string, dstpath: string) {
     if (real === srcpath) return;
     if (real === dstpath) throw new Error(`${dstpath} already exists`);
     await fs.remove(dstpath);
-  } catch (err) {
-    if (err.code !== 'ENOENT') throw err;
+  } catch (error) {
+    if (error.code !== 'ENOENT') throw error;
   }
 
   await fs.ensureSymlink(srcpath, dstpath);
 }
 
 export default class MapsTask extends Task<void> {
-  private queue = new PQueue({ concurrency: 1 });
+  private readonly queue = new PQueue({ concurrency: 1 });
   private mapsPath!: string;
   private metadataPath!: string;
   private mapsMetadata?: Required<MapsMetadata>;
   private addonInfoTask!: AddonInfoTask;
 
-  public constructor() {
+  constructor() {
     super(undefined);
   }
 
@@ -91,9 +91,10 @@ export default class MapsTask extends Task<void> {
 
     const valid = compiledSchema(content);
     if (!valid && compiledSchema.errors != null) {
-      compiledSchema.errors.forEach(err =>
-        this.error(this.metadataPath, `metadata${err.dataPath} ${err.message}`),
-      );
+      for (const { message, dataPath } of compiledSchema.errors) {
+        this.error(this.metadataPath, `metadata${dataPath} ${message}`);
+      }
+
       this.finish();
       return;
     }
@@ -138,7 +139,7 @@ export default class MapsTask extends Task<void> {
 
     await Promise.all(
       maps.map(({ base, name }) =>
-        safeSymlink(path.join(src, base + '.txt'), path.join(resource, name + '.txt')),
+        safeSymlink(path.join(src, `${base}.txt`), path.join(resource, `${name}.txt`)),
       ),
     );
   }
@@ -157,7 +158,7 @@ export default class MapsTask extends Task<void> {
         const filePath = path.join(resource, fileName);
         const stats = await fs.lstat(filePath);
         if (stats.isSymbolicLink()) {
-          if (!maps.some(({ name }) => name + '.txt' === fileName)) await fs.remove(filePath);
+          if (!maps.some(({ name }) => `${name}.txt` === fileName)) await fs.remove(filePath);
         } else {
           await fs.move(path.join(resource, fileName), path.join(src, fileName));
         }
@@ -170,9 +171,12 @@ export default class MapsTask extends Task<void> {
     const materials = this.resolvePath('src/materials/overviews');
 
     const baseNames = Object.keys(this.mapsMetadata!.maps);
-    const compare = async (dir: string, ext: string[]) => {
-      const expected = _.flatMap(baseNames.map(x => path.join(dir, x)), n => ext.map(e => n + e));
-      const actual = (await fs.readdir(dir)).map(name => path.join(dir, name));
+    const compare = async (directory: string, extensions: string[]) => {
+      // TODO: Clean up
+      const expected = _.flatMap(baseNames.map(x => path.join(directory, x)), n =>
+        extensions.map(e => n + e),
+      );
+      const actual = (await fs.readdir(directory)).map(name => path.join(directory, name));
       return {
         extra: _.difference(actual, expected),
         missing: _.difference(expected, actual),
@@ -227,7 +231,7 @@ export default class MapsTask extends Task<void> {
     const baseNames = Object.keys(this.mapsMetadata.maps);
     const basesPath = this.resolvePath('src/maps/bases');
 
-    const expected = baseNames.map(x => path.join(basesPath, x + '.vmap'));
+    const expected = baseNames.map(x => path.join(basesPath, `${x}.vmap`));
     const actual = (await fs.readdir(basesPath)).map(name => path.join(basesPath, name));
 
     const extra = _.difference(actual, expected);
@@ -239,7 +243,7 @@ export default class MapsTask extends Task<void> {
   private validateMetadata() {
     if (this.mapsMetadata == null) return;
     const mapNames = this.getMapCombinations().map(m => m.name);
-    const order = this.mapsMetadata.order;
+    const { order } = this.mapsMetadata;
 
     Object.keys(this.mapsMetadata.maps)
       .filter(m => !validFilename(m))
@@ -283,7 +287,7 @@ export default class MapsTask extends Task<void> {
     if (this.mapsMetadata == null) throw new Error('No metadata');
     const maps = this.getMapCombinations();
     const mapNames = maps.map(m => m.name);
-    const order = this.mapsMetadata.order;
+    const { order } = this.mapsMetadata;
 
     const restMaps = mapNames.filter(n => !order.includes(n));
     const sortedNames = _.flatMap(order, x => (x !== '...' ? x : restMaps));
@@ -292,12 +296,14 @@ export default class MapsTask extends Task<void> {
 
   private getMapCombinations() {
     if (this.mapsMetadata == null) throw new Error('No metadata');
-    return _.flatMap(this.mapsMetadata.maps, ({ modifications, players, teams }, base) =>
+    const { maps, separator } = this.mapsMetadata;
+
+    return _.flatMap(maps, ({ modifications, players, teams }, base) =>
       modifications!.map(
         (modification): MapCombination => ({
           base,
           modification,
-          name: base + (modification === '_' ? '' : this.mapsMetadata!.separator + modification),
+          name: base + (modification === '_' ? '' : separator + modification),
           teams,
           players,
         }),

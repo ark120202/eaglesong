@@ -11,7 +11,7 @@ export function reportTsDiagnostic(error: ServiceErrorReporter, diagnostic: ts.D
 
   const { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start!);
   const message = ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n');
-  const fileName = diagnostic.file.fileName;
+  const { fileName } = diagnostic.file;
   error(fileName, `(${line + 1},${character + 1}) TS${diagnostic.code}: ${message}`, level);
 }
 

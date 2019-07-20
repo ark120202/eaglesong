@@ -5,9 +5,9 @@ import tempWrite from 'temp-write';
 import path from 'upath';
 
 export class ResourceCompiler {
-  private patterns: string[] = [];
-  private contentPath: string;
-  public constructor(private dotaPath: string, addonName: string) {
+  private readonly patterns: string[] = [];
+  private readonly contentPath: string;
+  constructor(private readonly dotaPath: string, addonName: string) {
     this.contentPath = path.join(dotaPath, 'content', 'dota_addons', addonName);
   }
 

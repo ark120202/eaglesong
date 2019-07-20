@@ -21,7 +21,7 @@ export async function packAddonVpk(gamePath: string, vpkPath: string) {
   const listFilePath = await tempWrite(files.join('\n'));
   const vpk = await findVpkBinary();
 
-  const vpkName = '__eaglesong__' + uniqueString();
+  const vpkName = `__eaglesong__${uniqueString()}`;
   await execa(vpk, ['a', vpkName, `@${listFilePath}`], { cwd: gamePath });
-  await fs.move(path.join(gamePath, vpkName + '_dir.vpk'), vpkPath);
+  await fs.move(path.join(gamePath, `${vpkName}_dir.vpk`), vpkPath);
 }

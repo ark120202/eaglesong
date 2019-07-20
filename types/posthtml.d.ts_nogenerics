@@ -1,4 +1,3 @@
-/* tslint:disable member-access */
 declare module 'posthtml' {
   import * as htmlparser2 from 'htmlparser2';
 

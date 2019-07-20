@@ -1,5 +1,5 @@
 jobs:
-  - job: Main
+  - job: Lint
     pool:
       vmImage: ubuntu-latest
 
@@ -17,9 +17,7 @@ jobs:
 
       - script: |
           yarn lint:prettier
-          yarn --silent lint:tslint:root --format junit > junit.xml
-          # TODO:
-          yarn --silent lint:tslint:packages
+          yarn --silent lint:eslint --format junit > junit.xml
         displayName: Lint
 
       - task: PublishTestResults@2

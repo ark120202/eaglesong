@@ -1,6 +1,7 @@
 import { schemas as standardSchemas } from '@dota-data/scripts';
 import { RootSchema } from '@dota-data/scripts/lib/schema';
 import {
+  NamedType,
   ServiceErrorReporter,
   ServicePlugin,
   ServicePluginApi,
@@ -19,12 +20,11 @@ export type NpcPluginApi = ServicePluginApi & { collectedSchemas: Schemas };
 export type NpcPlugin = ServicePlugin<Hooks, NpcPluginApi>;
 export { defaultPlugins };
 
-export interface File extends Record<string, any> {}
-export interface Files extends Record<string, File> {}
-export type FileGroups = Record<string, Files>;
+export type File = Record<string, any> & NamedType;
+export type Files = Record<string, File> & NamedType;
+export type FileGroups = Record<string, Files> & NamedType;
 
-export type _hooks = NpcService['hooks'];
-export interface Hooks extends _hooks {}
+export type Hooks = NpcService['hooks'] & NamedType;
 
 function getGroupFromFileName(fileName: string): string {
   const segments = fileName.split('/');
@@ -43,11 +43,11 @@ export class NpcService {
     migrate: new AsyncSeriesHook<[Files, string]>(['files', 'group']),
   };
 
-  public constructor(
+  constructor(
     context: string,
     plugins: NpcPlugin[],
     serviceProvider: ServiceProvider,
-    private error: ServiceErrorReporter,
+    private readonly error: ServiceErrorReporter,
     triggerChange: TriggerChange,
   ) {
     this.hooks.schemas.tap({ name: 'NpcService', stage: -1000 }, schemas => {

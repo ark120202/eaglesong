@@ -19,15 +19,19 @@ export function CheckFilesPlugin(hooks: Hooks, { error, context, collectedSchema
       if (checkedFiles.has(fileName)) return;
       checkedFiles.add(fileName);
       if (resourceType != null) {
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
         const names: string[] = require(`dota-data/files/resources/${resourceType}.json`);
-        if (names.includes(fileName + '_c')) return;
+        if (names.includes(`${fileName}_c`)) return;
       }
 
       promises.push(
         // TODO: watch for changes
-        fs.pathExists(path.join(context, 'src', fileName)).then(x => {
-          if (!x) error(source, `Resource ${fileName} not exists`, 'warning');
-        }),
+        (async () => {
+          const exists = await fs.pathExists(path.join(context, 'src', fileName));
+          if (!exists) {
+            error(source, `Resource ${fileName} not exists`, 'warning');
+          }
+        })(),
       );
     };
 
@@ -57,14 +61,15 @@ export function CheckFilesPlugin(hooks: Hooks, { error, context, collectedSchema
                 'soundevents',
               );
               break;
-            case stringResourcePatterns.lua:
-              const scriptPath = [
-                value.startsWith('vscripts/') ? '' : 'vscripts/',
-                value.replace(/\.lua$/, ''),
-                '.ts',
-              ].join('');
+            case stringResourcePatterns.lua: {
+              let scriptPath = `${value.replace(/\.lua$/, '')}.ts`;
+              if (!scriptPath.startsWith('vscripts/')) {
+                scriptPath = `vscripts/${scriptPath}`;
+              }
+
               ensureResourceExists(fileName, scriptPath);
               break;
+            }
           }
         },
       });

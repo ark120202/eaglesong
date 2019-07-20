@@ -7,12 +7,8 @@ type TransformWatchEvent = WatchEvent | { event: 'synthetic'; file: string };
 
 export abstract class TransformTask<T> extends Task<T> {
   protected abstract pattern: string | string[];
-  private syntheticChanges = new Set<string>();
-  private queue = new PQueue();
-
-  public constructor(options: T) {
-    super(options);
-  }
+  private readonly syntheticChanges = new Set<string>();
+  private readonly queue = new PQueue();
 
   public apply() {
     this.hooks.build.tapPromise(this.constructor.name, async () => {
@@ -34,23 +30,15 @@ export abstract class TransformTask<T> extends Task<T> {
     setImmediate(() => this.syntheticChanges.delete(file));
   }
 
-  protected transformFile(_filePath: string): void | Promise<void> {
-    return;
-  }
-  protected removeFile(_filePath: string): void | Promise<void> {
-    return;
-  }
-  protected beforeWatch(_initial: boolean): void | Promise<void> {
-    return;
-  }
-  protected afterWatch(_initial: boolean): void | Promise<void> {
-    return;
-  }
+  protected async transformFile(_filePath: string): Promise<void> {}
+  protected async removeFile(_filePath: string): Promise<void> {}
+  protected async beforeWatch(_initial: boolean): Promise<void> {}
+  protected async afterWatch(_initial: boolean): Promise<void> {}
 
   private addEventToStack(info: TransformWatchEvent) {
-    // tslint:disable-next-line: no-floating-promises
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     if (this.state !== TaskState.Working) this.watchCycle();
-    // tslint:disable-next-line: no-floating-promises
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.queue.add(() => this.processWatchEvent(info));
   }
 
@@ -74,8 +62,8 @@ export abstract class TransformTask<T> extends Task<T> {
     this.finish();
   }
 
-  private watchEventErrors = new Map<string, TaskError[]>();
-  private currentCycleFiles = new Set<string>();
+  private readonly watchEventErrors = new Map<string, TaskError[]>();
+  private readonly currentCycleFiles = new Set<string>();
   private async processWatchEvent({ event, file }: TransformWatchEvent) {
     this.currentCycleFiles.add(file);
     this.watchEventErrors.delete(file);

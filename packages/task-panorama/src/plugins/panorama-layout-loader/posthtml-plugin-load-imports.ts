@@ -6,11 +6,11 @@ import webpack from 'webpack';
 
 const { parser, render } = posthtml().constructor;
 
-async function loadModule(ctx: webpack.loader.LoaderContext, request: string): Promise<string> {
+async function loadModule(context: webpack.loader.LoaderContext, request: string): Promise<string> {
   try {
-    return await promisify((ctx as any).loadModule)(request);
-  } catch (err) {
-    return `module.exports = ${JSON.stringify(err.name)}`;
+    return await promisify((context as any).loadModule)(request);
+  } catch (error) {
+    return `module.exports = ${JSON.stringify(error.name)}`;
   }
 }
 
@@ -31,7 +31,9 @@ function evaluateModule(publicPath: string, filename: string, source: string) {
   const exported: any = sandbox.module.exports;
 
   if (typeof exported !== 'string') {
-    throw new Error(`${filename} expected to export constant string, but got ${typeof exported}`);
+    throw new TypeError(
+      `${filename} expected to export constant string, but got ${typeof exported}`,
+    );
   }
 
   return exported;
@@ -39,23 +41,25 @@ function evaluateModule(publicPath: string, filename: string, source: string) {
 
 const isImportMessage = (msg: posthtml.Message): msg is ImportMessage => msg.type === 'import';
 
-export function loadImports(ctx: webpack.loader.LoaderContext): posthtml.Plugin {
-  const compilation: webpack.compilation.Compilation = ctx._compilation;
+export function loadImports(context: webpack.loader.LoaderContext): posthtml.Plugin {
+  const compilation: webpack.compilation.Compilation = context._compilation;
+  // eslint-disable-next-line prefer-destructuring
   const publicPath: string = compilation.outputOptions.publicPath;
 
   return async (tree: posthtml.Api) => {
-    const messages = tree.messages;
     let html = render(tree);
 
     const loadedModules = await Promise.all(
-      messages.filter(isImportMessage).map(async msg => {
-        const source = await loadModule(ctx, msg.url);
+      tree.messages.filter(isImportMessage).map(async msg => {
+        const source = await loadModule(context, msg.url);
         const result = evaluateModule(publicPath, msg.url, source);
         return { name: msg.name, result };
       }),
     );
 
-    loadedModules.forEach(mod => (html = html.replace(`\${${mod.name}}`, mod.result)));
+    for (const module of loadedModules) {
+      html = html.replace(`\${${module.name}}`, module.result);
+    }
 
     return parser(html);
   };

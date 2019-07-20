@@ -11,12 +11,12 @@ export function runTsLint(error: ServiceErrorReporter, configPath: string, progr
     .filter(<T>(x: T | undefined): x is T => x != null)
     .forEach(f => linter.lint(f.fileName, f.getText(), tslintConfig));
 
-  linter.getResult().failures.forEach(err => {
-    const severity = err.getRuleSeverity();
+  linter.getResult().failures.forEach(ruleFailure => {
+    const severity = ruleFailure.getRuleSeverity();
     if (severity === 'off') return;
 
-    const { line, character } = err.getStartPosition().getLineAndCharacter();
-    const pos = `(${line},${character})`;
-    error(err.getFileName(), `${pos} ${err.getRuleName()}: ${err.getFailure()}`, severity);
+    const { line, character } = ruleFailure.getStartPosition().getLineAndCharacter();
+    const errorMessage = `(${line},${character}) ${ruleFailure.getRuleName()}: ${ruleFailure.getFailure()}`;
+    error(ruleFailure.getFileName(), errorMessage, severity);
   });
 }

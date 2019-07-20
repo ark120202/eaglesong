@@ -57,7 +57,7 @@ export interface PublishOptions {
   publish?: { presets?: Record<string, PublishPreset> };
 }
 
-export default class extends CommandGroup {
+export default class PublishCommand extends CommandGroup {
   protected args!: {
     preset: string;
     newVersion?: string;
@@ -65,7 +65,8 @@ export default class extends CommandGroup {
     anyBranch: boolean;
     allowDirty: boolean;
   };
-  private git = simpleGit(this.context);
+
+  private readonly git = simpleGit(this.context);
   private preset!: PublishPreset;
   private oldVersion?: string;
   private newVersion?: string;
@@ -185,7 +186,7 @@ export default class extends CommandGroup {
         }
 
         const changed = version.neq(oldVersion, newVersion);
-        console.log(`Version: ${oldVersion} ${changed ? '(not changed)' : '-> ' + newVersion}`);
+        console.log(`Version: ${oldVersion} ${changed ? '(not changed)' : `-> ${newVersion}`}`);
       }
     } else {
       if (versionOption != null) {

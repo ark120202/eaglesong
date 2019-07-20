@@ -28,7 +28,7 @@ export function createNpcService(
 export default class NpcTask extends LintedTransformTask<Options> {
   protected pattern = ['src/npc/**/*', '!**/_*'];
 
-  public constructor(options: Options = {}) {
+  constructor(options: Options = {}) {
     super(options);
   }
 
@@ -79,8 +79,8 @@ export default class NpcTask extends LintedTransformTask<Options> {
       await Promise.all([
         fs.outputFile(getPath('index.d.ts'), types),
         ..._.flatMap(compiledSchemas, ({ name, content, schema }) => [
-          fs.outputJson(getPath(name + '.json'), schema.toSchema(), { spaces: 2 }),
-          fs.outputFile(getPath(name + '.d.ts'), content),
+          fs.outputJson(getPath(`${name}.json`), schema.toSchema(), { spaces: 2 }),
+          fs.outputFile(getPath(`${name}.d.ts`), content),
         ]),
       ]);
     });
@@ -109,7 +109,7 @@ export default class NpcTask extends LintedTransformTask<Options> {
     this.service.addFile(path.relative(this.resolvePath('src/npc'), filePath), content);
   }
 
-  protected removeFile(filePath: string) {
+  protected async removeFile(filePath: string) {
     this.service.removeFile(path.relative(this.resolvePath('src/npc'), filePath));
   }
 

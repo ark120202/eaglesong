@@ -25,7 +25,7 @@ const isYarnAvailable = (() => {
   try {
     execa.sync('yarnpkg --version');
     return true;
-  } catch (e) {
+  } catch {
     return false;
   }
 })();
@@ -34,7 +34,7 @@ const isGitAvailable = (() => {
   try {
     execa.sync('git --version');
     return true;
-  } catch (e) {
+  } catch {
     return false;
   }
 })();
@@ -68,7 +68,7 @@ const isGitAvailable = (() => {
         return 'A file with that name already exists';
       }
 
-      if ((await fs.readdir(name)).length !== 0) {
+      if ((await fs.readdir(name)).length > 0) {
         return "A directory with that name already exists and it's not empty";
       }
     }
@@ -128,6 +128,7 @@ const isGitAvailable = (() => {
     await execa('git', ['init'], { cwd: internalName });
   }
 
+  // eslint-disable-next-line no-constant-condition
   if (!true) {
     templates.add('test');
     devDependencies.push('jest', '@types/jest', 'ts-jest');
@@ -180,9 +181,11 @@ const isGitAvailable = (() => {
   try {
     await runPackageManager(['install']);
   } catch {
+    // TODO:
+    // eslint-disable-next-line no-throw-literal
     throw { message: 'Failed to install dependencies' };
   }
-})().catch(err => {
-  console.error(err);
+})().catch(error => {
+  console.error(error);
   process.exitCode = 1;
 });

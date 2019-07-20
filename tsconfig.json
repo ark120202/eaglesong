@@ -12,5 +12,5 @@
       "tapable": ["types/tapable.d.ts"]
     }
   },
-  "include": ["scripts/*", "types/*"]
+  "include": ["types/*"]
 }

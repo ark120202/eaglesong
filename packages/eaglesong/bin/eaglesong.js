@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable import/no-commonjs, @typescript-eslint/no-require-imports */
 
 try {
   if (process.argv.includes('--time-require')) require('time-require');
@@ -11,7 +12,6 @@ try {
   require('source-map-support/register');
 } catch {}
 
-var importLocal = require('import-local');
-if (!importLocal(__filename)) {
+if (!require('import-local')(__filename)) {
   require('../lib/cli');
 }

@@ -34,12 +34,13 @@ export const loadOptions = mem(
       throw new Error('Eaglesong configuration file (`eaglesong.config.ts`) not found.');
     }
 
-    // tslint:disable-next-line: deprecation
+    // eslint-disable-next-line node/no-deprecated-api
     if (require.extensions['.ts'] == null) {
       // Type checking and linting is done in a plugin
       (await import('ts-node')).register({ transpileOnly: true });
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     return require(configPath).default;
   },
 );

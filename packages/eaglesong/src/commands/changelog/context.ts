@@ -5,19 +5,19 @@ interface ChangelogGroup {
   addLine(line: string): void;
 }
 
-interface ChangelogContext extends ChangelogGroup {}
+type ChangelogContext = ChangelogGroup;
 
-export class ChangelogGroupImpl implements ChangelogGroup {
+export class ChangelogGroupImpl implements ChangelogContext {
   public context = this;
 
-  public constructor(public readonly name: string) {}
+  constructor(public readonly name: string) {}
 
   private sorter?(a: ChangelogGroupImpl, b: ChangelogGroupImpl): number;
   public setSorter(sort: (a: ChangelogGroupImpl, b: ChangelogGroupImpl) => number) {
     this.sorter = sort;
   }
 
-  private groups = new Map<string, ChangelogGroupImpl>();
+  private readonly groups = new Map<string, ChangelogGroupImpl>();
   public group(name: string) {
     if (this.groups.has(name)) return this.groups.get(name)!;
     const group = new ChangelogGroupImpl(name);
@@ -25,7 +25,7 @@ export class ChangelogGroupImpl implements ChangelogGroup {
     return group;
   }
 
-  private lines: string[] = [];
+  private readonly lines: string[] = [];
   public addLine(line: string) {
     this.lines.push(line);
   }

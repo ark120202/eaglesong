@@ -1,5 +1,3 @@
-/* tslint:disable member-access */
-
 declare module 'webpack/lib/ModuleError' {
   import webpack from 'webpack';
 

@@ -10,7 +10,7 @@ export abstract class CommandGroup {
   protected readonly context = path.toUnix(process.cwd());
   protected args: {} = {};
 
-  public constructor() {
+  constructor() {
     this.getAddonName = mem(this.getAddonName);
     this.getDotaPath = mem(this.getDotaPath);
   }
@@ -30,8 +30,8 @@ export abstract class CommandGroup {
   protected async getPkg() {
     try {
       return await readPkg({ cwd: this.context });
-    } catch (err) {
-      throw err.code === 'ENOENT' ? new Error('package.json not found') : err;
+    } catch (error) {
+      throw error.code === 'ENOENT' ? new Error('package.json not found') : error;
     }
   }
 
@@ -57,8 +57,8 @@ export abstract class CommandGroup {
     let dotaPath;
     try {
       dotaPath = await findSteamAppByName('dota 2 beta');
-    } catch (err) {
-      if (!(err instanceof SteamNotFoundError)) throw err;
+    } catch (error) {
+      if (!(error instanceof SteamNotFoundError)) throw error;
     }
     if (dotaPath == null) {
       throw new Error("Dota 2 wasn't found. You can specify it with a dotaPath option");

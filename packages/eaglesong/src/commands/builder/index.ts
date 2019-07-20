@@ -16,12 +16,12 @@ export interface BuildOptions {
   buildTasks: Task<any>[] | (() => Promise<Task<any>[]>);
 }
 
-export default class extends CommandGroup {
+export default class BuilderCommand extends CommandGroup {
   protected args: { pushLocalizations: boolean } = { pushLocalizations: false };
   // FIXME:
   public hooks: ReturnType<typeof createHooks> = createHooks();
   private readonly definitionsPath = path.join(this.context, 'node_modules/.definitions');
-  private tasks: TaskMap = new Map();
+  private readonly tasks: TaskMap = new Map();
   private reporter: Reporter = buildReporter;
 
   public register() {
@@ -32,9 +32,11 @@ export default class extends CommandGroup {
     });
 
     const errorOnFailure = (promise: Promise<boolean>) =>
-      promise.then(v => {
-        if (!v) process.exitCode = 1;
-      });
+      (async () => {
+        if (!(await promise)) {
+          process.exitCode = 1;
+        }
+      })();
 
     this.command({
       command: 'build',
@@ -96,11 +98,11 @@ export default class extends CommandGroup {
   }
 
   private isSuccess() {
-    return Array.from(this.tasks.values()).every(t => t.errorLevel == null);
+    return [...this.tasks.values()].every(t => t.errorLevel == null);
   }
 
   private report() {
-    this.reporter(this.context, Array.from(this.tasks.values()));
+    this.reporter(this.context, [...this.tasks.values()]);
   }
 
   private async loadTasks(isWatching: boolean, allowSideEffects: boolean) {
@@ -121,11 +123,11 @@ export default class extends CommandGroup {
       this.args,
     );
 
-    this.tasks.forEach(p => {
-      p.setHelper(helper);
-      p._stateCallback = () => this.report();
-    });
+    for (const task of this.tasks.values()) {
+      task.setHelper(helper);
+      task._stateCallback = () => this.report();
+    }
 
-    await Promise.all(Array.from(this.tasks.values()).map(p => p.apply()));
+    await Promise.all([...this.tasks.values()].map(p => p.apply()));
   }
 }

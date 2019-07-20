@@ -45,10 +45,10 @@ export interface Options {
 }
 
 export default class AddonInfoTask extends Task<Options> {
+  private readonly queue = new PQueue({ concurrency: 1 });
   private maps: Record<string, AddonInfoMap> = {};
-  private queue = new PQueue({ concurrency: 1 });
 
-  public constructor(options: Options = {}) {
+  constructor(options: Options = {}) {
     super(options);
   }
 
@@ -58,7 +58,7 @@ export default class AddonInfoTask extends Task<Options> {
 
   public setMaps(maps: Record<string, AddonInfoMap>) {
     this.maps = maps;
-    // tslint:disable-next-line: no-floating-promises
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     this.queueEmit();
   }
 

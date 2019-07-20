@@ -30,7 +30,7 @@ export class Compilation {
   protected errors: ModuleLoadingError[] = [];
   protected files = new Set<string>();
   protected options: tstl.CompilerOptions;
-  public constructor(program: ts.Program, protected host: CompilationHost = ts.sys) {
+  constructor(program: ts.Program, protected host: CompilationHost = ts.sys) {
     this.options = program.getCompilerOptions();
   }
 
@@ -51,19 +51,19 @@ export class Compilation {
 
       if (lua !== undefined) {
         const transformedLua = this.transformLuaFile(fileName, lua);
-        this.host.writeFile(pathWithoutExtension + '.lua', transformedLua, emitBOM);
+        this.host.writeFile(`${pathWithoutExtension}.lua`, transformedLua, emitBOM);
       }
 
       if (sourceMap !== undefined && this.options.sourceMap) {
-        this.host.writeFile(pathWithoutExtension + '.lua.map', sourceMap, emitBOM);
+        this.host.writeFile(`${pathWithoutExtension}.lua.map`, sourceMap, emitBOM);
       }
 
       if (declaration !== undefined) {
-        this.host.writeFile(pathWithoutExtension + '.d.ts', declaration, emitBOM);
+        this.host.writeFile(`${pathWithoutExtension}.d.ts`, declaration, emitBOM);
       }
 
       if (declarationMap !== undefined) {
-        this.host.writeFile(pathWithoutExtension + '.d.ts.map', declarationMap, emitBOM);
+        this.host.writeFile(`${pathWithoutExtension}.d.ts.map`, declarationMap, emitBOM);
       }
     }
 
@@ -115,7 +115,7 @@ export class Compilation {
     const pathWithoutExtension = this.toAbsolutePath(
       this.toOutputStructure(this.getRelativeToRootPath(path.trimExt(filePath))),
     );
-    this.host.writeFile(pathWithoutExtension + '.lua', result, this.options.emitBOM || false);
+    this.host.writeFile(`${pathWithoutExtension}.lua`, result, this.options.emitBOM || false);
   }
 
   protected transformLuaFile(filePath: string, fileContent: string) {
@@ -127,9 +127,9 @@ export class Compilation {
       let modulePath: string;
       try {
         modulePath = this.resolveDependency(filePath, request);
-      } catch (err) {
-        this.errors.push({ fileName: filePath, message: err.message });
-        return err;
+      } catch (error) {
+        this.errors.push({ fileName: filePath, message: error.message });
+        return error;
       }
 
       this.useFile(modulePath);
@@ -147,6 +147,8 @@ export class Compilation {
       packageFilter: (pkg, pkgFile) => {
         delete pkg.main;
 
+        // FIXME: https://github.com/typescript-eslint/typescript-eslint/issues/723
+        // eslint-disable-next-line prefer-destructuring
         const lua: PackageLuaField = pkg.lua;
         if (lua !== undefined) {
           if (typeof lua === 'string') {
@@ -158,6 +160,7 @@ export class Compilation {
               throw new Error(`${pkgFile} not supports Lua ${luaTarget} target`);
             }
           } else {
+            // eslint-disable-next-line unicorn/prefer-type-error
             throw new Error(`${pkgFile} has invalid "lua" field value`);
           }
         }
@@ -175,13 +178,11 @@ export class Compilation {
 
   protected getRelativeToRootPath(fileName: string) {
     if (this.options.rootDir || this.options.rootDirs) {
-      const rootDirs: string[] = [];
-      if (this.options.rootDirs != null) rootDirs.push(...this.options.rootDirs);
-      if (this.options.rootDir != null) rootDirs.unshift(this.options.rootDir);
+      const roots: string[] = [];
+      if (this.options.rootDirs) roots.push(...this.options.rootDirs);
+      if (this.options.rootDir != null) roots.unshift(this.options.rootDir);
 
-      return (
-        rootDirs.map(d => path.relative(d, fileName)).find(x => !x.startsWith('..')) || fileName
-      );
+      return roots.map(d => path.relative(d, fileName)).find(x => !x.startsWith('..')) || fileName;
     }
 
     return fileName;

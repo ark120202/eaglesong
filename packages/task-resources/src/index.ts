@@ -9,7 +9,7 @@ export interface Options {
 
 export default class ResourcesTask extends Task<Options> {
   private enabledDirectories!: string[];
-  public constructor(options: Options = {}) {
+  constructor(options: Options = {}) {
     super(options);
   }
 
@@ -29,6 +29,7 @@ export default class ResourcesTask extends Task<Options> {
       await Promise.all(
         this.enabledDirectories.map(d => fs.ensureDir(this.resolvePath(`src/${d}`))),
       );
+
       await Promise.all(
         this.enabledDirectories.map(x =>
           fs.ensureSymlink(this.resolvePath(`src/${x}`), this.resolvePath('content', x)),

@@ -1,4 +1,9 @@
-import { ServiceConstructor, ServiceMap, ServiceProvider } from '@eaglesong/helper-service';
+import {
+  NamedType,
+  ServiceConstructor,
+  ServiceMap,
+  ServiceProvider,
+} from '@eaglesong/helper-service';
 import chokidar from 'chokidar';
 import fs from 'fs-extra';
 import globby from 'globby';
@@ -22,8 +27,7 @@ export interface WatchEvent {
   file: string;
 }
 
-type _hooks = ReturnType<typeof createHooks>;
-export interface Hooks extends _hooks {}
+export type Hooks = ReturnType<typeof createHooks> & NamedType;
 export const createHooks = () => ({
   definitions: new AsyncParallelHook<[string]>(['definitionsPath']),
 
@@ -45,7 +49,7 @@ export const createHooks = () => ({
 });
 
 export class BuildHelper {
-  public constructor(
+  constructor(
     public readonly context: string,
     public readonly dotaPath: string | undefined,
     public readonly addonName: string,

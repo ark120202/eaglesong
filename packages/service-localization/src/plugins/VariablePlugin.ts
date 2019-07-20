@@ -6,9 +6,9 @@ import { FlatLocalizationFiles } from '../types';
 const VARIABLE_REGEXP = /#{([$\w]+)}/g;
 
 function findString(files: FlatLocalizationFiles, token: string) {
-  for (const fileName in files) {
-    if (files[fileName][token] != null) {
-      return { fileName, value: files[fileName][token] };
+  for (const [fileName, file] of Object.entries(files)) {
+    if (file[token] != null) {
+      return { fileName, value: file[token] };
     }
   }
 }

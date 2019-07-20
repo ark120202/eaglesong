@@ -3,7 +3,7 @@ import open from 'open';
 import path from 'upath';
 import { CommandGroup } from '../command';
 
-export default class extends CommandGroup {
+export default class OpenCommand extends CommandGroup {
   public register() {
     this.command({
       command: 'open <game|content>/...',

@@ -8,9 +8,9 @@ export class AppCompilation extends Compilation {
   protected transformLuaFile(filePath: string, fileContent: string) {
     try {
       luaparse.parse(fileContent);
-    } catch (err) {
-      if (!(err instanceof SyntaxError)) throw err;
-      this.errors.push({ fileName: filePath, message: err.message });
+    } catch (error) {
+      if (!(error instanceof SyntaxError)) throw error;
+      this.errors.push({ fileName: filePath, message: error.message });
     }
 
     return super.transformLuaFile(filePath, fileContent);

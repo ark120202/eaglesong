@@ -5,7 +5,6 @@ import { Options as LocalizationOptions } from '@eaglesong/task-localization';
 import { Options as NpcOptions } from '@eaglesong/task-npc';
 import { Options as PanoramaOptions } from '@eaglesong/task-panorama';
 import { Options as ResourcesOptions } from '@eaglesong/task-resources';
-import { Options as VScriptsOptions } from '@eaglesong/task-vscripts';
 
 export interface GetTasksOptions {
   maps?: null | boolean;
@@ -16,7 +15,7 @@ export interface GetTasksOptions {
   images?: null | boolean | ImagesOptions;
   npc?: null | boolean | NpcOptions;
   localization?: null | boolean | LocalizationOptions;
-  vscripts?: null | boolean | VScriptsOptions;
+  vscripts?: null | boolean;
   panorama?: null | boolean | PanoramaOptions;
 }
 
@@ -31,8 +30,8 @@ export async function getTasks(options: GetTasksOptions = {}): Promise<Task<any>
     if (option === false) return;
     tasks.push(
       (async () => {
-        const { default: task } = await load();
-        return option != null && option !== true ? new task(option) : new task();
+        const LoadedTask = (await load()).default;
+        return option != null && option !== true ? new LoadedTask(option) : new LoadedTask();
       })(),
     );
   };

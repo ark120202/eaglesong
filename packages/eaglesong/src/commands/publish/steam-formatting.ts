@@ -22,12 +22,13 @@ export function colorizeSteamFormatting(text: string) {
     return placeholder;
   });
 
-  textPatterns.forEach(
-    ({ regex, replacer }) =>
-      (text = text.replace(regex, (_fullMatch, ...args) => replacer(...args.slice(0, -2)))),
-  );
+  for (const { regex, replacer } of textPatterns) {
+    text = text.replace(regex, (_fullMatch, ...args) => replacer(...args.slice(0, -2)));
+  }
 
-  skipped.forEach(({ content, placeholder }) => (text = text.replace(placeholder, content)));
+  for (const { content, placeholder } of skipped) {
+    text = text.replace(placeholder, content);
+  }
 
   return text;
 }

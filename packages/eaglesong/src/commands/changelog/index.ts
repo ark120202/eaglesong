@@ -6,8 +6,8 @@ import { CommandGroup } from '../../command';
 import { ChangelogContextImpl } from './context';
 import { makeFakeRepo } from './git';
 
-export default class extends CommandGroup {
-  private git = simpleGit(this.context);
+export default class ChangelogCommand extends CommandGroup {
+  private readonly git = simpleGit(this.context);
   protected args: { previous?: string } = {};
 
   public register() {
@@ -58,7 +58,7 @@ export default class extends CommandGroup {
           p._stateCallback = _.noop;
         });
 
-        await Promise.all(Array.from(tasks.values()).map(p => p.apply()));
+        await Promise.all([...tasks.values()].map(p => p.apply()));
         await hooks.boot.promise();
         return { isOld, hooks, tasks, services };
       }),

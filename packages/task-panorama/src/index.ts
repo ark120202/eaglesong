@@ -20,7 +20,7 @@ function extractErrorsFromStats(stats: RealWebpackStats, type: 'errors' | 'warni
     c.children.forEach(processCompilation);
   };
   processCompilation(stats.compilation);
-  return _.unionBy(errors, err => (typeof err === 'string' ? err : err.message));
+  return _.unionBy(errors, error => (typeof error === 'string' ? error : error.message));
 }
 
 interface ForkTsCheckerError extends Error {
@@ -30,13 +30,13 @@ interface ForkTsCheckerError extends Error {
   rawMessage: string;
 }
 
-function isForkTsCheckerError(err: any): err is ForkTsCheckerError {
+function isForkTsCheckerError(error: any): error is ForkTsCheckerError {
   return (
-    typeof err === 'object' &&
-    'file' in err &&
-    'location' in err &&
-    'message' in err &&
-    'rawMessage' in err
+    typeof error === 'object' &&
+    'file' in error &&
+    'location' in error &&
+    'message' in error &&
+    'rawMessage' in error
   );
 }
 
@@ -47,7 +47,7 @@ export interface Options {
 }
 
 export default class PanoramaTask extends Task<Options> {
-  public constructor(options: Options = {}) {
+  constructor(options: Options = {}) {
     super(options);
   }
 
@@ -111,9 +111,9 @@ export default class PanoramaTask extends Task<Options> {
     }
 
     if (this.isWatching) {
-      compiler.watch({}, (err, stats) => this.compilationHandler(err, stats));
+      compiler.watch({}, (error, stats) => this.compilationHandler(error, stats));
     } else {
-      compiler.run((err, stats) => this.compilationHandler(err, stats));
+      compiler.run((error, stats) => this.compilationHandler(error, stats));
     }
 
     compiler.hooks.watchRun.tap(this.constructor.name, () => {
@@ -131,8 +131,8 @@ export default class PanoramaTask extends Task<Options> {
     );
   }
 
-  private compilationHandler(webpackErr: Error | undefined, stats: webpack.Stats) {
-    if (webpackErr) throw webpackErr;
+  private compilationHandler(webpackError: Error | undefined, stats: webpack.Stats) {
+    if (webpackError) throw webpackError;
 
     if (stats.hasErrors()) {
       this.displayErrors(extractErrorsFromStats(stats as RealWebpackStats, 'errors'), 'error');
@@ -144,17 +144,17 @@ export default class PanoramaTask extends Task<Options> {
   }
 
   private displayErrors(errors: WebpackError[], level: 'error' | 'warning') {
-    errors.forEach(err => {
-      if (!isForkTsCheckerError(err)) {
-        this.error(null, typeof err === 'string' ? err : err.message, level);
+    for (const error of errors) {
+      if (!isForkTsCheckerError(error)) {
+        this.error(null, typeof error === 'string' ? error : error.message, level);
         return;
       }
 
-      const message = err.rawMessage.replace(
+      const message = error.rawMessage.replace(
         /^ERROR/,
-        `(${err.location.line},${err.location.character})`,
+        `(${error.location.line},${error.location.character})`,
       );
-      this.error(err.file, message, level);
-    });
+      this.error(error.file, message, level);
+    }
   }
 }

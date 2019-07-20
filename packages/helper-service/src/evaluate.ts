@@ -23,8 +23,8 @@ export async function evaluateFile(
         try {
           file[key] = await value(functionApi);
           if (file[key] == null) pluginApi.error(fileName, `${key}() returned ${file[key]}`);
-        } catch (err) {
-          pluginApi.error(fileName, err.message);
+        } catch (error) {
+          pluginApi.error(fileName, error.message);
         }
       }),
   );

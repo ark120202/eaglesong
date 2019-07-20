@@ -1,4 +1,5 @@
 import {
+  NamedType,
   ServiceErrorReporter,
   ServicePlugin,
   ServicePluginApi,
@@ -37,7 +38,7 @@ export type LocalizationPlugin = ServicePlugin<Hooks, LocalizationPluginApi>;
 
 function getFilesMeta(files: LocalizationFiles) {
   const fileList = Object.values(files);
-  const values = fileList.reduce<string[]>((acc, f) => acc.concat(Object.values(f)), []);
+  const values = fileList.reduce<string[]>((acc, f) => [...acc, ...Object.values(f)], []);
   const chars = values.reduce((n, s) => n + s.length, 0);
 
   return {
@@ -47,9 +48,7 @@ function getFilesMeta(files: LocalizationFiles) {
   };
 }
 
-export type _hooks = LocalizationService['hooks'];
-export interface Hooks extends _hooks {}
-
+export type Hooks = LocalizationService['hooks'] & NamedType;
 export class LocalizationService {
   public hooks = {
     /**
@@ -80,15 +79,15 @@ export class LocalizationService {
      */
     emit: new AsyncSeriesHook<[FlatLocalizationFile, DotaLanguage]>(['file', 'language']),
   };
-  private provider: Provider;
 
-  public constructor(
+  private readonly provider: Provider;
+  constructor(
     context: string,
     plugins: LocalizationPlugin[],
     serviceProvider: ServiceProvider,
-    private error: ServiceErrorReporter,
+    private readonly error: ServiceErrorReporter,
     triggerChange: TriggerChange,
-    private defaultLanguage: DotaLanguage,
+    private readonly defaultLanguage: DotaLanguage,
     platformOptions: ProviderOptions,
   ) {
     this.provider = mapTypeToPlatform(platformOptions);
@@ -96,7 +95,7 @@ export class LocalizationService {
     plugins.forEach(p => p(this.hooks, api));
   }
 
-  private baseFiles: FlatLocalizationFiles = {};
+  private readonly baseFiles: FlatLocalizationFiles = {};
   public async addFile(fileName: string, fileContent: LocalizationFile) {
     this.baseFiles[fileName] = await this.preprocess(fileContent, fileName);
   }
@@ -144,9 +143,9 @@ export class LocalizationService {
 
       if (removed.length > 0) log(`[LOCALIZATION] Removed ${removed.length} files`);
       log('[LOCALIZATION] Push complete');
-    } catch (err) {
-      err.message = `[LOCALIZATION] Push error:\n${err.message}`;
-      throw err;
+    } catch (error) {
+      error.message = `[LOCALIZATION] Push error:\n${error.message}`;
+      throw error;
     }
   }
 

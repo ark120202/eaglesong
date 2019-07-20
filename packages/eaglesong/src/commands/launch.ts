@@ -12,7 +12,7 @@ export interface LaunchOptions {
   };
 }
 
-export default class extends CommandGroup {
+export default class LaunchCommand extends CommandGroup {
   public register() {
     this.command({
       command: 'launch',

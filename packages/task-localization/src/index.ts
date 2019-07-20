@@ -45,7 +45,7 @@ export function createLocalizationService(
 export default class LocalizationTask extends LintedTransformTask<Options> {
   protected pattern = ['src/localization/**/*', '!**/_*'];
 
-  public constructor(options: Options = {}) {
+  constructor(options: Options = {}) {
     super(options);
   }
 
@@ -83,7 +83,7 @@ export default class LocalizationTask extends LintedTransformTask<Options> {
     await this.service.addFile(path.relative(this.resolvePath('src/npc'), filePath), content);
   }
 
-  protected removeFile(filePath: string) {
+  protected async removeFile(filePath: string) {
     this.service.removeFile(path.relative(this.resolvePath('src/npc'), filePath));
   }
 

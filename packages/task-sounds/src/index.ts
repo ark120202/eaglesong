@@ -25,7 +25,7 @@ export default class SoundsTask extends LintedTransformTask<void> {
   protected pattern = 'src/sounds/**/*.yml';
   private srcPath!: string;
 
-  public constructor() {
+  constructor() {
     super(undefined);
   }
 
@@ -54,7 +54,9 @@ export default class SoundsTask extends LintedTransformTask<void> {
     const content: SoundEvents = await this.import(filePath);
     const valid = compiledSchema(content);
     if (!valid && compiledSchema.errors != null) {
-      compiledSchema.errors.forEach(err => this.error(filePath, `${err.dataPath} ${err.message}`));
+      for (const { message, dataPath } of compiledSchema.errors) {
+        this.error(filePath, `${dataPath} ${message}`);
+      }
     }
 
     const data = await pProps(content, async soundEvent => {
@@ -108,7 +110,7 @@ export default class SoundsTask extends LintedTransformTask<void> {
           }
 
           absolute = path.changeExt(absolute, '.vsnd');
-          return 'sounds/custom_game/' + path.relative(this.srcPath, absolute);
+          return `sounds/custom_game/${path.relative(this.srcPath, absolute)}`;
         }
 
         if (x.startsWith('sounds')) {

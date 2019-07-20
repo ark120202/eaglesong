@@ -20,7 +20,7 @@ export interface PostHTMLLoaderMeta {
   messages: posthtml.Message[];
 }
 
-export default async function(
+export default async function panoramaLayoutLoader(
   this: webpack.loader.LoaderContext,
   source: string,
   _map: never,
@@ -29,7 +29,7 @@ export default async function(
   const options: LoaderOptions = { ...defaults, ...getOptions(this) };
   validate({ name: 'Panorama Layout Loader', schema, target: options });
 
-  const cb = this.async()!;
+  const callback = this.async()!;
 
   const plugins: posthtml.Plugin[] = [];
 
@@ -68,8 +68,8 @@ export default async function(
       xmlMode: true,
     });
 
-    cb(null, html);
-  } catch (err) {
-    cb(err);
+    callback(null, html);
+  } catch (error) {
+    callback(error);
   }
 }

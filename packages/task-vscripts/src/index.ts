@@ -15,11 +15,9 @@ const tstlPath = path.dirname(require.resolve('typescript-to-lua/package.json'))
 export const copyLuaLib = (to: string) =>
   fs.copy(path.join(tstlPath, 'dist/lualib/lualib_bundle.lua'), path.join(to, 'lualib_bundle.lua'));
 
-export interface Options {}
-
-export default class VScriptsTask extends Task<Options> {
-  public constructor(options: Options = {}) {
-    super(options);
+export default class VScriptsTask extends Task<void> {
+  constructor() {
+    super(undefined);
   }
 
   public apply() {
@@ -53,9 +51,9 @@ export default class VScriptsTask extends Task<Options> {
             const program = builderProgram.getProgram();
             await this.lint(program);
             await this.emit(program);
-          } catch (err) {
+          } catch (error) {
             // TODO:
-            console.error(err);
+            console.error(error);
             process.exit(1);
             return;
           }

@@ -21,11 +21,11 @@ function getTaskStateSymbol(state: TaskState) {
 }
 
 function formatTaskErrors(context: string, indent: string, task: Task<any>) {
-  return task.errors.map(err => {
-    const file = err.file != null ? ' ' + path.relative(context, err.file) : '';
-    const message = err.message.trim().replace(/\n/g, `\n   ${indent}`);
-    const errLevel = err.level === 'error' ? chalk.bgRed('[E]') : chalk.bgYellow('[W]');
-    return `${indent}${errLevel}${chalk.cyan(file)} ${message}`;
+  return task.errors.map(error => {
+    const file = error.file != null ? ` ${path.relative(context, error.file)}` : '';
+    const message = error.message.trim().replace(/\n/g, `\n   ${indent}`);
+    const errorLevel = error.level === 'error' ? chalk.bgRed('[E]') : chalk.bgYellow('[W]');
+    return `${indent}${errorLevel}${chalk.cyan(file)} ${message}`;
   });
 }
 
@@ -36,7 +36,7 @@ class ReportList {
   private tasks: Task<any>[] = [];
   private frame = 0;
   private timer?: NodeJS.Timer;
-  constructor(private context: string) {}
+  constructor(private readonly context: string) {}
 
   public setTasks(tasks: Task<any>[]) {
     this.tasks = tasks;
@@ -57,7 +57,7 @@ class ReportList {
       text += task.name;
       if (task.state !== TaskState.Working) {
         const errors = formatTaskErrors(this.context, ' ', task).join('\n');
-        if (errors.length > 0) text += '\n' + errors;
+        if (errors.length > 0) text += `\n${errors}`;
       }
       text += '\n';
     });

@@ -28,3 +28,7 @@ export type ServiceErrorReporter = (
   message: string,
   level?: 'warning' | 'error',
 ) => void;
+
+// A hack to make type alias display a name instead of a full object
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface NamedType {}

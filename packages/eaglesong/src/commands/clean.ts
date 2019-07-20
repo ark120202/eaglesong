@@ -2,7 +2,7 @@ import del from 'del';
 import path from 'upath';
 import { CommandGroup } from '../command';
 
-export default class extends CommandGroup {
+export default class CleanCommand extends CommandGroup {
   public register() {
     this.command({
       command: 'clean',

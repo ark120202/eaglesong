@@ -11,12 +11,13 @@ const compilerCommons = new WeakMap<
 export const getCommonsForCompiler = (compiler: webpack.Compiler) => compilerCommons.get(compiler);
 
 export class UseCommonsPlugin implements webpack.Plugin {
-  public constructor(
-    private commons: Record<string, { manifest: Manifest; preserveRealm: boolean }>,
+  constructor(
+    private readonly commons: Record<string, { manifest: Manifest; preserveRealm: boolean }>,
   ) {}
 
   public apply(compiler: webpack.Compiler) {
     // @ts-ignore
+    // eslint-disable-next-line prefer-destructuring
     const context: string = compiler.context;
 
     const [preserved, notPreserved] = _.partition(

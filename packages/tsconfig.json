@@ -8,6 +8,7 @@
     { "path": "helper-tstl" },
     { "path": "service-localization" },
     { "path": "service-npc" },
+    { "path": "task-addoninfo" },
     { "path": "task-images" },
     { "path": "task-localization" },
     { "path": "task-maps" },

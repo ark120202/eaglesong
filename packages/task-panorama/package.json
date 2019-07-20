@@ -54,8 +54,6 @@
     "yml-loader": "^2.1.0"
   },
   "devDependencies": {
-    "@ark120202/typescript-config": "^2.0.0",
-    "tslint-plugin-prettier": "^2.0.1",
     "typescript": "^3.5.3"
   },
   "peerDependencies": {

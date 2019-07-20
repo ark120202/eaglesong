@@ -18,7 +18,7 @@ export default class ImagesTask extends TransformTask<Options> {
   protected pattern = 'src/images/**/*';
   private srcPath!: string;
 
-  public constructor(options: Options = {}) {
+  constructor(options: Options = {}) {
     super(options);
   }
 
@@ -60,14 +60,15 @@ export default class ImagesTask extends TransformTask<Options> {
   }
 
   private verifyFile(fullPath: string, fileName: string, content: Buffer) {
-    const verifySizes: SizeGroup[] = Array.isArray(this.options.verifySizes)
-      ? this.options.verifySizes
-      : this.options.verifySizes == null
-      ? [
-          { name: 'items', test: ['items'], sizes: [[88, 64]] },
-          { name: 'spellicons', test: ['spellicons'], sizes: [[128, 128]] },
-        ]
-      : [];
+    const verifySizes: SizeGroup[] = [];
+    if (Array.isArray(this.options.verifySizes)) {
+      verifySizes.push(...this.options.verifySizes);
+    } else if (this.options.verifySizes == null) {
+      verifySizes.push(
+        { name: 'items', test: ['items'], sizes: [[88, 64]] },
+        { name: 'spellicons', test: ['spellicons'], sizes: [[128, 128]] },
+      );
+    }
 
     const eSizes = verifySizes.find(({ test }) => {
       if (Array.isArray(test)) {
@@ -84,8 +85,8 @@ export default class ImagesTask extends TransformTask<Options> {
     try {
       const { width, height } = imageSize(content);
       rSizes = [width, height];
-    } catch (err) {
-      this.error(fullPath, err.message);
+    } catch (error) {
+      this.error(fullPath, error.message);
       return false;
     }
 

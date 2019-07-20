@@ -9,13 +9,13 @@ import {
 class LintInternalTask extends LintedTransformTask<void> {
   protected pattern = ['**/*', '!**/*.{ts,tsx,js,jsx}', '!src', '!node_modules'];
 
-  public constructor() {
+  constructor() {
     super(undefined);
   }
 }
 
 class TypeScriptInternalTask extends Task<void> {
-  public constructor() {
+  constructor() {
     super(undefined);
   }
 

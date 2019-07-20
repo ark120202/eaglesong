@@ -1,0 +1,5 @@
+node_modules
+/example
+/types
+/packages/*/lib
+/packages/create-custom-game/templates
