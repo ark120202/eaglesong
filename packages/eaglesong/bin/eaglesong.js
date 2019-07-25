@@ -2,7 +2,9 @@
 /* eslint-disable import/no-commonjs, @typescript-eslint/no-require-imports */
 
 try {
-  if (process.argv.includes('--time-require')) require('time-require');
+  if (process.argv.includes('--time-require')) {
+    require('time-require');
+  }
 } catch {}
 
 require('please-upgrade-node')(require('../package.json'));
@@ -12,6 +14,4 @@ try {
   require('source-map-support/register');
 } catch {}
 
-if (!require('import-local')(__filename)) {
-  require('../lib/cli');
-}
+require('../lib/cli');
