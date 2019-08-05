@@ -13,13 +13,11 @@ async function prompt(question: inquirer.Question) {
   return value;
 }
 
-async function promptString(question: inquirer.InputQuestion<inquirer.Answers>): Promise<string> {
-  return prompt(question);
-}
+const promptString = (question: inquirer.InputQuestion<inquirer.Answers>): Promise<string> =>
+  prompt(question);
 
-async function promptConfirmation(message: string, defaultValue?: boolean): Promise<boolean> {
-  return prompt({ type: 'confirm', message, default: defaultValue });
-}
+const promptConfirmation = (message: string, defaultValue?: boolean): Promise<boolean> =>
+  prompt({ type: 'confirm', message, default: defaultValue });
 
 const isYarnAvailable = (() => {
   try {

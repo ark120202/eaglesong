@@ -54,6 +54,7 @@ class CustomEnumsSchema extends EnumsSchema {
       const member = this.getDefinition().members.find(x => x.name === name);
       return member ? member.originalName : name;
     };
+
     if (typeof value === 'string') return getOriginalName(value);
     if (!this._flags || !Array.isArray(value)) return value;
     return value.map(getOriginalName).join(' | ');
@@ -73,7 +74,7 @@ export function BetterEnumsPlugin(hooks: Hooks, { collectedSchemas }: NpcPluginA
     if (collectedSchemas[group] == null) return;
     _.each(files, file => {
       collectedSchemas[group].validateRoot(file, {
-        afterVisit: (schema, value, context) => {
+        afterVisit(schema, value, context) {
           if (schema instanceof CustomEnumsSchema) {
             _.set(file, context.path, schema.mapValue(value));
           }

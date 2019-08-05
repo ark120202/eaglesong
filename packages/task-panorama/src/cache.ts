@@ -37,27 +37,30 @@ export async function loadCache(
   }
 }
 
-export async function resolveVersions(context: string, modules: string[]) {
-  return _.fromPairs(
+export const resolveVersions = async (context: string, modules: string[]) =>
+  _.fromPairs(
     await Promise.all(
-      modules.map<Promise<[string, string]>>(async moduleName => {
-        const resolved = resolveFrom(context, `${moduleName}/package.json`);
-        if (resolved === null) return [moduleName, 'exotic'];
-        // @ts-ignore
-        const pkg = await readPkg({ cwd: path.dirname(resolved) });
-        return [moduleName, pkg.version];
-      }),
+      modules.map(
+        async (moduleName): Promise<[string, string]> => {
+          const resolved = resolveFrom(context, `${moduleName}/package.json`);
+          if (resolved === null) return [moduleName, 'exotic'];
+          // @ts-ignore
+          const pkg = await readPkg({ cwd: path.dirname(resolved) });
+          return [moduleName, pkg.version];
+        },
+      ),
     ),
   );
-}
 
 async function isDirty(isWatching: boolean, context: string, common: Common, cached?: Cache) {
   if (cached == null) return true;
 
   if (common.lifetime === 'compiler') return true;
+
   if (typeof common.lifetime === 'number' && cached.time + common.lifetime >= Date.now()) {
     return true;
   }
+
   if (cached.isWatching !== isWatching) return true;
 
   return !_.isEqual(cached.versions, await resolveVersions(context, common.modules));

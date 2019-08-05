@@ -49,6 +49,7 @@ export function AbilityPrecachePlugin(hooks: Hooks) {
           if (precache[vdf.EXTRA_VALUES] && precache[vdf.EXTRA_VALUES][key]) {
             values.push(...precache[vdf.EXTRA_VALUES][key]);
           }
+
           precache[key] = values;
         });
       });

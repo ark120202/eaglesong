@@ -9,9 +9,8 @@ import { schema, SoundEvents } from './soundevents.schema';
 const ajv = new Ajv({ allErrors: true, useDefaults: true });
 const compiledSchema = ajv.compile(schema);
 
-function toOperatorVariableValues(value: Record<string, unknown>) {
-  return _.mapValues(value, x => (x == null ? x : toOperatorVariableValue(x)));
-}
+const toOperatorVariableValues = (value: Record<string, unknown>) =>
+  _.mapValues(value, x => (x == null ? x : toOperatorVariableValue(x)));
 
 function toOperatorVariableValue(value: unknown) {
   if (Array.isArray(value)) value = _.fromPairs(value.map((v, i) => [`value${i}`, v]));

@@ -7,12 +7,9 @@ import WebpackError from 'webpack/lib/WebpackError';
 import { XmlChunk } from './HtmlWebpackXmlPlugin';
 
 class PanoramaManifestError extends WebpackError {
+  public name = 'PanoramaManifestError';
   constructor(filename: string, message: string) {
-    super();
-
-    this.name = 'PanoramaManifestError';
-    this.message = `Panorama manifest ${filename}\n${message}`;
-
+    super(`Panorama manifest ${filename}\n${message}`);
     Error.captureStackTrace(this, this.constructor);
   }
 }
@@ -49,7 +46,7 @@ export class PanoramaEntriesPlugin {
 
     compiler.hooks.compilation.tap(
       this.constructor.name,
-      async (compilation, { normalModuleFactory }) => {
+      (compilation, { normalModuleFactory }) => {
         // @ts-ignore
         compilation.dependencyFactories.set(PanoramaEntryDependency, normalModuleFactory);
       },

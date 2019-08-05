@@ -66,18 +66,18 @@ export default class MapsTask extends Task<void> {
         'src/maps/overviews',
         'src/materials/overviews',
       ];
-      this.watch(watchedResources, async () =>
+
+      this.watch(watchedResources, () => {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this.queue.add(async () => {
           this.removeErrors();
           this.start();
           await this.reloadMetadata();
-        }),
-      );
+        });
+      });
     });
 
-    this.hooks.compile.tapPromise(this.constructor.name, async addResource => {
-      addResource('maps/*.vmap');
-    });
+    this.hooks.compile.tap(this.constructor.name, addResource => addResource('maps/*.vmap'));
   }
 
   private async reloadMetadata() {

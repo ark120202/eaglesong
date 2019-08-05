@@ -20,14 +20,13 @@ function getTaskStateSymbol(state: TaskState) {
   }
 }
 
-function formatTaskErrors(context: string, indent: string, task: Task<any>) {
-  return task.errors.map(error => {
+const formatTaskErrors = (context: string, indent: string, task: Task<any>) =>
+  task.errors.map(error => {
     const file = error.file != null ? ` ${path.relative(context, error.file)}` : '';
     const message = error.message.trim().replace(/\n/g, `\n   ${indent}`);
     const errorLevel = error.level === 'error' ? chalk.bgRed('[E]') : chalk.bgYellow('[W]');
     return `${indent}${errorLevel}${chalk.cyan(file)} ${message}`;
   });
-}
 
 export type Reporter = (context: string, tasks: Task<any>[]) => void;
 
@@ -55,10 +54,12 @@ class ReportList {
 
       text += ' ';
       text += task.name;
+
       if (task.state !== TaskState.Working) {
         const errors = formatTaskErrors(this.context, ' ', task).join('\n');
         if (errors.length > 0) text += `\n${errors}`;
       }
+
       text += '\n';
     });
 

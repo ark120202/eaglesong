@@ -32,6 +32,7 @@ export function createTaskGroup<T>(
       this.subtasks.forEach(t => {
         this.runningTasks.add(t);
         t.setHelper(this._helper);
+
         Object.defineProperty(t, 'errorLevel', { get: () => this.errorLevel });
         Object.defineProperty(t, 'state', { get: () => this.state });
 
@@ -40,6 +41,7 @@ export function createTaskGroup<T>(
           if (this.runningTasks.size === 0) this.start();
           this.runningTasks.add(t);
         };
+
         t.finish = () => {
           this._stateCallback();
           this.runningTasks.delete(t);

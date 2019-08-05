@@ -20,7 +20,7 @@ class TypeScriptInternalTask extends Task<void> {
   }
 
   public apply() {
-    this.hooks.build.tapPromise(this.constructor.name, async () => {
+    this.hooks.build.tap(this.constructor.name, () => {
       createTsAutoWatch(
         this.context,
         this.resolvePath('project', 'tsconfig.json'),
@@ -31,7 +31,7 @@ class TypeScriptInternalTask extends Task<void> {
           this.start();
         },
         this.error,
-        async builderProgram => {
+        builderProgram => {
           const program = builderProgram.getProgram();
           runTsLint(this.error, this.resolvePath('project', 'tslint.json'), program);
           this.finish();

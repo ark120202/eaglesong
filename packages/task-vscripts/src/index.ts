@@ -44,27 +44,26 @@ export default class VScriptsTask extends Task<void> {
           this.start();
         },
         this.error,
-        async builderProgram => {
+        builderProgram => {
           isInInternalCycle = false;
-          try {
+          (async () => {
             updateConfigFile(builderProgram.getCompilerOptions());
             const program = builderProgram.getProgram();
             await this.lint(program);
-            await this.emit(program);
-          } catch (error) {
+            this.emit(program);
+
+            if (isOutdatedInLocalCycle) {
+              isOutdatedInLocalCycle = false;
+              this.removeErrors();
+              forceProgramUpdate();
+            } else {
+              this.finish();
+            }
+          })().catch(error => {
             // TODO:
             console.error(error);
             process.exit(1);
-            return;
-          }
-
-          if (isOutdatedInLocalCycle) {
-            isOutdatedInLocalCycle = false;
-            this.removeErrors();
-            forceProgramUpdate();
-          } else {
-            this.finish();
-          }
+          });
         },
       );
 
@@ -93,7 +92,7 @@ export default class VScriptsTask extends Task<void> {
     runTsLint(this.error, this.resolvePath('src/vscripts/tslint.json'), program);
   }
 
-  private async emit(program: ts.Program) {
+  private emit(program: ts.Program) {
     const options = program.getCompilerOptions();
     options.noEmit = this.dotaPath == null;
     const { diagnostics, errors } = transpileProgram(program, this.resolvePath('src/common'));

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* eslint-disable import/no-commonjs, @typescript-eslint/no-require-imports */
+/* eslint-disable @typescript-eslint/no-require-imports */
 
 try {
   if (process.argv.includes('--time-require')) {

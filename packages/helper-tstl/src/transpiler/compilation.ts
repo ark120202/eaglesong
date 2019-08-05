@@ -4,14 +4,13 @@ import tstl from 'typescript-to-lua';
 import path from 'upath';
 
 const REQUIRE_REGEXP = /require *(?:\( *'(.*?)' *\)|\( *"(.*?)" *\)| *'(.*?)'| *"(.*?)")/g;
-export function replaceImports(code: string, replacer: (module: string) => string | Error) {
-  return code.replace(REQUIRE_REGEXP, (source, m1, m2, m3, m4) => {
+export const replaceImports = (code: string, replacer: (module: string) => string | Error) =>
+  code.replace(REQUIRE_REGEXP, (source, m1, m2, m3, m4) => {
     const replacement = replacer(m4 || m3 || m2 || m1);
     return replacement instanceof Error
       ? `--[[ ${source} ]] error(${JSON.stringify(replacement.message)})`
       : `require(${JSON.stringify(replacement)})`;
   });
-}
 
 export interface ModuleLoadingError {
   fileName: string;
@@ -91,6 +90,7 @@ export class Compilation {
           this.errors.push({ fileName: filePath, message });
           result = `error("${message}")`;
         }
+
         break;
       }
 

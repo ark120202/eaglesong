@@ -2,9 +2,8 @@ import { DotaLanguage, languages } from '@dota-data/localization/files';
 import { NamedType } from '@eaglesong/helper-service';
 
 export { DotaLanguage };
-export function isDotaLanguage(language: string): language is DotaLanguage {
-  return languages.includes(language as any);
-}
+export const isDotaLanguage = (language: string): language is DotaLanguage =>
+  languages.includes(language as any);
 
 export type Files<T> = Record<string, T> & NamedType;
 export type Multilingual<T> = Partial<Record<DotaLanguage, T>> & NamedType;

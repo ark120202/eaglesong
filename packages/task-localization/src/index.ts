@@ -83,7 +83,7 @@ export default class LocalizationTask extends LintedTransformTask<Options> {
     await this.service.addFile(path.relative(this.resolvePath('src/npc'), filePath), content);
   }
 
-  protected async removeFile(filePath: string) {
+  protected removeFile(filePath: string) {
     this.service.removeFile(path.relative(this.resolvePath('src/npc'), filePath));
   }
 

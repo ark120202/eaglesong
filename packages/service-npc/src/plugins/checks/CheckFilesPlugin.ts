@@ -37,7 +37,7 @@ export function CheckFilesPlugin(hooks: Hooks, { error, context, collectedSchema
 
     _.each(files, (file, fileName) => {
       collectedSchemas[group].validateRoot(file, {
-        beforeVisit: (schema, value) => {
+        beforeVisit(schema, value) {
           if (!(schema instanceof StringSchema)) return;
           if (typeof value !== 'string') return;
 

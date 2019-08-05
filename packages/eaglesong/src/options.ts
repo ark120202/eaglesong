@@ -21,10 +21,11 @@ async function find(context: string) {
     }),
   );
 
-  return possibleConfigs
-    .filter(x => x.exists)
-    .map(x => x.absolute)
-    .pop();
+  for (const config of possibleConfigs) {
+    if (config.exists) {
+      return config.absolute;
+    }
+  }
 }
 
 export const loadOptions = mem(

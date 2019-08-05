@@ -44,16 +44,19 @@ export async function uploadToSteam(metadataPath: string, workshopId: number) {
   }
 
   let childStdout = '';
-  child.stdout!.on('data', async (buf: Buffer) => {
-    childStdout += buf.toString();
+  child.stdout!.on('data', (buf: Buffer) => {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    (async () => {
+      childStdout += buf.toString();
 
-    if (childStdout.trimRight().endsWith('password:')) {
-      child.stdin!.write(`${await getPassword()}\n`);
-    }
+      if (childStdout.trimRight().endsWith('password:')) {
+        child.stdin!.write(`${await getPassword()}\n`);
+      }
 
-    if (childStdout.trimRight().endsWith('Steam Guard code:')) {
-      child.stdin!.write(`${await getGuardCode()}\n`);
-    }
+      if (childStdout.trimRight().endsWith('Steam Guard code:')) {
+        child.stdin!.write(`${await getGuardCode()}\n`);
+      }
+    })();
   });
 
   try {

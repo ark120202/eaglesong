@@ -109,7 +109,7 @@ export default class NpcTask extends LintedTransformTask<Options> {
     this.service.addFile(path.relative(this.resolvePath('src/npc'), filePath), content);
   }
 
-  protected async removeFile(filePath: string) {
+  protected removeFile(filePath: string) {
     this.service.removeFile(path.relative(this.resolvePath('src/npc'), filePath));
   }
 
@@ -118,8 +118,9 @@ export default class NpcTask extends LintedTransformTask<Options> {
 
     const artifacts = await this.service.emit();
     if (this.dotaPath == null) return;
+
     await Promise.all(
-      Object.entries(artifacts).map(async ([group, kv]) =>
+      Object.entries(artifacts).map(([group, kv]) =>
         this.outputKV1(this.resolvePath('game', `scripts/npc/${group}.txt`), { '': kv }),
       ),
     );

@@ -27,10 +27,12 @@ export default class LaunchCommand extends CommandGroup {
 
     let launchOptions = (await this.getOptions()).launch;
     if (launchOptions == null) launchOptions = {};
+
     if (launchOptions.vconsole !== false) {
       args.push('-vconsole');
       spawn(path.join(win64, 'vconsole2.exe'), [], { cwd: win64 });
     }
+
     if (launchOptions.language != null) args.push('-language', launchOptions.language);
     if (launchOptions.args != null) args.push(...launchOptions.args);
     if (launchOptions.map != null) {

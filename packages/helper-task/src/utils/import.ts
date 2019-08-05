@@ -29,6 +29,7 @@ export async function _import(id: string): Promise<any> {
         // Type checking and linting is done in a plugin
         (await import('ts-node')).register({ transpileOnly: true });
       }
+
     // fallthrough
     case '.js': {
       const resolved = require.resolve(id);

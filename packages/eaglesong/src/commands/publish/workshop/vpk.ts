@@ -6,9 +6,7 @@ import tempWrite from 'temp-write';
 import uniqueString from 'unique-string';
 import path from 'upath';
 
-async function getGameFiles(gamePath: string) {
-  return globby('**/*', { cwd: gamePath, dot: true });
-}
+const getGameFiles = (gamePath: string) => globby('**/*', { cwd: gamePath, dot: true });
 
 const ALIEN_SWARM_SDK_APP_ID = 640;
 async function findVpkBinary() {

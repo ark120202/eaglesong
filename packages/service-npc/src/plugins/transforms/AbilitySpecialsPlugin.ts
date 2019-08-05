@@ -69,10 +69,12 @@ export function AbilitySpecialsPlugin(hooks: Hooks, { error }: NpcPluginApi) {
 
             const fields = Object.keys(special);
             const mainCandidates = fields.filter(x => !(x in reservedFields) && !x.startsWith('$'));
+
             if (mainCandidates.length === 0) {
               error(fileName, `${abilityName}.Specials[${index}] not contains special name`);
               return [fullIndex, special];
             }
+
             if (mainCandidates.length > 1) {
               error(
                 fileName,
@@ -89,8 +91,7 @@ export function AbilitySpecialsPlugin(hooks: Hooks, { error }: NpcPluginApi) {
             if (mainIndex !== 0) {
               error(
                 fileName,
-                `${abilityName}.Specials(${mainName}) has main field at ${mainIndex} index. ` +
-                  `Main field should come first.`,
+                `${abilityName}.Specials(${mainName}) has main field at ${mainIndex} index. Main field should come first.`,
                 'warning',
               );
             }
@@ -136,10 +137,8 @@ export function AbilitySpecialsPlugin(hooks: Hooks, { error }: NpcPluginApi) {
         if (ability.AbilitySpecial == null) return;
         ability.Specials = Object.entries<any>(ability.AbilitySpecial)
           .sort(([a], [b]) => Number(a) - Number(b))
-          .map(([, special]) => {
-            // TODO:
-            return _.omit(special, 'var_type');
-          });
+          // TODO:
+          .map(([, special]) => _.omit(special, 'var_type'));
       });
     });
   });

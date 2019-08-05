@@ -32,10 +32,12 @@ export function prettyDiff(oldVersion: string, versionInput: string) {
         firstVersionChange = true;
         return `${chalk.dim.cyan(newPart)}`;
       }
+
       if (newPart.indexOf('-') >= 1) {
         const preVersion = newPart.split('-');
         return `${chalk.dim.cyan(`${preVersion[0]}-${preVersion[1]}`)}`;
       }
+
       return chalk.reset.dim(newPart);
     })
     .join(chalk.reset.dim('.'));

@@ -41,26 +41,26 @@ function evaluateModule(publicPath: string, filename: string, source: string) {
 
 const isImportMessage = (msg: posthtml.Message): msg is ImportMessage => msg.type === 'import';
 
-export function loadImports(context: webpack.loader.LoaderContext): posthtml.Plugin {
+export const loadImports = (context: webpack.loader.LoaderContext): posthtml.Plugin => async (
+  tree: posthtml.Api,
+) => {
   const compilation: webpack.compilation.Compilation = context._compilation;
   // eslint-disable-next-line prefer-destructuring
   const publicPath: string = compilation.outputOptions.publicPath;
 
-  return async (tree: posthtml.Api) => {
-    let html = render(tree);
+  let html = render(tree);
 
-    const loadedModules = await Promise.all(
-      tree.messages.filter(isImportMessage).map(async msg => {
-        const source = await loadModule(context, msg.url);
-        const result = evaluateModule(publicPath, msg.url, source);
-        return { name: msg.name, result };
-      }),
-    );
+  const loadedModules = await Promise.all(
+    tree.messages.filter(isImportMessage).map(async msg => {
+      const source = await loadModule(context, msg.url);
+      const result = evaluateModule(publicPath, msg.url, source);
+      return { name: msg.name, result };
+    }),
+  );
 
-    for (const module of loadedModules) {
-      html = html.replace(`\${${module.name}}`, module.result);
-    }
+  for (const module of loadedModules) {
+    html = html.replace(`\${${module.name}}`, module.result);
+  }
 
-    return parser(html);
-  };
-}
+  return parser(html);
+};

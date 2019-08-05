@@ -118,10 +118,12 @@ export default class PublishCommand extends CommandGroup {
     await this.validateRepo();
     await this.readNewVersion();
     await this.bumpVersion();
+
     if (!(await this.build())) {
       process.exitCode = 1;
       return;
     }
+
     await this.commitVersionChanges();
     await this.uploadToWorkshop();
 
@@ -192,6 +194,7 @@ export default class PublishCommand extends CommandGroup {
       if (versionOption != null) {
         throw new Error("--new-version option can't be used with disabled bumping");
       }
+
       newVersion = oldVersion;
     }
 

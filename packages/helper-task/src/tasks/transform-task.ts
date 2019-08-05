@@ -12,11 +12,11 @@ export abstract class TransformTask<T> extends Task<T> {
 
   public apply() {
     this.hooks.build.tapPromise(this.constructor.name, async () => {
-      await this.beforeWatch(true);
+      if (this.beforeWatch) await this.beforeWatch(true);
 
       const files = await this.matchFiles(this.pattern);
-      await Promise.all(files.map(f => this.transformFile(f)));
-      await this.afterWatch(true);
+      if (this.transformFile) await Promise.all(files.map(f => this.transformFile!(f)));
+      if (this.afterWatch) await this.afterWatch(true);
 
       this.finish();
       this.watch(this.pattern, e => this.addEventToStack(e));
@@ -30,10 +30,10 @@ export abstract class TransformTask<T> extends Task<T> {
     setImmediate(() => this.syntheticChanges.delete(file));
   }
 
-  protected async transformFile(_filePath: string): Promise<void> {}
-  protected async removeFile(_filePath: string): Promise<void> {}
-  protected async beforeWatch(_initial: boolean): Promise<void> {}
-  protected async afterWatch(_initial: boolean): Promise<void> {}
+  protected transformFile?(_filePath: string): void | Promise<void>;
+  protected removeFile?(_filePath: string): void | Promise<void>;
+  protected beforeWatch?(_initial: boolean): void | Promise<void>;
+  protected afterWatch?(_initial: boolean): void | Promise<void>;
 
   private addEventToStack(info: TransformWatchEvent) {
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -47,7 +47,7 @@ export abstract class TransformTask<T> extends Task<T> {
     this.start();
     this.currentCycleFiles.clear();
 
-    await this.beforeWatch(false);
+    if (this.beforeWatch) await this.beforeWatch(false);
     await this.queue.onIdle();
 
     // Restore errors coming from not changed files
@@ -57,7 +57,7 @@ export abstract class TransformTask<T> extends Task<T> {
       }
     }
 
-    await this.afterWatch(false);
+    if (this.afterWatch) await this.afterWatch(false);
 
     this.finish();
   }
@@ -72,12 +72,13 @@ export abstract class TransformTask<T> extends Task<T> {
       case 'add':
       case 'change':
       case 'synthetic':
-        await this.transformFile(file);
+        if (this.transformFile) await this.transformFile(file);
         break;
       case 'unlink':
-        await this.removeFile(file);
+        if (this.removeFile) await this.removeFile(file);
         break;
     }
+
     this.watchEventErrors.set(file, _.difference(this.errors, oldErrors));
   }
 }

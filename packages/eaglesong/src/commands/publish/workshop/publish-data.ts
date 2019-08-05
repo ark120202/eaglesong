@@ -8,10 +8,10 @@ export const createPublishData = (addonName: string) => {
   const publishTime = new Date();
   return `"publish_data"
 {
-	"title"		""
-	"source_folder"		"${addonName}"
-	"publish_time"		"${time(publishTime)}"
-	"publish_time_readable"		"${readable(publishTime)}"
+\t"title"\t\t""
+\t"source_folder"\t\t"${addonName}"
+\t"publish_time"\t\t"${time(publishTime)}"
+\t"publish_time_readable"\t\t"${readable(publishTime)}"
 }
 `;
 };

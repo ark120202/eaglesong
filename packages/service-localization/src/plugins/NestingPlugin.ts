@@ -19,7 +19,7 @@ function flatten(object: Record<string, any>, prevKey: string, tokens: Record<st
   return tokens;
 }
 
-export async function NestingPlugin(hooks: Hooks) {
+export function NestingPlugin(hooks: Hooks) {
   hooks.preprocess.tap('NestingPlugin', file => {
     _.each(file, (value, key) => {
       if (!_.isPlainObject(value)) return;

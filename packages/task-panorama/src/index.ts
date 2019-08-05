@@ -14,12 +14,15 @@ interface RealWebpackStats extends webpack.Stats {
 
 type WebpackError = Error | string;
 function extractErrorsFromStats(stats: RealWebpackStats, type: 'errors' | 'warnings') {
-  let errors: WebpackError[] = [];
-  const processCompilation = (c: webpack.compilation.Compilation) => {
-    errors = errors.concat(c[type]);
-    c.children.forEach(processCompilation);
+  const errors: WebpackError[] = [];
+
+  const processCompilation = (compilation: webpack.compilation.Compilation) => {
+    errors.push(...compilation[type]);
+    compilation.children.forEach(processCompilation);
   };
+
   processCompilation(stats.compilation);
+
   return _.unionBy(errors, error => (typeof error === 'string' ? error : error.message));
 }
 
@@ -30,15 +33,12 @@ interface ForkTsCheckerError extends Error {
   rawMessage: string;
 }
 
-function isForkTsCheckerError(error: any): error is ForkTsCheckerError {
-  return (
-    typeof error === 'object' &&
-    'file' in error &&
-    'location' in error &&
-    'message' in error &&
-    'rawMessage' in error
-  );
-}
+const isForkTsCheckerError = (error: any): error is ForkTsCheckerError =>
+  typeof error === 'object' &&
+  'file' in error &&
+  'location' in error &&
+  'message' in error &&
+  'rawMessage' in error;
 
 export interface Options {
   common?: Record<string, Common>;

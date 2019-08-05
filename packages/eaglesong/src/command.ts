@@ -54,12 +54,14 @@ export abstract class CommandGroup {
   protected async getDotaPath() {
     const options = await this.getOptions();
     if (options.dotaPath != null) return options.dotaPath;
+
     let dotaPath;
     try {
       dotaPath = await findSteamAppByName('dota 2 beta');
     } catch (error) {
       if (!(error instanceof SteamNotFoundError)) throw error;
     }
+
     if (dotaPath == null) {
       throw new Error("Dota 2 wasn't found. You can specify it with a dotaPath option");
     }
