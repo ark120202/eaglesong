@@ -21,6 +21,9 @@ export function createTaskGroup<T>(
     }
 
     public set errors(_value) {
+      // Super constructor calls setter before class has been initialized
+      if (!this.subtasks) return;
+
       throw new Error("Task group errors can't be updated");
     }
 

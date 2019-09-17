@@ -3,7 +3,7 @@ import _ from 'lodash';
 import yargs from 'yargs';
 import * as commands from './commands';
 
-if (!isInstalledGlobally) {
+if (isInstalledGlobally) {
   throw new Error(
     "Eaglesong should be installed locally. Remove it with 'npm --global uninstall eaglesong' or 'yarn global remove eaglesong' and install in your project.",
   );

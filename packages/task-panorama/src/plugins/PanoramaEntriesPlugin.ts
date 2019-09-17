@@ -26,7 +26,7 @@ class PanoramaEntryDependency extends ModuleDependency {
 export interface Entry {
   name: string;
   source: string;
-  type?: boolean | string;
+  type: string | null;
 }
 
 export class PanoramaEntriesPlugin {
@@ -75,13 +75,11 @@ export class PanoramaEntriesPlugin {
       );
 
       compilation.hooks.reviveChunks.tap(this.constructor.name, chunks => {
-        chunks.forEach(chunk => {
+        for (const chunk of chunks) {
           const entry = entries.find(e => e.name === chunk.name);
-          if (!entry || entry.type === false) return;
-
-          (chunk as XmlChunk).__type =
-            entry.type === true || entry.type == null ? 'HUD' : entry.type;
-        });
+          if (!entry || entry.type === null) return;
+          (chunk as XmlChunk).__type = entry.type;
+        }
       });
     });
   }
