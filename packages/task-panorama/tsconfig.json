@@ -5,5 +5,5 @@
     "outDir": "lib"
   },
   "references": [{ "path": "../helper-task" }],
-  "include": ["src/**/*", "src/**/*.json"]
+  "include": ["src", "src/**/*.json"]
 }
