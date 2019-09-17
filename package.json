@@ -46,21 +46,21 @@
     }
   },
   "devDependencies": {
-    "@ark120202/eslint-config": "^1.1.0",
+    "@ark120202/eslint-config": "^2.0.0",
     "@ark120202/typescript-config": "^2.0.0",
     "@types/fs-extra": "^8.0.0",
     "@types/htmlparser2": "^3.10.1",
-    "@types/node": "^12.6.6",
-    "eslint": "^5.16.0",
+    "@types/node": "^12.7.5",
+    "eslint": "^6.4.0",
     "fs-extra": "^8.1.0",
-    "lerna": "^3.15.0",
+    "lerna": "^3.16.4",
     "npm-run-all": "^4.1.5",
     "prettier": "^1.18.2",
-    "rimraf": "^2.6.3",
+    "rimraf": "^3.0.0",
     "ts-node": "^8.3.0",
     "tsc-pnp": "^0.1.0",
     "tslib": "^1.10.0",
-    "typescript": "^3.5.3"
+    "typescript": "^3.6.3"
   },
   "installConfig": {
     "pnp": false

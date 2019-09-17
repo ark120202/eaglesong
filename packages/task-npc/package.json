@@ -18,10 +18,10 @@
     "@eaglesong/helper-task": "link:../helper-task",
     "@eaglesong/service-npc": "link:../service-npc",
     "@types/fs-extra": "^8.0.0",
-    "@types/lodash": "^4.14.136",
+    "@types/lodash": "^4.14.138",
     "fs-extra": "^8.1.0",
-    "lodash": "^4.17.14",
+    "lodash": "^4.17.15",
     "tslib": "^1.10.0",
-    "upath": "^1.1.0"
+    "upath": "^1.2.0"
   }
 }

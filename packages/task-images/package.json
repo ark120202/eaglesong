@@ -18,8 +18,8 @@
     "@types/fs-extra": "^8.0.0",
     "@types/image-size": "^0.7.0",
     "fs-extra": "^8.1.0",
-    "image-size": "^0.7.3",
+    "image-size": "^0.7.5",
     "tslib": "^1.10.0",
-    "upath": "^1.1.0"
+    "upath": "^1.2.0"
   }
 }

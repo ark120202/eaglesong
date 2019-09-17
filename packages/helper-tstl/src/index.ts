@@ -1,4 +1,4 @@
-import createDotaTransformer from 'dota-lua-types/lib/transformer';
+import createDotaTransformer from 'dota-lua-types/transformer';
 import path from 'path';
 import * as ts from 'typescript';
 import * as tstl from 'typescript-to-lua';

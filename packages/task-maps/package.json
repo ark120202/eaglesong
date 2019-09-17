@@ -17,11 +17,11 @@
     "@eaglesong/helper-task": "link:../helper-task",
     "@eaglesong/task-addoninfo": "link:../task-addoninfo",
     "@types/fs-extra": "^8.0.0",
-    "@types/lodash": "^4.14.136",
+    "@types/lodash": "^4.14.138",
     "ajv": "^6.10.2",
     "fs-extra": "^8.1.0",
-    "lodash": "^4.17.14",
-    "p-queue": "^6.1.0",
+    "lodash": "^4.17.15",
+    "p-queue": "^6.1.1",
     "tslib": "^1.10.0",
     "valid-filename": "^3.1.0"
   }

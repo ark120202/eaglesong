@@ -16,11 +16,11 @@
   "dependencies": {
     "@eaglesong/helper-service": "link:../helper-service",
     "@types/fs-extra": "^8.0.0",
-    "@types/lodash": "^4.14.136",
+    "@types/lodash": "^4.14.138",
     "ajv": "^6.10.2",
     "fs-extra": "^8.1.0",
-    "lodash": "^4.17.14",
-    "p-props": "^3.0.1",
+    "lodash": "^4.17.15",
+    "p-props": "^3.1.0",
     "tapable": "^2.0.0-beta.2",
     "tslib": "^1.10.0",
     "vdf-extra": "^2.2.2"

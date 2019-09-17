@@ -14,14 +14,14 @@
   "bin": "lib/index.js",
   "dependencies": {
     "@types/fs-extra": "^8.0.0",
-    "@types/inquirer": "^6.0.3",
-    "@types/yargs": "^13.0.0",
-    "execa": "^2.0.3",
+    "@types/inquirer": "^6.5.0",
+    "@types/yargs": "^13.0.2",
+    "execa": "^2.0.4",
     "fs-extra": "^8.1.0",
     "globby": "^10.0.1",
-    "inquirer": "^6.5.0",
+    "inquirer": "^7.0.0",
     "sort-package-json": "^1.22.1",
-    "yargs": "^13.3.0"
+    "yargs": "^14.0.0"
   },
   "engines": {
     "node": ">=10"
