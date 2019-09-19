@@ -8,8 +8,9 @@ export abstract class LintedTransformTask<T> extends TransformTask<T> {
     const baseName = path.parse(filePath).base;
     const extension = path.extname(filePath);
     const isSupported = prettierSupportedLanguages.some(
-      x =>
-        x.extensions.includes(extension) || (x.filenames != null && x.filenames.includes(baseName)),
+      language =>
+        (language.extensions && language.extensions.includes(extension)) ||
+        (language.filenames && language.filenames.includes(baseName)),
     );
 
     if (isSupported) {

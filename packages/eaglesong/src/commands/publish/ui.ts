@@ -1,7 +1,7 @@
 import inquirer from 'inquirer';
 import * as version from './version';
 
-export const prompt = async (question: inquirer.Question) =>
+export const prompt = async (question: inquirer.DistinctQuestion) =>
   (await inquirer.prompt<{ value: string }>([{ ...question, name: 'value' }])).value;
 
 export const askForWorkshopMessage = (newVersion: string) =>
