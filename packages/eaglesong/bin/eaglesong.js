@@ -8,7 +8,6 @@ try {
 } catch {}
 
 require('please-upgrade-node')(require('../package.json'));
-require('loud-rejection/register');
 
 try {
   require('source-map-support/register');

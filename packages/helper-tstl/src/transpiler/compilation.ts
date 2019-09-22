@@ -38,7 +38,7 @@ export class Compilation {
     if (this.used) throw new Error('Compilation can be used only once');
     this.used = true;
 
-    [...files]
+    files
       .filter(({ lua }) => lua !== undefined)
       .forEach(({ fileName }) => this.files.add(fileName));
 

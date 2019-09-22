@@ -10,7 +10,7 @@ export function UnitAbilitiesPlugin(hooks: Hooks) {
       .filter(([schemaName]) => fileFilter.has(schemaName))
       .forEach(([, schema]) =>
         schema.getRestRootsLike(s.ObjectSchema).forEach(element => {
-          element.fieldBefore('Ability1', 'Abilities', s.str());
+          element.fieldBefore('Ability1', 'Abilities', s.array(s.str()));
           _.times(24, i => element.delete(`Ability${i + 1}`));
         }),
       ),

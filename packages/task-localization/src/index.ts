@@ -9,7 +9,7 @@ import {
   ProviderOptions,
 } from '@eaglesong/service-localization';
 import pProps from 'p-props';
-import path from 'path';
+import path from 'upath';
 
 export { DotaLanguage, ProviderOptions };
 export interface Options {
@@ -80,11 +80,14 @@ export default class LocalizationTask extends LintedTransformTask<Options> {
   protected async transformFile(filePath: string) {
     await super.transformFile(filePath);
     const content = await this.import(filePath);
-    await this.service.addFile(path.relative(this.resolvePath('src/npc'), filePath), content);
+    await this.service.addFile(
+      path.relative(this.resolvePath('src/localization'), filePath),
+      content,
+    );
   }
 
   protected removeFile(filePath: string) {
-    this.service.removeFile(path.relative(this.resolvePath('src/npc'), filePath));
+    this.service.removeFile(path.relative(this.resolvePath('src/localization'), filePath));
   }
 
   protected async beforeWatch(initial: boolean) {

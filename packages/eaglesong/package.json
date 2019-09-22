@@ -42,7 +42,6 @@
     "is-installed-globally": "^0.2.0",
     "lodash": "^4.17.15",
     "log-symbols": "^3.0.0",
-    "loud-rejection": "^2.1.0",
     "mem": "^5.1.1",
     "open": "^6.4.0",
     "please-upgrade-node": "^3.2.0",
