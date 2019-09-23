@@ -7,6 +7,7 @@ try {
   }
 } catch {}
 
+require('v8-compile-cache');
 require('please-upgrade-node')(require('../package.json'));
 
 try {
