@@ -18,7 +18,7 @@ interface PublishUpdateInfo {
   clean?: boolean;
 }
 
-export interface PublishPreset {
+export interface PublishStrategy {
   workshopId: number;
   forceBranch?: string;
   /** @default false */
@@ -54,12 +54,12 @@ export interface PublishPreset {
 }
 
 export interface PublishOptions {
-  publish?: { presets?: Record<string, PublishPreset> };
+  publish?: { strategies?: Record<string, PublishStrategy> };
 }
 
 export default class PublishCommand extends CommandGroup {
   protected args!: {
-    preset: string;
+    strategy: string;
     newVersion?: string;
     skipBuild: boolean;
     anyBranch: boolean;
@@ -67,7 +67,7 @@ export default class PublishCommand extends CommandGroup {
   };
 
   private readonly git = simpleGit(this.context);
-  private preset!: PublishPreset;
+  private strategy!: PublishStrategy;
   private oldVersion?: string;
   private newVersion?: string;
 
@@ -75,11 +75,7 @@ export default class PublishCommand extends CommandGroup {
     this.command({
       builder: argv =>
         argv
-          .option('preset', {
-            default: 'default',
-            describe: 'A preset name',
-            type: 'string',
-          })
+          .positional('strategy', { type: 'string' })
           .option('new-version', {
             describe:
               'A new version number or a release type ' +
@@ -101,22 +97,29 @@ export default class PublishCommand extends CommandGroup {
             type: 'boolean',
             default: false,
           }),
-      command: 'publish',
-      describe: 'Bump version, make git tag, build .vpk and push it to workshop',
+      command: 'publish <strategy>',
+      describe: 'Bump version, make git tag, build .vpk and push it to Steam Workshop',
       handler: () => this.publish(),
     });
   }
 
   private async publish() {
     const options = await this.getOptions();
-    const publishOptions = options.publish != null ? options.publish : {};
-    const presets = publishOptions.presets != null ? publishOptions.presets : {};
-    const presetName = this.args.preset;
-    this.preset = presets[presetName];
-    if (this.preset == null) throw new Error(`Invalid --preset ${presetName} option value`);
+    const strategies = (options.publish || {}).strategies || {};
+    const strategyName = this.args.strategy;
+    this.strategy = strategies[strategyName];
+    if (this.strategy == null) {
+      const strategyNames = Object.keys(strategies);
+      const recommendation =
+        strategyNames.length === 0
+          ? 'Configure your strategies in a config file.'
+          : `Provide one of: ${strategyNames.join(', ')}.`;
+
+      throw new Error(`Unknown strategy name '${strategyName}'. ${recommendation}`);
+    }
 
     await this.validateRepo();
-    await this.readNewVersion();
+    await this.computeVersions();
     await this.bumpVersion();
 
     if (!(await this.build())) {
@@ -128,14 +131,16 @@ export default class PublishCommand extends CommandGroup {
     await this.uploadToWorkshop();
 
     if (
-      this.preset.bump !== false &&
-      (this.preset.bump == null || this.preset.bump === true || this.preset.bump.push !== false)
+      this.strategy.bump !== false &&
+      (this.strategy.bump == null ||
+        this.strategy.bump === true ||
+        this.strategy.bump.push !== false)
     ) {
       await this.git.push(undefined, undefined, ['--tags']);
     }
 
-    if (this.preset.afterSuccess) {
-      await this.preset.afterSuccess(await this.getUpdateInfo());
+    if (this.strategy.afterSuccess) {
+      await this.strategy.afterSuccess(await this.getUpdateInfo());
     }
   }
 
@@ -144,7 +149,7 @@ export default class PublishCommand extends CommandGroup {
 
     const currentBranch = (await this.git.branchLocal()).current;
 
-    const { forceBranch } = this.preset;
+    const { forceBranch } = this.strategy;
     if (forceBranch != null && currentBranch !== forceBranch && !this.args.anyBranch) {
       throw new Error(`Not on '${forceBranch}' branch. Use --any-branch to publish anyway.`);
     }
@@ -164,7 +169,7 @@ export default class PublishCommand extends CommandGroup {
     }
   }
 
-  private async readNewVersion() {
+  private async computeVersions() {
     const oldVersion = (await this.getPkg()).version;
     if (!version.isValidNumber(oldVersion)) {
       throw new Error(`package.json has incorrect version ${oldVersion}`);
@@ -172,7 +177,7 @@ export default class PublishCommand extends CommandGroup {
 
     const versionOption = this.args.newVersion;
     let newVersion: string;
-    if (this.preset.bump !== false) {
+    if (this.strategy.bump !== false) {
       if (versionOption == null) {
         newVersion = await askForNewVersion(oldVersion);
       } else {
@@ -214,7 +219,8 @@ export default class PublishCommand extends CommandGroup {
       throw new Error('Incorrect state');
     }
 
-    const bump = this.preset.bump != null && this.preset.bump !== true ? this.preset.bump : {};
+    const bump =
+      this.strategy.bump != null && this.strategy.bump !== true ? this.strategy.bump : {};
     if (bump === false) throw new Error('Incorrect state');
     if (!(await this.git.checkIsRepo())) return;
 
@@ -241,7 +247,8 @@ export default class PublishCommand extends CommandGroup {
       return true;
     }
 
-    const build = this.preset.build != null && this.preset.build !== true ? this.preset.build : {};
+    const build =
+      this.strategy.build != null && this.strategy.build !== true ? this.strategy.build : {};
     if (build.clean !== false) {
       await new Clean().clean();
     }
@@ -258,8 +265,8 @@ export default class PublishCommand extends CommandGroup {
     if (this.newVersion == null) throw new Error('Incorrect state');
 
     let workshopMessage: string;
-    if (this.preset.workshopMessage != null) {
-      workshopMessage = this.preset.workshopMessage(await this.getUpdateInfo());
+    if (this.strategy.workshopMessage != null) {
+      workshopMessage = this.strategy.workshopMessage(await this.getUpdateInfo());
       console.log(`${chalk.gray('------------')}Workshop Message${chalk.gray('------------')}`);
       console.log(colorizeSteamFormatting(workshopMessage));
       console.log(chalk.gray('----------------------------------------'));
@@ -272,7 +279,7 @@ export default class PublishCommand extends CommandGroup {
     await packAndUpload({
       addonName,
       gamePath: path.join(dotaPath, 'game', 'dota_addons', addonName),
-      workshopId: this.preset.workshopId,
+      workshopId: this.strategy.workshopId,
       message: workshopMessage,
       beforePublish(size) {
         if (size >= 1024) {
