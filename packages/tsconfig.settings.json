@@ -1,16 +1,15 @@
 {
   "extends": "@ark120202/typescript-config/node/10.json",
   "compilerOptions": {
-    "types": ["node", "../../types"],
     "composite": true,
+    // TODO:
+    "skipLibCheck": true,
 
-    // FIXME:
     "baseUrl": "..",
     "paths": {
-      "webpack": ["types/webpack.d.ts"],
-      "html-webpack-plugin": ["types/html-webpack-plugin.d.ts"],
-      "tapable": ["types/tapable.d.ts"]
-    },
-    "skipLibCheck": true
+      "*": ["types/*"],
+      "@webpack-contrib/schema-utils": ["types/webpack-contrib__schema-utils.d.ts"],
+      "@posthtml/esm": ["types/posthtml__esm.d.ts"]
+    }
   }
 }

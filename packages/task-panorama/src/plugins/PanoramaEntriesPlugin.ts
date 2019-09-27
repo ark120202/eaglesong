@@ -16,11 +16,6 @@ class PanoramaManifestError extends WebpackError {
 
 class PanoramaEntryDependency extends ModuleDependency {
   public readonly type = 'panorama entry';
-  // TODO: Type ModuleDependency
-  // eslint-disable-next-line @typescript-eslint/no-useless-constructor
-  constructor(request: string) {
-    super(request);
-  }
 }
 
 export interface Entry {
@@ -60,6 +55,7 @@ export class PanoramaEntriesPlugin {
       try {
         entries = parseJson(result.toString('utf8'));
       } catch (error) {
+        // @ts-ignore
         const manifestPath = makePathsRelative(compiler.options.context, this.manifest);
         compilation.errors.push(new PanoramaManifestError(manifestPath, error.message));
         return;
@@ -68,7 +64,6 @@ export class PanoramaEntriesPlugin {
       await Promise.all(
         entries.map(async ({ source, name }) => {
           const dep = new PanoramaEntryDependency(source);
-          // @ts-ignore
           dep.loc = { name };
           await new Promise<void>(resolve => compilation.addEntry(context, dep, name, resolve));
         }),
