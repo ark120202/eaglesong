@@ -4,7 +4,7 @@ import { Options } from 'eaglesong';
 
 const config: Options = {
   publish: {
-    presets: {
+    strategies: {
       release: {
         workshopId: 0,
         // if conventional-commits: bump: { commit: version => `chore(release): ${version}` },
