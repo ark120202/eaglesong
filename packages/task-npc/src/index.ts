@@ -1,5 +1,5 @@
 import { ServiceErrorReporter, ServiceProvider, TriggerChange } from '@eaglesong/helper-service';
-import { LintedTransformTask } from '@eaglesong/helper-task';
+import { TransformTask } from '@eaglesong/helper-task';
 import { defaultPlugins, NpcPlugin, NpcService, Schemas } from '@eaglesong/service-npc';
 import fs from 'fs-extra';
 import _ from 'lodash';
@@ -25,7 +25,7 @@ export function createNpcService(
   return new NpcService(context, plugins, serviceProvider, error, triggerChange);
 }
 
-export default class NpcTask extends LintedTransformTask<Options> {
+export default class NpcTask extends TransformTask<Options> {
   protected pattern = ['src/npc/**/*', '!**/_*'];
 
   constructor(options: Options = {}) {
@@ -104,7 +104,6 @@ export default class NpcTask extends LintedTransformTask<Options> {
   }
 
   protected async transformFile(filePath: string) {
-    await super.transformFile(filePath);
     const content = await this.import(filePath);
     this.service.addFile(path.relative(this.resolvePath('src/npc'), filePath), content);
   }

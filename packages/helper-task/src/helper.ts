@@ -68,8 +68,13 @@ export class BuildHelper {
   public watch(patterns: string | string[], callback: (info: WatchEvent) => void) {
     if (!this.isWatching) return;
 
-    const watcher = chokidar.watch(patterns, { ignoreInitial: true, cwd: this.context });
     const toPath = (fileName: string) => path.resolve(this.context, fileName);
+    const watcher = chokidar.watch(patterns, {
+      ignoreInitial: true,
+      cwd: this.context,
+      awaitWriteFinish: { stabilityThreshold: 200 },
+    });
+
     watcher.on('add', file => callback({ event: 'add', file: toPath(file) }));
     watcher.on('change', file => callback({ event: 'change', file: toPath(file) }));
     watcher.on('unlink', file => callback({ event: 'unlink', file: toPath(file) }));

@@ -1,7 +1,7 @@
 {
-  "name": "@eaglesong/task-root-scripts",
+  "name": "@eaglesong/task-eslint",
   "version": "0.0.0",
-  "description": "Eaglesong task for checking root TypeScript project",
+  "description": "Eaglesong task for ESLint",
   "keywords": [
     "dota 2",
     "eaglesong"
@@ -14,6 +14,14 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "dependencies": {
-    "@eaglesong/helper-task": "link:../helper-task"
+    "@eaglesong/helper-task": "link:../helper-task",
+    "tslib": "^1.10.0"
+  },
+  "devDependencies": {
+    "@types/eslint": "^6.1.1",
+    "eslint": "^6.4.0"
+  },
+  "peerDependencies": {
+    "eslint": "^6.0.0"
   }
 }

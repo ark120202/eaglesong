@@ -40,10 +40,8 @@ export abstract class Task<T> {
     }
   }
 
-  public name: string;
-  constructor(public readonly options: T) {
-    this.name = this.constructor.name;
-  }
+  public name = this.constructor.name;
+  constructor(public readonly options: T) {}
 
   public abstract apply(): void | Promise<void>;
 

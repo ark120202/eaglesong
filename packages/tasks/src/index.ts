@@ -9,6 +9,8 @@ import { Options as ResourcesOptions } from '@eaglesong/task-resources';
 export interface GetTasksOptions {
   maps?: null | boolean;
   sounds?: null | boolean;
+  prettier?: null | boolean;
+  eslint?: null | boolean;
   rootScripts?: null | boolean;
   resources?: null | boolean | ResourcesOptions;
   addoninfo?: null | boolean | AddonInfoOptions;
@@ -37,11 +39,13 @@ export async function getTasks(options: GetTasksOptions = {}): Promise<Task<any>
   };
 
   addTask(() => import('@eaglesong/task-addoninfo'), options.addoninfo);
+  addTask(() => import('@eaglesong/task-eslint'), options.eslint);
   addTask(() => import('@eaglesong/task-images'), options.images);
   addTask(() => import('@eaglesong/task-localization'), options.localization);
   addTask(() => import('@eaglesong/task-maps'), options.maps);
   addTask(() => import('@eaglesong/task-npc'), options.npc);
   addTask(() => import('@eaglesong/task-panorama'), options.panorama);
+  addTask(() => import('@eaglesong/task-prettier'), options.prettier);
   addTask(() => import('@eaglesong/task-resources'), options.resources);
   addTask(() => import('@eaglesong/task-root-scripts'), options.rootScripts);
   addTask(() => import('@eaglesong/task-sounds'), options.sounds);

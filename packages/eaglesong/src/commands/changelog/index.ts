@@ -39,7 +39,7 @@ export default class ChangelogCommand extends CommandGroup {
         const services: ServiceMap = new Map();
         const hooks = createHooks();
         const context = isOld
-          ? await makeFakeRepo(this.context, previousHash, ['src', 'tsconfig.json', 'tslint.json'])
+          ? await makeFakeRepo(this.context, previousHash, ['src', 'tsconfig.json'])
           : this.context;
         const helper = new BuildHelper(
           context,

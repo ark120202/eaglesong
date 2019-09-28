@@ -1,5 +1,5 @@
 import { ServiceErrorReporter, ServiceProvider, TriggerChange } from '@eaglesong/helper-service';
-import { LintedTransformTask } from '@eaglesong/helper-task';
+import { TransformTask } from '@eaglesong/helper-task';
 import {
   defaultPlugins,
   DotaLanguage,
@@ -42,7 +42,7 @@ export function createLocalizationService(
   );
 }
 
-export default class LocalizationTask extends LintedTransformTask<Options> {
+export default class LocalizationTask extends TransformTask<Options> {
   protected pattern = ['src/localization/**/*', '!**/_*'];
 
   constructor(options: Options = {}) {
@@ -78,7 +78,6 @@ export default class LocalizationTask extends LintedTransformTask<Options> {
   }
 
   protected async transformFile(filePath: string) {
-    await super.transformFile(filePath);
     const content = await this.import(filePath);
     await this.service.addFile(
       path.relative(this.resolvePath('src/localization'), filePath),

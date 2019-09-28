@@ -1,4 +1,4 @@
-import { LintedTransformTask } from '@eaglesong/helper-task';
+import { TransformTask } from '@eaglesong/helper-task';
 import Ajv from 'ajv';
 import fs from 'fs-extra';
 import _ from 'lodash';
@@ -20,7 +20,7 @@ function toOperatorVariableValue(value: unknown) {
 }
 
 const SUPPORTED_AUDIO_EXTENSIONS = ['.mp3', '.wav'];
-export default class SoundsTask extends LintedTransformTask<void> {
+export default class SoundsTask extends TransformTask<void> {
   protected pattern = 'src/sounds/**/*.yml';
   private srcPath!: string;
 
@@ -49,7 +49,6 @@ export default class SoundsTask extends LintedTransformTask<void> {
   }
 
   protected async transformFile(filePath: string) {
-    await super.transformFile(filePath);
     const content: SoundEvents = await this.import(filePath);
     const valid = compiledSchema(content);
     if (!valid && compiledSchema.errors != null) {

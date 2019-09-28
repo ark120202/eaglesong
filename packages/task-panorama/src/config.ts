@@ -54,7 +54,6 @@ export function createWebpackConfig({ context, dotaPath, addonName }: CreateWebp
 
   const panoramaPath = path.join(context, 'src', 'panorama');
   const configFile = path.join(panoramaPath, 'tsconfig.json');
-  const tslintConfig = path.join(panoramaPath, 'tslint.json');
 
   const entryLoader: webpack.RuleSetLoader = {
     loader: require.resolve('./plugins/entry-loader'),
@@ -87,17 +86,8 @@ export function createWebpackConfig({ context, dotaPath, addonName }: CreateWebp
       ],
     },
     plugins: [
-      new ForkTsCheckerWebpackPlugin({
-        tsconfig: configFile,
-        async: false,
-        silent: true,
-        tslint: tslintConfig,
-      }),
-      new webpack.BannerPlugin({
-        banner: 'var self = this;',
-        raw: true,
-        test: /\.js$/,
-      }),
+      new ForkTsCheckerWebpackPlugin({ tsconfig: configFile, async: false, silent: true }),
+      new webpack.BannerPlugin({ banner: 'var self = this;', raw: true, test: /\.js$/ }),
     ],
   };
 
