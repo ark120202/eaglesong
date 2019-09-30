@@ -16,7 +16,7 @@
   "dependencies": {
     "@eaglesong/helper-task": "link:../helper-task",
     "@types/fs-extra": "^8.0.0",
-    "@types/lodash": "^4.14.140",
+    "@types/lodash": "^4.14.141",
     "fs-extra": "^8.1.0",
     "lines-and-columns": "^1.1.6",
     "lodash": "^4.17.15",

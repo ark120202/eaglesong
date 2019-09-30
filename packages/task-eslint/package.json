@@ -19,7 +19,7 @@
   },
   "devDependencies": {
     "@types/eslint": "^6.1.1",
-    "eslint": "^6.4.0"
+    "eslint": "^6.5.0"
   },
   "peerDependencies": {
     "eslint": "^6.0.0"

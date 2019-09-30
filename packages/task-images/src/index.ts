@@ -1,6 +1,6 @@
 import { TransformTask } from '@eaglesong/helper-task';
 import fs from 'fs-extra';
-import imageSize from 'image-size';
+import { imageSize } from 'image-size';
 import path from 'upath';
 
 export interface SizeGroup {
@@ -83,6 +83,7 @@ export default class ImagesTask extends TransformTask<Options> {
 
     let rSizes: [number, number];
     try {
+      // @ts-ignore https://github.com/image-size/image-size/pull/219
       const { width, height } = imageSize(content);
       rSizes = [width, height];
     } catch (error) {

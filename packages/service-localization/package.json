@@ -16,8 +16,8 @@
   "dependencies": {
     "@eaglesong/helper-service": "link:../helper-service",
     "@types/dedent": "^0.7.0",
-    "@types/lodash": "^4.14.138",
-    "@types/request-promise-native": "^1.0.16",
+    "@types/lodash": "^4.14.141",
+    "@types/request-promise-native": "^1.0.17",
     "dedent": "^0.7.0",
     "lodash": "^4.17.15",
     "p-props": "^3.1.0",
@@ -27,7 +27,7 @@
     "tslib": "^1.10.0"
   },
   "devDependencies": {
-    "@dota-data/localization": "^0.1.4"
+    "@dota-data/localization": "^0.1.5"
   },
   "peerDependencies": {
     "@dota-data/localization": "^0.1.2"

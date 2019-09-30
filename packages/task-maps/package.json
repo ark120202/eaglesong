@@ -17,7 +17,7 @@
     "@eaglesong/helper-task": "link:../helper-task",
     "@eaglesong/task-addoninfo": "link:../task-addoninfo",
     "@types/fs-extra": "^8.0.0",
-    "@types/lodash": "^4.14.138",
+    "@types/lodash": "^4.14.141",
     "ajv": "^6.10.2",
     "fs-extra": "^8.1.0",
     "lodash": "^4.17.15",
