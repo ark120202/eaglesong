@@ -62,7 +62,7 @@ const isGitAvailable = (() => {
   const validateInternalName = async (name: string) => {
     if (name === '') return "Name shouldn't be empty";
     if (await fs.pathExists(name)) {
-      if (!(await fs.stat(name)).isDirectory) {
+      if (!(await fs.stat(name)).isDirectory()) {
         return 'A file with that name already exists';
       }
 
@@ -126,7 +126,7 @@ const isGitAvailable = (() => {
     await execa('git', ['init'], { cwd: internalName });
   }
 
-  // eslint-disable-next-line no-constant-condition
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (!true) {
     templates.add('test');
     devDependencies.push('jest', '@types/jest', 'ts-jest');

@@ -3,9 +3,9 @@ import tar from 'tar-fs';
 import tempfile from 'tempfile';
 
 export async function makeFakeRepo(cwd: string, commit: string, paths: string[]) {
-  const tempPath = tempfile();
+  const temporaryFilePath = tempfile();
   const git = execa('git', ['archive', commit, ...paths], { cwd });
-  const extractStream = tar.extract(tempPath);
+  const extractStream = tar.extract(temporaryFilePath);
   git.stdout!.pipe(extractStream);
 
   await Promise.all([
@@ -16,5 +16,5 @@ export async function makeFakeRepo(cwd: string, commit: string, paths: string[])
     }),
   ]);
 
-  return tempPath;
+  return temporaryFilePath;
 }

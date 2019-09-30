@@ -1,4 +1,5 @@
 import posthtml from 'posthtml';
+import _ from 'lodash';
 
 export const dependencies = (additionalScripts: string[]): posthtml.Plugin => (
   tree: posthtml.Api,
@@ -23,31 +24,23 @@ export const dependencies = (additionalScripts: string[]): posthtml.Plugin => (
     return false;
   });
 
-  const includes = Object.entries(newTags).reduce<posthtml.NodeTree>(
-    (acc, [tag, sources]) => {
-      if (sources.length === 0) return acc;
+  const includes: posthtml.NodeTree = [
+    '\n',
+    ..._.flatMap(Object.entries(newTags), ([tag, sources]) => {
+      if (sources.length === 0) return [];
 
       const node: posthtml.Node = {
         tag,
         attrs: {},
-        content: sources.reduce<posthtml.NodeTree>(
-          (nodes, src) => [
-            ...nodes,
-            {
-              attrs: { src },
-              content: [],
-              tag: 'include',
-            },
-            '\n',
-          ],
-          ['\n'],
-        ),
+        content: [
+          '\n',
+          ..._.flatMap(sources, src => [{ tag: 'include', attrs: { src }, content: [] }, '\n']),
+        ],
       };
 
-      return [...acc, node, '\n'];
-    },
-    ['\n'],
-  );
+      return [node, '\n'];
+    }),
+  ];
 
   if (includes.length > 0) {
     if (!root) throw new Error('Root node not found');

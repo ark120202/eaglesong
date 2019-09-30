@@ -105,6 +105,7 @@ export default class MapsTask extends Task<void> {
     await this.validateFiles();
     await this.removeOldMapLinks();
 
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (this.errorLevel == null) {
       await this.syncOverviews();
       await this.createMapLinks();

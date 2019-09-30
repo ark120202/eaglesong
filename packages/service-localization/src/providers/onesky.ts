@@ -140,6 +140,7 @@ export class OneSky implements Provider {
     let results: FileListResponse = [];
     let page = 1;
 
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     while (true) {
       const onPage = await this.listFilesOnPage(page);
       if (onPage.length === 0) return results;

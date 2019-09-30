@@ -28,14 +28,14 @@ export function ItemRecipePlugin(hooks: Hooks) {
       _.each(file, (item: { Recipe?: Recipe }, itemName) => {
         if (item.Recipe == null) return;
 
-        let requirements: string[][] = [];
+        let allRequirements: string[][] = [];
         if (item.Recipe.requirements != null && Array.isArray(item.Recipe.requirements)) {
           // @ts-ignore
           if (item.Recipe.requirements.every(x => typeof x === 'string')) {
-            requirements = [item.Recipe.requirements as string[]];
+            allRequirements = [item.Recipe.requirements as string[]];
             // @ts-ignore
           } else if (item.Recipe.requirements.every(x => Array.isArray(x))) {
-            requirements = item.Recipe.requirements as string[][];
+            allRequirements = item.Recipe.requirements as string[][];
           }
         }
 
@@ -47,12 +47,12 @@ export function ItemRecipePlugin(hooks: Hooks) {
           ItemCost: item.Recipe.cost || 0,
           ItemRecipe: true,
           ItemResult: itemName,
-          ItemRequirements: requirements
-            .map(x => x.join(';'))
-            .reduce<Record<string, string>>(
-              (acc, x, i) => ({ ...acc, [String(i + 1).padStart(2, '0')]: x }),
-              {},
-            ),
+          ItemRequirements: _.fromPairs(
+            allRequirements.map((requirements, index) => [
+              String(index + 1).padStart(2, '0'),
+              requirements.join(';'),
+            ]),
+          ),
         };
 
         delete item.Recipe;

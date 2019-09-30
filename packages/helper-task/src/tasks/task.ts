@@ -27,7 +27,7 @@ export abstract class Task<T> {
     this._helper = value;
 
     const props = new Set<string>();
-    let proto = value;
+    let proto: any = value;
     do {
       Object.getOwnPropertyNames(proto).forEach(p => props.add(p));
       proto = Object.getPrototypeOf(proto);

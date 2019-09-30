@@ -98,7 +98,7 @@ export default class SoundsTask extends TransformTask<void> {
         if (isRoot || x.startsWith('./')) {
           let absolute = path.resolve(
             isRoot ? this.srcPath : fileDirectory,
-            x.substring(isRoot ? 1 : 0),
+            x.slice(isRoot ? 1 : 0),
           );
 
           if (!SUPPORTED_AUDIO_EXTENSIONS.includes(extension)) {

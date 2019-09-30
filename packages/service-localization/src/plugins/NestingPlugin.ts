@@ -1,12 +1,16 @@
 import _ from 'lodash';
 import { Hooks } from '..';
 
-function flatten(object: Record<string, any>, prevKey: string, tokens: Record<string, any> = {}) {
+function flatten(
+  object: Record<string, any>,
+  previousKey: string,
+  tokens: Record<string, any> = {},
+) {
   _.each(object, (value, currentKey) => {
     const isVariable = currentKey.startsWith('$');
 
-    if (isVariable) currentKey = currentKey.substring(1);
-    let newKey = currentKey === '_' ? prevKey : `${prevKey}_${currentKey}`;
+    if (isVariable) currentKey = currentKey.slice(1);
+    let newKey = currentKey === '_' ? previousKey : `${previousKey}_${currentKey}`;
     if (isVariable) newKey = `$${newKey}`;
 
     if (_.isPlainObject(value)) {

@@ -62,6 +62,7 @@ export default async function panoramaLayoutLoader(
   plugins.push(banTextNodes(m => this.emitError(m)));
 
   try {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     const input = meta && meta.ast && meta.ast.type === 'posthtml' ? meta.ast.root : source;
     const { html } = await posthtml(plugins).process(input, {
       closingSingleTag: 'slash',

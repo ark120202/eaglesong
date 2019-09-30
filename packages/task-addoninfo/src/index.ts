@@ -1,4 +1,5 @@
 import { Task, TaskState } from '@eaglesong/helper-task';
+import _ from 'lodash';
 import PQueue from 'p-queue';
 
 export interface AddonInfoMap {
@@ -79,9 +80,9 @@ export default class AddonInfoTask extends Task<Options> {
 
     (Object.keys(this.options) as (keyof Options)[]).forEach(key => {
       if (key === 'Default_Keys' && this.options.Default_Keys != null) {
-        content.Default_Keys = this.options.Default_Keys.reduce<Record<string, DefaultKey>>(
-          (acc, x, i) => ({ ...acc, [String(i + 1)]: x }),
-          {},
+        content.Default_Keys = _.fromPairs(
+          // TODO: as const
+          this.options.Default_Keys.map((k, i): [string, DefaultKey] => [String(i + 1), k]),
         );
         return;
       }

@@ -9,19 +9,20 @@ export interface ProviderOptionsFs {
 export class Fs implements Provider {
   public name = this.constructor.name;
   public makeGroups(baseFiles: FlatLocalizationFiles) {
-    return _.reduce<FlatLocalizationFiles, Multilingual<FlatLocalizationFiles>>(
-      baseFiles,
-      (acc, content, name) => {
-        const language = name.split('/')[0];
-        if (!isDotaLanguage(language)) throw new Error(`Unexpected language ${language}`);
+    const result: Multilingual<FlatLocalizationFiles> = {};
 
-        let languageAcc = acc[language];
-        if (languageAcc == null) languageAcc = acc[language] = {};
-        languageAcc[name] = content;
+    for (const [name, content] of Object.entries(baseFiles)) {
+      const [language] = name.split('/');
+      if (!isDotaLanguage(language)) {
+        throw new Error(`Unexpected language ${language}`);
+      }
 
-        return acc;
-      },
-      {},
-    );
+      let files = result[language];
+      if (files == null) files = result[language] = {};
+
+      files[name] = content;
+    }
+
+    return result;
   }
 }
