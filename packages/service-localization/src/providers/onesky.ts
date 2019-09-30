@@ -167,7 +167,7 @@ export class OneSky implements Provider {
       .digest('hex');
   }
 
-  private request(options: request.Options) {
+  private async request(options: request.Options) {
     return request({
       ...options,
       json: true,
