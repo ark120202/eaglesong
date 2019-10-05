@@ -3,11 +3,8 @@
   "references": [
     { "path": "create-custom-game" },
     { "path": "eaglesong" },
-    { "path": "helper-service" },
     { "path": "helper-task" },
     { "path": "helper-tstl" },
-    { "path": "service-localization" },
-    { "path": "service-npc" },
     { "path": "task-addoninfo" },
     { "path": "task-eslint" },
     { "path": "task-images" },

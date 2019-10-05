@@ -1,5 +1,11 @@
-import { ServiceErrorReporter, ServiceProvider, TriggerChange } from '@eaglesong/helper-service';
-import { TransformTask } from '@eaglesong/helper-task';
+import {
+  TransformTask,
+  ServiceProvider,
+  ServiceErrorReporter,
+  TriggerChange,
+} from '@eaglesong/helper-task';
+import pProps from 'p-props';
+import path from 'upath';
 import {
   defaultPlugins,
   DotaLanguage,
@@ -7,11 +13,10 @@ import {
   LocalizationPlugin,
   LocalizationService,
   ProviderOptions,
-} from '@eaglesong/service-localization';
-import pProps from 'p-props';
-import path from 'upath';
+} from './service';
 
-export { DotaLanguage, ProviderOptions };
+export * from './service';
+
 export interface Options {
   defaultLanguage?: DotaLanguage;
   provider?: ProviderOptions;

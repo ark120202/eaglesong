@@ -14,10 +14,7 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "dependencies": {
-    "@eaglesong/helper-service": "link:../helper-service",
     "@eaglesong/helper-task": "link:../helper-task",
-    "@eaglesong/service-localization": "link:../service-localization",
-    "@eaglesong/service-npc": "link:../service-npc",
     "@eaglesong/task-localization": "link:../task-localization",
     "@eaglesong/task-npc": "link:../task-npc",
     "@types/bytes": "^3.0.0",

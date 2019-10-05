@@ -1,15 +1,10 @@
-import {
-  NamedType,
-  ServiceConstructor,
-  ServiceMap,
-  ServiceProvider,
-} from '@eaglesong/helper-service';
 import chokidar from 'chokidar';
 import fs from 'fs-extra';
 import globby from 'globby';
 import { AsyncParallelHook } from 'tapable';
 import path from 'upath';
 import vdf, { StringifyOptions } from 'vdf-extra';
+import { NamedType, ServiceConstructor, ServiceMap, ServiceProvider } from './service';
 import { ReadonlyTaskMap, TaskProvider } from './tasks';
 import { _import } from './utils';
 
@@ -119,7 +114,7 @@ export class BuildHelper {
   public taskProvider: TaskProvider = key => this.tasks.get(key);
   public serviceProvider: ServiceProvider = key => this.services.get(key);
   public registerService(service: object) {
-    this.services.set((service.constructor as unknown) as ServiceConstructor, service);
+    this.services.set(service.constructor as ServiceConstructor, service);
   }
 
   public hasFlag(flag: string) {

@@ -66,15 +66,9 @@
     tslib "^1.9.3"
     vdf-extra "^2.1.2"
 
-"@eaglesong/helper-service@link:packages/helper-service":
-  version "0.0.0"
-  dependencies:
-    tslib "^1.10.0"
-
 "@eaglesong/helper-task@link:packages/helper-task":
   version "0.0.0"
   dependencies:
-    "@eaglesong/helper-service" "link:packages/helper-service"
     "@types/fs-extra" "^8.0.0"
     "@types/js-yaml" "^3.12.1"
     "@types/json-parse-better-errors" "^1.0.0"
@@ -105,35 +99,6 @@
     typescript-to-lua "^0.27.1"
     upath "^1.2.0"
 
-"@eaglesong/service-localization@link:packages/service-localization":
-  version "0.0.0"
-  dependencies:
-    "@eaglesong/helper-service" "link:packages/helper-service"
-    "@types/dedent" "^0.7.0"
-    "@types/lodash" "^4.14.141"
-    "@types/request-promise-native" "^1.0.17"
-    dedent "^0.7.0"
-    lodash "^4.17.15"
-    p-props "^3.1.0"
-    request "^2.88.0"
-    request-promise-native "^1.0.5"
-    tapable "^2.0.0-beta.2"
-    tslib "^1.10.0"
-
-"@eaglesong/service-npc@link:packages/service-npc":
-  version "0.0.0"
-  dependencies:
-    "@eaglesong/helper-service" "link:packages/helper-service"
-    "@types/fs-extra" "^8.0.0"
-    "@types/lodash" "^4.14.141"
-    ajv "^6.10.2"
-    fs-extra "^8.1.0"
-    lodash "^4.17.15"
-    p-props "^3.1.0"
-    tapable "^2.0.0-beta.2"
-    tslib "^1.10.0"
-    vdf-extra "^2.2.2"
-
 "@eaglesong/task-addoninfo@link:packages/task-addoninfo":
   version "0.0.0"
   dependencies:
@@ -162,12 +127,18 @@
 "@eaglesong/task-localization@link:packages/task-localization":
   version "0.0.0"
   dependencies:
-    "@eaglesong/helper-service" "link:packages/helper-service"
     "@eaglesong/helper-task" "link:packages/helper-task"
-    "@eaglesong/service-localization" "link:packages/service-localization"
+    "@types/dedent" "^0.7.0"
     "@types/fs-extra" "^8.0.0"
+    "@types/lodash" "^4.14.141"
+    "@types/request-promise-native" "^1.0.17"
+    dedent "^0.7.0"
     fs-extra "^8.1.0"
+    lodash "^4.17.15"
     p-props "^3.1.0"
+    request "^2.88.0"
+    request-promise-native "^1.0.5"
+    tapable "^2.0.0-beta.2"
     tslib "^1.10.0"
     upath "^1.2.0"
 
@@ -188,15 +159,17 @@
 "@eaglesong/task-npc@link:packages/task-npc":
   version "0.0.0"
   dependencies:
-    "@eaglesong/helper-service" "link:packages/helper-service"
     "@eaglesong/helper-task" "link:packages/helper-task"
-    "@eaglesong/service-npc" "link:packages/service-npc"
     "@types/fs-extra" "^8.0.0"
     "@types/lodash" "^4.14.141"
+    ajv "^6.10.2"
     fs-extra "^8.1.0"
     lodash "^4.17.15"
+    p-props "^3.1.0"
+    tapable "^2.0.0-beta.2"
     tslib "^1.10.0"
     upath "^1.2.0"
+    vdf-extra "^2.2.2"
 
 "@eaglesong/task-panorama@link:packages/task-panorama":
   version "0.0.0"

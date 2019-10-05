@@ -1,5 +1,5 @@
 import * as s from '@dota-data/scripts/lib/schema';
-import { Hooks } from '@eaglesong/service-npc';
+import { Hooks } from '@eaglesong/task-npc';
 
 export function CustomHeroesPlugin(hooks: Hooks) {
   hooks.schemas.tap('CustomHeroesPlugin', schemas => {

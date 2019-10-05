@@ -1,9 +1,15 @@
-import { ServiceErrorReporter, ServiceProvider, TriggerChange } from '@eaglesong/helper-service';
-import { TransformTask } from '@eaglesong/helper-task';
-import { defaultPlugins, NpcPlugin, NpcService, Schemas } from '@eaglesong/service-npc';
+import {
+  ServiceErrorReporter,
+  ServiceProvider,
+  TransformTask,
+  TriggerChange,
+} from '@eaglesong/helper-task';
 import fs from 'fs-extra';
 import _ from 'lodash';
 import path from 'upath';
+import { defaultPlugins, NpcPlugin, NpcService, Schemas } from './service';
+
+export * from './service';
 
 export interface Options {
   plugins?: NpcPlugin[];

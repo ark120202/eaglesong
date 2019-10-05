@@ -14,13 +14,25 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "dependencies": {
-    "@eaglesong/helper-service": "link:../helper-service",
     "@eaglesong/helper-task": "link:../helper-task",
-    "@eaglesong/service-localization": "link:../service-localization",
+    "@types/dedent": "^0.7.0",
     "@types/fs-extra": "^8.0.0",
+    "@types/lodash": "^4.14.141",
+    "@types/request-promise-native": "^1.0.17",
+    "dedent": "^0.7.0",
     "fs-extra": "^8.1.0",
+    "lodash": "^4.17.15",
     "p-props": "^3.1.0",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.5",
+    "tapable": "^2.0.0-beta.2",
     "tslib": "^1.10.0",
     "upath": "^1.2.0"
+  },
+  "devDependencies": {
+    "@dota-data/localization": "^0.1.5"
+  },
+  "peerDependencies": {
+    "@dota-data/localization": "^0.1.2"
   }
 }

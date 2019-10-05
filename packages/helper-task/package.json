@@ -14,7 +14,6 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "dependencies": {
-    "@eaglesong/helper-service": "link:../helper-service",
     "@types/fs-extra": "^8.0.0",
     "@types/js-yaml": "^3.12.1",
     "@types/json-parse-better-errors": "^1.0.0",

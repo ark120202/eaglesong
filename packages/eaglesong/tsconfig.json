@@ -5,10 +5,7 @@
     "outDir": "lib"
   },
   "references": [
-    { "path": "../service-localization" },
-    { "path": "../service-npc" },
     { "path": "../helper-task" },
-    { "path": "../helper-service" },
     { "path": "../task-localization" },
     { "path": "../task-npc" }
   ]

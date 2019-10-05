@@ -1,6 +1,6 @@
-import { ServiceErrorReporter } from '@eaglesong/helper-service';
 import path from 'upath';
 import { BuildHelper } from '../helper';
+import { ServiceErrorReporter } from '../service';
 
 export enum TaskState {
   Working,

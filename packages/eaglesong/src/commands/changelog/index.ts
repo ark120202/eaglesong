@@ -1,5 +1,10 @@
-import { ServiceMap } from '@eaglesong/helper-service';
-import { BuildHelper, createHooks, TaskConstructor, TaskMap } from '@eaglesong/helper-task';
+import {
+  BuildHelper,
+  createHooks,
+  ServiceMap,
+  TaskConstructor,
+  TaskMap,
+} from '@eaglesong/helper-task';
 import _ from 'lodash';
 import simpleGit from 'simple-git/promise';
 import { CommandGroup } from '../../command';

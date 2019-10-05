@@ -1,6 +1,6 @@
-import { ServiceErrorReporter } from '@eaglesong/helper-service';
 import _ from 'lodash';
 import * as ts from 'typescript';
+import { ServiceErrorReporter } from '../service';
 
 export function reportTsDiagnostic(error: ServiceErrorReporter, diagnostic: ts.Diagnostic) {
   const level = diagnostic.category === ts.DiagnosticCategory.Error ? 'error' : 'warning';
