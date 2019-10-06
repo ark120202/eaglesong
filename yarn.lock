@@ -94,7 +94,6 @@
     luaparse "^0.2.1"
     resolve "^1.12.0"
     tslib "^1.10.0"
-    typescript "^3.6.3"
     typescript-to-lua "^0.27.1"
     upath "^1.2.0"
 
@@ -209,7 +208,6 @@
     upath "^1.2.0"
     webpack "^4.41.0"
     webpack-merge "^4.2.2"
-    yml-loader "^2.1.0"
 
 "@eaglesong/task-prettier@link:packages/task-prettier":
   version "0.0.0"
@@ -5253,14 +5251,6 @@ js-yaml@^3.13.0, js-yaml@^3.13.1:
     argparse "^1.0.7"
     esprima "^4.0.0"
 
-js-yaml@^3.8.3:
-  version "3.13.0"
-  resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.13.0.tgz#38ee7178ac0eea2c97ff6d96fff4b18c7d8cf98e"
-  integrity sha512-pZZoSxcCYco+DIKBTimr67J6Hy+EYGZDY/HCWC+iAEA9h1ByhMXAIVUXMcMFpOCxQ/xjXmPI2MkDL5HRm5eFrQ==
-  dependencies:
-    argparse "^1.0.7"
-    esprima "^4.0.0"
-
 jsbn@~0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/jsbn/-/jsbn-0.1.1.tgz#a5e654c2e5a2deb5f201d96cefbca80c0ef2f513"
@@ -5466,7 +5456,7 @@ loader-utils@^0.2.16:
     json5 "^0.5.0"
     object-assign "^4.0.1"
 
-loader-utils@^1.0.2, loader-utils@^1.1.0, loader-utils@^1.2.3:
+loader-utils@^1.0.2, loader-utils@^1.2.3:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/loader-utils/-/loader-utils-1.2.3.tgz#1ff5dc6911c9f0a062531a4c04b609406108c2c7"
   integrity sha512-fkpz8ejdnEMG3s37wGL07iSBDg99O9D5yflE9RGNH3hRdx9SOwYfnGYdZOUIZitN8E+E2vkq3MUMYMvPYl5ZZA==
@@ -9185,14 +9175,6 @@ yargs@^14.0.0:
     which-module "^2.0.0"
     y18n "^4.0.0"
     yargs-parser "^13.1.1"
-
-yml-loader@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/yml-loader/-/yml-loader-2.1.0.tgz#b976b8691b537b6d3dc7d92a9a7d34b90de10870"
-  integrity sha512-mo42d5FQWlXxpyTEpYywPu1LzK3F69pPPCOB8WKgJi8s+aqaogQP7XnXTjSobbKzzlZ/wXm7kg9CkP4x4ZnVMw==
-  dependencies:
-    js-yaml "^3.8.3"
-    loader-utils "^1.1.0"
 
 yn@^3.0.0:
   version "3.1.1"

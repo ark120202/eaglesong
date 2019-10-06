@@ -136,17 +136,12 @@ export function createWebpackConfig({ context, dotaPath, addonName }: CreateWebp
   };
 
   const resourcesConfig: webpack.Configuration = {
-    resolve: { extensions: ['.yml', '.yaml'] },
     module: {
       rules: [
         {
-          test: /\.(png|jpg|gif)$/,
+          test: /\.(png|je?pg)$/,
           loader: 'file-loader',
           options: { limit: 8192, name: 'images/[name].[hash:8].[ext]' },
-        },
-        {
-          test: /\.ya?ml$/,
-          loader: 'yml-loader',
         },
       ],
     },

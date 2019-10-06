@@ -49,8 +49,7 @@
     "tslib": "^1.10.0",
     "upath": "^1.2.0",
     "webpack": "^4.41.0",
-    "webpack-merge": "^4.2.2",
-    "yml-loader": "^2.1.0"
+    "webpack-merge": "^4.2.2"
   },
   "devDependencies": {
     "typescript": "^3.6.3"
