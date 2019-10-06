@@ -1,18 +1,17 @@
-import { LuaTransformer } from 'typescript-to-lua/dist/LuaTransformer';
+import * as ts from 'typescript';
+import * as tstl from 'typescript-to-lua';
 
-// @ts-ignore
-class UntypedCustomLuaTransformer extends LuaTransformer {
-  public getAbsoluteImportPath(relativePath: string): string {
-    // const currentSourceFile: ts.SourceFile = this['currentSourceFile'];
-    // return this._useDependency(currentSourceFile.fileName, relativePath);
-    return relativePath;
-  }
+export class CustomLuaTransformer extends tstl.LuaTransformer {
+  protected createModuleRequire(moduleSpecifier: ts.StringLiteral, resolveModule = true) {
+    const modulePath = tstl.createStringLiteral(moduleSpecifier.text);
+    const requireSpecifier = resolveModule
+      ? tstl.createCallExpression(tstl.createIdentifier('__TS__Resolve'), [modulePath])
+      : modulePath;
 
-  public getImportPath(relativePath: string): string {
-    // return this['formatPathToLuaPath'](this.getAbsoluteImportPath(relativePath));
-    // return this.getAbsoluteImportPath(relativePath);
-    return relativePath;
+    return tstl.createCallExpression(
+      tstl.createIdentifier('require'),
+      [requireSpecifier],
+      moduleSpecifier,
+    );
   }
 }
-
-export const CustomLuaTransformer = (UntypedCustomLuaTransformer as unknown) as typeof LuaTransformer;

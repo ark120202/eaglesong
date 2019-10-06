@@ -3,13 +3,14 @@ import ts from 'typescript';
 import tstl from 'typescript-to-lua';
 import path from 'upath';
 
-const REQUIRE_REGEXP = /require *(?:\( *'(.*?)' *\)|\( *"(.*?)" *\)| *'(.*?)'| *"(.*?)")/g;
-export const replaceImports = (code: string, replacer: (module: string) => string | Error) =>
-  code.replace(REQUIRE_REGEXP, (source, m1, m2, m3, m4) => {
-    const replacement = replacer(m4 || m3 || m2 || m1);
+const RESOLVE_REGEXP = /__TS__Resolve\("(.*?)"\)/g;
+export const replaceResolve = (code: string, replacer: (module: string) => string | Error) =>
+  code.replace(RESOLVE_REGEXP, (source, match) => {
+    const replacement = replacer(match);
+    // TODO: Escape string for Lua
     return replacement instanceof Error
       ? `--[[ ${source} ]] error(${JSON.stringify(replacement.message)})`
-      : `require(${JSON.stringify(replacement)})`;
+      : JSON.stringify(replacement);
   });
 
 export interface ModuleLoadingError {
@@ -121,9 +122,7 @@ export class Compilation {
   protected transformLuaFile(filePath: string, fileContent: string) {
     if (this.options.resolveDependencies === false) return fileContent;
 
-    return replaceImports(fileContent, request => {
-      if (request === 'lualib_bundle') return request;
-
+    return replaceResolve(fileContent, request => {
       let modulePath: string;
       try {
         modulePath = this.resolveDependency(filePath, request);
