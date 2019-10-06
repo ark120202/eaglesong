@@ -14,9 +14,8 @@ export default class VScriptsTask extends Task<void> {
   }
 
   public apply() {
-    const tsconfigPath = this.resolvePath('src/vscripts/tsconfig.json');
-
     this.hooks.build.tapPromise(this.constructor.name, async () => {
+      const tsconfigPath = this.resolvePath('src/vscripts/tsconfig.json');
       const outDir = this.resolvePath('game', 'scripts/vscripts');
       await copyLuaLib(outDir);
 
@@ -24,11 +23,7 @@ export default class VScriptsTask extends Task<void> {
       const forceProgramUpdate = createTsAutoWatch(
         this.resolvePath('src/vscripts'),
         tsconfigPath,
-        {
-          noEmit: true,
-          outDir,
-          rootDir: this.resolvePath('src/vscripts'),
-        },
+        { outDir, rootDir: this.resolvePath('src/vscripts') },
         this.isWatching,
         () => {
           this.removeErrors();
@@ -36,7 +31,12 @@ export default class VScriptsTask extends Task<void> {
         },
         this.error,
         builderProgram => {
-          updateConfigFile(builderProgram.getCompilerOptions());
+          const options = builderProgram.getCompilerOptions();
+          updateConfigFile(options);
+          if (!options.noEmit) {
+            options.noEmit = this.dotaPath == null;
+          }
+
           const program = builderProgram.getProgram();
           this.emit(program);
           this.finish();
@@ -52,11 +52,7 @@ export default class VScriptsTask extends Task<void> {
   }
 
   private emit(program: ts.Program) {
-    const options = program.getCompilerOptions();
-    options.noEmit = this.dotaPath == null;
     const { diagnostics, errors } = transpileProgram(program, this.resolvePath('src/common'));
-    options.noEmit = true;
-
     errors.forEach(x => this.error(x.fileName, x.message));
     diagnostics.forEach(x => reportTsDiagnostic(this.error, x));
   }

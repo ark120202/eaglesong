@@ -42,11 +42,7 @@ export function createTsAutoWatch(
     },
   );
 
-  const originalAfterProgramCreate = host.afterProgramCreate!.bind(host);
-  host.afterProgramCreate = program => {
-    originalAfterProgramCreate(program);
-    onProgram(program);
-  };
+  host.afterProgramCreate = onProgram;
 
   const watchProgram = ts.createWatchProgram(host);
   return () => {
