@@ -1,14 +1,19 @@
 import { TransformTask } from '@eaglesong/helper-task';
 import { CLIEngine } from 'eslint';
 
-export default class ESLintTask extends TransformTask<void> {
-  protected pattern = ['**/*.{js,jsx,ts,tsx}', '!node_modules'];
+export interface Options {
+  extensions?: string[];
+}
 
-  constructor() {
-    super(undefined);
+export default class ESLintTask extends TransformTask<Options> {
+  private readonly extensions = this.options.extensions || ['.js', '.jsx', '.ts', '.tsx'];
+  private readonly cliEngine = new CLIEngine({ extensions: this.extensions });
+  protected pattern = [`**/*{${this.extensions.join(',')}}`, '!node_modules'];
+
+  constructor(options: Options = {}) {
+    super(options);
   }
 
-  private readonly cliEngine = new CLIEngine({ extensions: ['.js', '.jsx', '.ts', '.tsx'] });
   protected afterWatch() {
     const { results } = this.cliEngine.executeOnFiles(['.']);
     for (const lintResult of results) {
