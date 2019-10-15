@@ -126,20 +126,6 @@ const isGitAvailable = (() => {
     await execa('git', ['init'], { cwd: internalName });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-  if (!true) {
-    templates.add('test');
-    devDependencies.push('jest', '@types/jest', 'ts-jest');
-    packageJson.scripts.test = 'jest';
-    packageJson.jest = {
-      projects: ['<rootDir>/src/vscripts.test', '<rootDir>/src/panorama.test'],
-    };
-
-    if (includeExamples) {
-      templates.add('test-examples');
-    }
-  }
-
   if (conventionalCommits) {
     templates.add('conventional-commits');
     devDependencies.push('husky', '@commitlint/cli', '@commitlint/config-conventional');
