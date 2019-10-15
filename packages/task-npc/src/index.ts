@@ -74,12 +74,11 @@ export default class NpcTask extends TransformTask<Options> {
 
       let types = '';
       types += Object.keys(schemas)
-        .map(name => `import './${name}';`)
+        .map(name => `/// <reference types="./${name}" />`)
         .join('\n');
       types += '\n\n';
-      types += 'declare global {\n';
       types += _.union(...compiledSchemas.map(x => x.globals)).join('\n\n');
-      types += '\n}\n';
+      types += '\n';
 
       const getPath = (name: string) => path.join(definitionsPath, name);
       await Promise.all([
