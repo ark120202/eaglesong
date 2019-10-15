@@ -43,6 +43,7 @@ export default class BuilderCommand extends CommandGroup {
       describe: 'Build and compile all resources for production release',
       handler: () => errorOnFailure(this.build()),
     });
+
     this.command({
       builder: argv =>
         argv.option('push-localizations', {
@@ -54,6 +55,24 @@ export default class BuilderCommand extends CommandGroup {
       describe: 'Run all build tasks without emitting any output',
       handler: () => errorOnFailure(this.ci()),
     });
+
+    this.command({
+      command: 'generate-types',
+      describe: 'Generate TypeScript definition files',
+      handler: () => errorOnFailure(this.generateTypes()),
+    });
+  }
+
+  private async watch() {
+    await this.loadTasks(true, true);
+    this.reporter = watchReporter;
+    this.report();
+
+    await this.hooks.boot.promise();
+    await this.hooks.definitions.promise(this.definitionsPath);
+    await this.hooks.build.promise();
+
+    await new Promise<never>(() => {});
   }
 
   public async build() {
@@ -85,16 +104,14 @@ export default class BuilderCommand extends CommandGroup {
     return this.isSuccess();
   }
 
-  private async watch() {
-    await this.loadTasks(true, true);
-    this.reporter = watchReporter;
+  private async generateTypes() {
+    await this.loadTasks(false, false);
     this.report();
 
     await this.hooks.boot.promise();
     await this.hooks.definitions.promise(this.definitionsPath);
-    await this.hooks.build.promise();
 
-    await new Promise<never>(() => {});
+    return this.isSuccess();
   }
 
   private isSuccess() {
