@@ -23,7 +23,7 @@ export default class VScriptsTask extends Task<void> {
       const forceProgramUpdate = createTsAutoWatch(
         this.resolvePath('src/vscripts'),
         tsconfigPath,
-        { outDir, rootDir: this.resolvePath('src/vscripts') },
+        { outDir },
         this.isWatching,
         () => {
           this.removeErrors();
