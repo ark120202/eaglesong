@@ -94,7 +94,7 @@
     luaparse "^0.2.1"
     resolve "^1.12.0"
     tslib "^1.10.0"
-    typescript-to-lua "^0.27.1"
+    typescript-to-lua "^0.28.0"
     upath "^1.2.0"
 
 "@eaglesong/task-addoninfo@link:packages/task-addoninfo":
@@ -3349,12 +3349,12 @@ dota-data@^0.4.0:
   dependencies:
     lodash "^4.17.11"
 
-dota-lua-types@^2.4.0:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/dota-lua-types/-/dota-lua-types-2.4.0.tgz#b68460d2017dd4dcdede042b7984bd08c6b7d6a1"
-  integrity sha512-HFHhZBg+9WZ/YPxne9I4tRqGKK9omsHvczrjP7waa6gxUGGbovqpePmA8uPp6ueR9eF8s3jSF3EGRsZ/MtnqGg==
+dota-lua-types@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/dota-lua-types/-/dota-lua-types-3.0.0.tgz#575786a7dd089dc8f98429898bf0d96ad660445d"
+  integrity sha512-muXMem5KFMX+9tU6z/OUDkhuuFmdd/nDW/gI2hs9MZk4zVxrmDmo/GO2dZvZB5nC/0IvuVyygXIXmVaElNKWPQ==
   dependencies:
-    lua-types "^2.6.1"
+    lua-types "^2.6.2"
     tslib "^1.10.0"
 
 duplexer3@^0.1.4:
@@ -5648,10 +5648,10 @@ lru-cache@^5.1.1:
   dependencies:
     yallist "^3.0.2"
 
-lua-types@^2.6.1:
-  version "2.6.1"
-  resolved "https://registry.yarnpkg.com/lua-types/-/lua-types-2.6.1.tgz#4b0a166c16272103fca8cf78fc336c09d7cbde7e"
-  integrity sha512-OU058Qm8cidDYz73VUPfE1gWgMrq0wjOT8XqFeeguVKQgqXjebw9bsUV2GUZ1MSmZwfdFeMjLQCVEGjT21mRKg==
+lua-types@^2.6.2:
+  version "2.6.2"
+  resolved "https://registry.yarnpkg.com/lua-types/-/lua-types-2.6.2.tgz#ff0a7a8ff58ad235fc7c0ddc52839fa704f788a3"
+  integrity sha512-bZN+eFFkjC6EzYi2OfgdAiUyjsJsDd6DwJyLlyWbb6FQJKBoPx/5KukaNWzpRjezvbDIrwsyy1LGkcWi8iwdVA==
 
 luaparse@^0.2.1:
   version "0.2.1"
@@ -8644,19 +8644,19 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript-to-lua@^0.27.1:
-  version "0.27.1"
-  resolved "https://registry.yarnpkg.com/typescript-to-lua/-/typescript-to-lua-0.27.1.tgz#3cc78000a2ba50080bd9c3dc73f4c3428471be74"
-  integrity sha512-/V3oacsgpN+5aHkLXeorxVitMCYWrNUpyn32/TJmdFTr+aT0hmMKjYc9TFBbiNiDR0uLYYXDG5FWlIG8rAMc0Q==
+typescript-to-lua@^0.28.0:
+  version "0.28.0"
+  resolved "https://registry.yarnpkg.com/typescript-to-lua/-/typescript-to-lua-0.28.0.tgz#d2b82317b5f8cf773c94ba12b09e43ca1c5a5ad0"
+  integrity sha512-pwfkftKvGEE2FUcw1wF7zlQqkr5HFXMAf8TlI+dG4MQ5QFblzWl1jpVhleZBl9/NPM2301pqp0HwLjdfayFbVQ==
   dependencies:
     resolve "^1.11.0"
     source-map "^0.7.3"
-    typescript "3.5.x"
+    typescript "^3.6.2"
 
-typescript@3.5.x, typescript@3.6.3, typescript@^3.6.3:
-  version "3.6.3"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.6.3.tgz#fea942fabb20f7e1ca7164ff626f1a9f3f70b4da"
-  integrity sha512-N7bceJL1CtRQ2RiG0AQME13ksR7DiuQh/QehubYcghzv20tnh+MQnQIuJddTmsbqYj+dztchykemz0zFzlvdQw==
+typescript@^3.6.2, typescript@^3.6.4:
+  version "3.6.4"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.6.4.tgz#b18752bb3792bc1a0281335f7f6ebf1bbfc5b91d"
+  integrity sha512-unoCll1+l+YK4i4F8f22TaNVPRHcD9PA3yCuZ8g5e0qGqlVlJ/8FSateOLLSagn+Yg5+ZwuPkL8LFUc0Jcvksg==
 
 uglify-js@3.4.x:
   version "3.4.10"

@@ -52,7 +52,7 @@
     "webpack-merge": "^4.2.2"
   },
   "devDependencies": {
-    "typescript": "^3.6.3"
+    "typescript": "^3.6.4"
   },
   "peerDependencies": {
     "typescript": "^3.0.0"
