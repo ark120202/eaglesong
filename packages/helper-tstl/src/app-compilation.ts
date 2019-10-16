@@ -1,9 +1,16 @@
 import luaparse from 'luaparse';
+import * as ts from 'typescript';
 import path from 'upath';
-import { Compilation } from './transpiler/compilation';
+import { Compilation, CompilationHost } from './transpiler/compilation';
 
 export class AppCompilation extends Compilation {
-  public commonRoot?: string;
+  constructor(
+    program: ts.Program,
+    host: CompilationHost | undefined,
+    private readonly commonRoot?: string,
+  ) {
+    super(program, host);
+  }
 
   protected transformLuaFile(filePath: string, fileContent: string) {
     try {
@@ -16,12 +23,14 @@ export class AppCompilation extends Compilation {
     return super.transformLuaFile(filePath, fileContent);
   }
 
-  protected getRelativeToRootPath(filePath: string) {
-    if (this.commonRoot == null) return super.getRelativeToRootPath(filePath);
+  protected toOutputStructure(filePath: string) {
+    if (this.commonRoot) {
+      const commonRelativePath = path.relative(this.commonRoot, filePath);
+      if (!commonRelativePath.startsWith('..') && !path.isAbsolute(commonRelativePath)) {
+        return super.toOutputStructure(path.join(this.rootDir, `__common__/${commonRelativePath}`));
+      }
+    }
 
-    const commonRelativePath = path.relative(this.commonRoot, filePath);
-    const isCommon = !commonRelativePath.startsWith('..') && !path.isAbsolute(commonRelativePath);
-
-    return isCommon ? `__common__/${commonRelativePath}` : super.getRelativeToRootPath(filePath);
+    return super.toOutputStructure(filePath);
   }
 }

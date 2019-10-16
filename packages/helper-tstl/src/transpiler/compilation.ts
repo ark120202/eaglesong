@@ -1,3 +1,4 @@
+import assert from 'assert';
 import resolve from 'resolve';
 import ts from 'typescript';
 import tstl from 'typescript-to-lua';
@@ -30,6 +31,9 @@ export class Compilation {
   protected errors: ModuleLoadingError[] = [];
   protected files = new Set<string>();
   protected options: tstl.CompilerOptions;
+  // TODO: Infer rootDir
+  protected rootDir: string = this.options.rootDir || '';
+
   constructor(program: ts.Program, protected host: CompilationHost = ts.sys) {
     this.options = program.getCompilerOptions();
   }
@@ -45,9 +49,7 @@ export class Compilation {
 
     const emitBOM = this.options.emitBOM || false;
     for (const { fileName, lua, sourceMap, declaration, declarationMap } of files) {
-      const pathWithoutExtension = this.toAbsolutePath(
-        this.toOutputStructure(this.getRelativeToRootPath(path.trimExt(fileName))),
-      );
+      const pathWithoutExtension = this.toAbsolutePath(this.toOutputStructure(fileName));
 
       if (lua !== undefined) {
         const transformedLua = this.transformLuaFile(fileName, lua);
@@ -72,9 +74,7 @@ export class Compilation {
 
   protected useFile(filePath: string) {
     filePath = path.normalize(filePath);
-    if (!path.isAbsolute(filePath)) {
-      throw new Error('Absolute file path expected');
-    }
+    assert(path.isAbsolute(filePath), 'Absolute file path expected.');
 
     if (this.files.has(filePath)) return;
     this.files.add(filePath);
@@ -100,7 +100,7 @@ export class Compilation {
       case '.jsx':
       case '.ts':
       case '.tsx': {
-        const message = "Couldn't import script file outside of TypeScript project";
+        const message = "Couldn't import non-transformed script file outside of TypeScript project";
         this.errors.push({ fileName: filePath, message });
         result = `error("${message}")`;
         break;
@@ -113,9 +113,7 @@ export class Compilation {
       }
     }
 
-    const pathWithoutExtension = this.toAbsolutePath(
-      this.toOutputStructure(this.getRelativeToRootPath(path.trimExt(filePath))),
-    );
+    const pathWithoutExtension = this.toAbsolutePath(this.toOutputStructure(filePath));
     this.host.writeFile(`${pathWithoutExtension}.lua`, result, this.options.emitBOM || false);
   }
 
@@ -132,9 +130,7 @@ export class Compilation {
       }
 
       this.useFile(modulePath);
-      return this.toLuaPath(
-        this.toOutputStructure(this.getRelativeToRootPath(path.trimExt(modulePath))),
-      );
+      return this.toLuaPath(this.toOutputStructure(modulePath));
     });
   }
 
@@ -175,26 +171,16 @@ export class Compilation {
     return resolved;
   }
 
-  protected getRelativeToRootPath(fileName: string) {
-    if (this.options.rootDir || this.options.rootDirs) {
-      const roots: string[] = [];
-      if (this.options.rootDirs) roots.push(...this.options.rootDirs);
-      if (this.options.rootDir != null) roots.unshift(this.options.rootDir);
-
-      return roots.map(d => path.relative(d, fileName)).find(x => !x.startsWith('..')) || fileName;
-    }
-
-    return fileName;
-  }
-
   protected toOutputStructure(fileName: string) {
-    let result = fileName;
+    let result = path.relative(this.rootDir, path.trimExt(fileName));
 
     const upRelative = result.replace(/^(\.\.[/\\])*/, '');
-    if (upRelative.startsWith('node_modules')) result = upRelative;
+    if (upRelative.startsWith('node_modules')) {
+      result = upRelative;
+    }
 
     if (result.startsWith('..') || path.isAbsolute(result)) {
-      throw new Error(`Couldn't resolve "${fileName}" within rootDir(s)`);
+      throw new Error(`Couldn't resolve "${fileName}" within rootDir(s) or node_modules boundary`);
     }
 
     return result.replace(/\./g, '__dot__');

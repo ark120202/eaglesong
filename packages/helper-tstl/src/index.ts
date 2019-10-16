@@ -45,8 +45,7 @@ export function transpileProgram(
     transformer,
   });
 
-  const compilation = new AppCompilation(program);
-  compilation.commonRoot = commonRoot;
+  const compilation = new AppCompilation(program, undefined, commonRoot);
   const { errors } = compilation.emit(transpiledFiles);
 
   return { diagnostics: [...emitDiagnostics], errors };
