@@ -3,7 +3,4 @@ node_modules
 .yarn
 /packages/*/lib
 *.tsbuildinfo
-
 .vscode
-lerna-debug.log
-/example
