@@ -18,8 +18,8 @@
     "tslib": "^1.10.0"
   },
   "devDependencies": {
-    "@types/eslint": "^6.1.1",
-    "eslint": "^6.5.0"
+    "@types/eslint": "^6.1.2",
+    "eslint": "^6.5.1"
   },
   "peerDependencies": {
     "eslint": "^6.0.0"

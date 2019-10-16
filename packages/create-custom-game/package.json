@@ -16,12 +16,12 @@
     "@types/fs-extra": "^8.0.0",
     "@types/inquirer": "^6.5.0",
     "@types/yargs": "^13.0.3",
-    "execa": "^2.0.4",
+    "execa": "^3.0.0",
     "fs-extra": "^8.1.0",
     "globby": "^10.0.1",
     "inquirer": "^7.0.0",
     "sort-package-json": "^1.22.1",
-    "yargs": "^14.0.0"
+    "yargs": "^14.2.0"
   },
   "engines": {
     "node": ">=10"

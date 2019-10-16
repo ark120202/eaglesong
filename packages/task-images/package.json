@@ -17,7 +17,7 @@
     "@eaglesong/helper-task": "link:../helper-task",
     "@types/fs-extra": "^8.0.0",
     "fs-extra": "^8.1.0",
-    "image-size": "^0.8.2",
+    "image-size": "^0.8.3",
     "tslib": "^1.10.0",
     "upath": "^1.2.0"
   }

@@ -83,8 +83,8 @@ export default class ImagesTask extends TransformTask<Options> {
 
     let rSizes: [number, number];
     try {
-      // @ts-ignore https://github.com/image-size/image-size/pull/219
       const { width, height } = imageSize(content);
+      // @ts-ignore Is it really nullable?
       rSizes = [width, height];
     } catch (error) {
       this.error(fullPath, error.message);
