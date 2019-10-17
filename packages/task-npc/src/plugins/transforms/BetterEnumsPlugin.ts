@@ -15,7 +15,7 @@ class CustomEnumsSchema extends EnumsSchema {
         name => `    ${/^\d/.test(name) ? JSON.stringify(name) : name} = ${JSON.stringify(name)},`,
       )
       .join('\n');
-    context.addGlobal(`const enum ${this._name} {\n${members}\n}`);
+    context.addGlobal(`declare const enum ${this._name} {\n${members}\n}`);
     return this._name + (this._flags ? ` | ${this._name}[]` : '');
   }
 
