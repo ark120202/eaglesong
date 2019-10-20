@@ -69,7 +69,10 @@ class ReportList {
       this.timer = undefined;
     }
 
-    console.clear();
+    if (!process.env.EAGLESONG_NO_CLEAR) {
+      console.clear();
+    }
+
     console.log(text.trim());
   }
 
