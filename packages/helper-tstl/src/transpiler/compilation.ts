@@ -31,11 +31,12 @@ export class Compilation {
   protected errors: ModuleLoadingError[] = [];
   protected files = new Set<string>();
   protected options: tstl.CompilerOptions;
-  // TODO: Infer rootDir
-  protected rootDir: string = this.options.rootDir || '';
+  protected rootDir: string;
 
   constructor(program: ts.Program, protected host: CompilationHost = ts.sys) {
     this.options = program.getCompilerOptions();
+    // TODO: Infer
+    this.rootDir = this.options.rootDir || '';
   }
 
   protected used = false;
