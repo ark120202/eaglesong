@@ -53,7 +53,7 @@ export class BuildHelper {
     public readonly hooks: Readonly<Hooks>,
     private readonly tasks: ReadonlyTaskMap,
     public readonly isWatching: boolean,
-    private readonly flags: Record<string, boolean>,
+    private readonly flags: Record<string, boolean | undefined>,
   ) {}
 
   public async matchFiles(patterns: string | string[]) {

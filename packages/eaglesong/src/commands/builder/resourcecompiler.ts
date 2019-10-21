@@ -1,4 +1,5 @@
 import execa from 'execa';
+import fs from 'fs-extra';
 import globby from 'globby';
 import _ from 'lodash';
 import tempWrite from 'temp-write';
@@ -16,12 +17,8 @@ export class ResourceCompiler {
   }
 
   public async compile() {
-    const useWine = process.platform !== 'win32';
     const compilerPath = `${this.dotaPath}/game/bin/win64/resourcecompiler.exe`;
-
     const args: string[] = [];
-    const executable = useWine ? 'wine' : compilerPath;
-    if (useWine) args.push(compilerPath);
 
     const files = await globby(this.patterns, { cwd: this.contentPath, dot: true });
     // resourcecompiler fails when there are no files
@@ -29,6 +26,13 @@ export class ResourceCompiler {
 
     const fileListPath = await tempWrite(files.join('\n'));
     args.push('-filelist', fileListPath);
-    await execa(executable, args, { cwd: this.contentPath });
+    try {
+      await execa(compilerPath, args, { cwd: this.contentPath, stdio: 'inherit' });
+      return true;
+    } catch {
+      return false;
+    } finally {
+      await fs.remove(fileListPath);
+    }
   }
 }

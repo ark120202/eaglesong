@@ -7,6 +7,7 @@ import {
   TaskMap,
 } from '@eaglesong/helper-task';
 import path from 'upath';
+import yargs from 'yargs';
 import { CommandGroup } from '../../command';
 import { buildReporter, Reporter, watchReporter } from './reporters';
 import { ResourceCompiler } from './resourcecompiler';
@@ -17,7 +18,12 @@ export interface BuildOptions {
 }
 
 export default class BuilderCommand extends CommandGroup {
-  protected args: { pushLocalizations: boolean } = { pushLocalizations: false };
+  protected args: {
+    pushLocalizations?: boolean;
+    skipCompilation?: boolean;
+    noDota?: boolean;
+  } = {};
+
   // FIXME:
   public hooks: ReturnType<typeof createHooks> = createHooks();
   private readonly definitionsPath = path.join(this.context, 'node_modules/.definitions');
@@ -25,12 +31,6 @@ export default class BuilderCommand extends CommandGroup {
   private reporter: Reporter = buildReporter;
 
   public register() {
-    this.command({
-      command: 'dev',
-      describe: 'Run Dota 2 and watch for resources',
-      handler: () => this.watch(),
-    });
-
     const errorOnFailure = (promise: Promise<boolean>) =>
       (async () => {
         if (!(await promise)) {
@@ -38,33 +38,45 @@ export default class BuilderCommand extends CommandGroup {
         }
       })();
 
+    const buildOptions: Record<string, yargs.Options> = {
+      'no-dota': {
+        describe: 'Run build without using Dota 2 client files',
+        type: 'boolean',
+        default: false,
+      },
+    };
+
     this.command({
-      command: 'build',
-      describe: 'Build and compile all resources for production release',
-      handler: () => errorOnFailure(this.build()),
+      builder: argv => argv.options(buildOptions),
+      command: 'dev',
+      describe: 'Build and watch for resources',
+      handler: () => this.watch(),
     });
 
     this.command({
       builder: argv =>
-        argv.option('push-localizations', {
-          describe: '[LocalizationBuilder] Push base files to localization platform',
-          type: 'boolean',
-          default: false,
+        argv.options({
+          ...buildOptions,
+          'skip-compilation': {
+            describe: 'Skip resourcecompiler execution',
+            type: 'boolean',
+            default: false,
+          },
         }),
-      command: 'ci',
-      describe: 'Run all build tasks without emitting any output',
-      handler: () => errorOnFailure(this.ci()),
+      command: 'build',
+      describe: 'Build and compile all resources for production environment',
+      handler: () => errorOnFailure(this.build()),
     });
 
     this.command({
-      command: 'generate-types',
-      describe: 'Generate TypeScript definition files',
-      handler: () => errorOnFailure(this.generateTypes()),
+      command: 'generate-static',
+      describe: 'Generate static files for other tools',
+      handler: () => errorOnFailure(this.generateStatic()),
     });
   }
 
   private async watch() {
-    await this.loadTasks(true, true);
+    await this.loadTasks(true, Boolean(this.args.noDota));
     this.reporter = watchReporter;
     this.report();
 
@@ -76,36 +88,35 @@ export default class BuilderCommand extends CommandGroup {
   }
 
   public async build() {
+    if (this.args.skipCompilation && this.args.noDota) {
+      console.log('--no-dota implies --skip-compilation, so they should not be specified together');
+      return false;
+    }
+
     if (process.env.NODE_ENV == null) process.env.NODE_ENV = 'production';
+    await this.loadTasks(false, Boolean(this.args.noDota));
+    this.report();
+
+    await this.hooks.boot.promise();
+    await this.hooks.definitions.promise(this.definitionsPath);
+    await this.hooks.build.promise();
+
+    if (!(this.args.skipCompilation || this.args.noDota)) {
+      const compiler = new ResourceCompiler(await this.getDotaPath(), await this.getAddonName());
+      await this.hooks.compile.promise(p => compiler.addResource(p));
+
+      console.log('');
+      console.log('Executing resourcecompiler...');
+      if (!(await compiler.compile())) {
+        return false;
+      }
+    }
+
+    return this.isSuccess();
+  }
+
+  private async generateStatic() {
     await this.loadTasks(false, true);
-    this.report();
-
-    await this.hooks.boot.promise();
-    await this.hooks.definitions.promise(this.definitionsPath);
-    await this.hooks.build.promise();
-
-    const compiler = new ResourceCompiler(await this.getDotaPath(), await this.getAddonName());
-    await this.hooks.compile.promise(p => compiler.addResource(p));
-    console.log('Starting compilation...');
-    await compiler.compile();
-    console.log('Compilation finished');
-
-    return this.isSuccess();
-  }
-
-  private async ci() {
-    await this.loadTasks(false, false);
-    this.report();
-
-    await this.hooks.boot.promise();
-    await this.hooks.definitions.promise(this.definitionsPath);
-    await this.hooks.build.promise();
-
-    return this.isSuccess();
-  }
-
-  private async generateTypes() {
-    await this.loadTasks(false, false);
     this.report();
 
     await this.hooks.boot.promise();
@@ -122,7 +133,7 @@ export default class BuilderCommand extends CommandGroup {
     this.reporter(this.context, [...this.tasks.values()]);
   }
 
-  private async loadTasks(isWatching: boolean, allowSideEffects: boolean) {
+  private async loadTasks(isWatching: boolean, noDota: boolean) {
     let { buildTasks, output } = await this.getOptions();
     if (typeof buildTasks === 'function') buildTasks = await buildTasks();
     if (buildTasks.length === 0) throw new Error('Builder got an empty task list');
@@ -130,7 +141,7 @@ export default class BuilderCommand extends CommandGroup {
 
     const helper = new BuildHelper(
       this.context,
-      allowSideEffects ? await this.getDotaPath() : undefined,
+      noDota ? undefined : await this.getDotaPath(),
       await this.getAddonName(),
       output != null ? output : {},
       new Map(),

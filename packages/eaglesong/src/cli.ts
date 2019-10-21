@@ -25,4 +25,5 @@ yargs
   .locale('en')
   .demandCommand(1, '')
   .strict()
+  .parserConfiguration({ 'boolean-negation': false })
   .parse();
