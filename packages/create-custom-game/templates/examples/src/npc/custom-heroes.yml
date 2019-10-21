@@ -1,9 +1,0 @@
-custom_hero_1:
-  model: something/something.vmdl
-  modelScale: 0.75
-  attackRate: 1.6
-  abilities:
-    - custom_hero_1_ability1
-    - custom_hero_1_ability2
-    - custom_hero_1_ability3
-    - custom_hero_1_ability4

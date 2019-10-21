@@ -3,6 +3,58 @@
     "./src/npc/**/*.json": "jsonc",
     "./src/localization/**/*.json": "jsonc"
   },
-
-  "typescript.tsdk": "node_modules\\typescript\\lib"
+  "json.schemas": [
+    {
+      "url": "./node_modules/.definitions/npc_abilities_custom.json",
+      "fileMatch": ["src/npc/npc_abilities_custom.json", "src/npc/npc_abilities_custom/*.json"]
+    },
+    {
+      "url": "./node_modules/.definitions/npc_abilities_override.json",
+      "fileMatch": ["src/npc/npc_abilities_override.json", "src/npc/npc_abilities_override/*.json"]
+    },
+    {
+      "url": "./node_modules/.definitions/npc_heroes_custom.json",
+      "fileMatch": ["src/npc/npc_heroes_custom.json", "src/npc/npc_heroes_custom/*.json"]
+    },
+    {
+      "url": "./node_modules/.definitions/npc_items_custom.json",
+      "fileMatch": ["src/npc/npc_items_custom.json", "src/npc/npc_items_custom/*.json"]
+    },
+    {
+      "url": "./node_modules/.definitions/npc_units_custom.json",
+      "fileMatch": ["src/npc/npc_units_custom.json", "src/npc/npc_units_custom/*.json"]
+    },
+    {
+      "url": "./node_modules/.definitions/portraits.json",
+      "fileMatch": ["src/npc/portraits.json", "src/npc/portraits/*.json"]
+    }
+  ],
+  "yaml.schemas": {
+    "../_modules/eaglesong/packages/task-maps/lib/metadata.schema.json": "src/maps/metadata.yml",
+    "../_modules/eaglesong/packages/task-sounds/lib/soundevents.schema.json": "src/sounds/*.yml",
+    "./node_modules/.definitions/npc_abilities_custom.json": [
+      "src/npc/npc_abilities_custom.yml",
+      "src/npc/npc_abilities_custom/*.yml"
+    ],
+    "./node_modules/.definitions/npc_abilities_override.json": [
+      "src/npc/npc_abilities_override.yml",
+      "src/npc/npc_abilities_override/*.yml"
+    ],
+    "./node_modules/.definitions/npc_heroes_custom.json": [
+      "src/npc/npc_heroes_custom.yml",
+      "src/npc/npc_heroes_custom/*.yml"
+    ],
+    "./node_modules/.definitions/npc_items_custom.json": [
+      "src/npc/npc_items_custom.yml",
+      "src/npc/npc_items_custom/*.yml"
+    ],
+    "./node_modules/.definitions/npc_units_custom.json": [
+      "src/npc/npc_units_custom.yml",
+      "src/npc/npc_units_custom/*.yml"
+    ],
+    "./node_modules/.definitions/portraits.json": [
+      "src/npc/portraits.yml",
+      "src/npc/portraits/*.yml"
+    ]
+  }
 }

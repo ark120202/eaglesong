@@ -1,0 +1,14 @@
+{
+  "extends": "@ark120202/typescript-config/dota/lua.json",
+  "include": [".", "../common"],
+  "compilerOptions": {
+    "rootDir": ".",
+    "baseUrl": ".",
+    "paths": {
+      "@common/*": ["../common/*"]
+    }
+  },
+  "tstl": {
+    "sourceMapTraceback": true
+  }
+}

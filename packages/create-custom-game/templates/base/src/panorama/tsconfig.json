@@ -1,0 +1,15 @@
+{
+  "extends": "@ark120202/typescript-config/base.json",
+  "include": [".", "../common"],
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["esnext"],
+    "module": "esnext",
+
+    "types": ["panorama-types", "webpack-env"],
+    "baseUrl": ".",
+    "paths": {
+      "@common/*": ["../common/*"]
+    }
+  }
+}

@@ -1,6 +1,5 @@
 import { buildTasks } from '@eaglesong/tasks';
 import { Options } from 'eaglesong';
-// if examples: import { CustomHeroesPlugin } from './eaglesong/npc';
 
 const config: Options = {
   publish: {
@@ -11,23 +10,7 @@ const config: Options = {
       },
     },
   },
-  buildTasks: buildTasks({
-    // if examples: npc: { plugins: [CustomHeroesPlugin] },
-    panorama: {
-      common: {
-        polyfill: {
-          lifetime: 'compiler',
-          preserveRealm: true,
-          modules: ['panorama-polyfill'],
-        },
-        vendor: {
-          lifetime: 'compiler',
-          preserveRealm: false,
-          modules: ['querystring-es3', 'tslib', 'ramda'],
-        },
-      },
-    },
-  }),
+  buildTasks: buildTasks(),
 };
 
 export default config;

@@ -1,0 +1,7 @@
+custom_ability_example:
+  BaseClass: ability_lua
+  ScriptFile: abilities/custom_ability_example
+  AbilityBehavior: POINT
+  AbilityTextureName: custom_ability_example
+  Specials:
+    - damage_reduction: 15

@@ -1,0 +1,4 @@
+Custom.Ring:
+  pitch: 1.5
+  soundlevel: 150
+  files: ./ring.mp3

@@ -2,26 +2,14 @@
 import execa from 'execa';
 import fs from 'fs-extra';
 import globby from 'globby';
-import inquirer from 'inquirer';
 import path from 'path';
 import sortPackageJson from 'sort-package-json';
 import yargs from 'yargs';
-
-async function prompt(question: inquirer.Question) {
-  const { value } = await inquirer.prompt<{ value: any }>([{ ...question, name: 'value' }]);
-  await new Promise<void>(resolve => setImmediate(resolve));
-  return value;
-}
-
-const promptString = (question: inquirer.InputQuestion<inquirer.Answers>): Promise<string> =>
-  prompt(question);
-
-const promptConfirmation = (message: string, defaultValue?: boolean): Promise<boolean> =>
-  prompt({ type: 'confirm', message, default: defaultValue });
+import { ask } from './input';
 
 const isYarnAvailable = (() => {
   try {
-    execa.sync('yarnpkg --version');
+    execa.sync('yarn --version');
     return true;
   } catch {
     return false;
@@ -37,7 +25,7 @@ const isGitAvailable = (() => {
   }
 })();
 
-(async () => {
+async function main() {
   const argv = yargs
     .alias('h', 'help')
     .alias('v', 'version')
@@ -45,49 +33,25 @@ const isGitAvailable = (() => {
     .usage('Usage: $0')
     .boolean('use-npm')
     .default('use-npm', false)
-    .describe('use-npm', 'Use npm to install dependencies even if `yarn` is found')
+    .describe('use-npm', 'Use `npm` to install dependencies even if `yarn` is found')
     .boolean('no-git')
     .default('no-git', false)
-    .describe('no-git', "Don't initialize git repository even if `git` is found")
+    .describe('no-git', 'Do not initialize git repository even if `git` is found')
     .strict()
+    .parserConfiguration({ 'boolean-negation': false })
     .parse();
 
-  const transformInternalName = (input: string) =>
-    input
-      .toLowerCase()
-      .replace(/ ?& ?/g, '-and-')
-      .replace(/[_ ]/g, '-')
-      .replace(/[^a-z\d-]/g, '');
-
-  const validateInternalName = async (name: string) => {
-    if (name === '') return "Name shouldn't be empty";
-    if (await fs.pathExists(name)) {
-      if (!(await fs.stat(name)).isDirectory()) {
-        return 'A file with that name already exists';
-      }
-
-      if ((await fs.readdir(name)).length > 0) {
-        return "A directory with that name already exists and it's not empty";
-      }
-    }
-
-    return true;
-  };
-
-  const displayName = await promptString({ message: 'Display Name:' });
-  const internalName = await promptString({
-    message: 'Internal Name:',
-    validate: validateInternalName,
-    transformer: transformInternalName,
-    default: transformInternalName(displayName),
-  });
-
-  const conventionalCommits = await promptConfirmation('Use conventional commits?', true);
-  const includeExamples = await promptConfirmation('Include examples?', true);
-
   const useGit = isGitAvailable && !argv['no-git'];
+  const packageManager = isYarnAvailable && !argv['use-npm'] ? 'yarn' : 'npm';
+  const {
+    displayName,
+    internalName,
+    includeExamples,
+    useESLint,
+    usePrettier,
+    conventionalCommits,
+  } = await ask();
 
-  const packageManager = isYarnAvailable && !argv['use-npm'] ? 'yarnpkg' : 'npm';
   const runPackageManager = (args: string[]) =>
     execa(packageManager, args, { stdio: 'inherit', cwd: internalName });
   const outputFile = (filePath: string, content: string) =>
@@ -95,35 +59,43 @@ const isGitAvailable = (() => {
   const outputJson = (filePath: string, data: any) =>
     fs.outputJson(path.join(internalName, filePath), data, { spaces: 2 });
 
+  const templates = new Set(['base']);
+  const variables = new Map([['displayName', displayName]]);
+
   const packageJson: Record<string, any> = {
     name: internalName,
-    version: '1.0.0',
+    version: '0.0.0',
     private: true,
     scripts: {
-      build: 'node ../packages/cli/bin/eaglesong.js build',
-      ci: 'node ../packages/cli/bin/eaglesong.js ci --push-localization',
-      clean: 'node ../packages/cli/bin/eaglesong.js clean',
-      dev: 'node ../packages/cli/bin/eaglesong.js dev',
-      eaglesong: 'node ../packages/cli/bin/eaglesong.js',
-      launch: 'node ../packages/cli/bin/eaglesong.js launch',
-      release: 'node ../packages/cli/bin/eaglesong.js publish --preset release',
+      dev: 'eaglesong dev',
+      launch: 'eaglesong launch',
+      release: 'eaglesong publish release',
     },
+    dependencies: {},
+    devDependencies: {},
   };
 
   const dependencies = [
     '@types/node',
-    'types-dota-panorama',
+    '@types/webpack-env',
     'dota-lua-types',
-    'link:D:/dev/dota/_modules/panorama-polyfill',
+    'panorama-types',
+    'tslib',
   ];
 
-  const devDependencies = ['typescript', 'tslint', 'tslint-config-prettier'];
-
-  const templates = new Set(['base']);
+  const devDependencies = [
+    '@ark120202/typescript-config',
+    'typescript',
+    '@eaglesong/tasks',
+    'eaglesong',
+  ];
 
   if (useGit) {
     templates.add('git');
-    await execa('git', ['init'], { cwd: internalName });
+  }
+
+  if (includeExamples) {
+    templates.add('examples');
   }
 
   if (conventionalCommits) {
@@ -133,42 +105,88 @@ const isGitAvailable = (() => {
     packageJson.commitlint = { extends: '@commitlint/config-conventional' };
   }
 
-  if (includeExamples) {
-    templates.add('examples');
-    dependencies.push('lodash', '@types/lodash', 'date-fns@next');
+  if (useESLint) {
+    packageJson.eslintConfig = {
+      extends: '@ark120202/eslint-config/node',
+      parserOptions: {
+        project: ['tsconfig.json', 'src/panorama/tsconfig.json', 'src/vscripts/tsconfig.json'],
+      },
+    };
+
+    devDependencies.push('eslint', '@ark120202/eslint-config');
   }
 
-  await Promise.all(
-    [...templates].map(async template => {
-      const rootPath = path.join(__dirname, '..', 'templates', template);
-      const files = await globby('**/*', { cwd: rootPath, dot: true });
-      await Promise.all(
-        files.map(async fileName => {
-          let fileContent = await fs.readFile(path.join(rootPath, fileName), 'utf8');
-          if (fileName.endsWith('.ts')) {
-            fileContent = fileContent.replace(/\/\/ if (.+?): (.+)/g, (_, condition, expression) =>
-              templates.has(condition) ? expression : '',
-            );
-          }
+  if (usePrettier) {
+    packageJson.prettier = {
+      printWidth: 100,
+      proseWrap: 'always',
+      singleQuote: true,
+      trailingComma: 'all',
+    };
 
-          // See: https://github.com/npm/npm/issues/1862
-          if (fileName === '_gitignore') fileName = '.gitignore';
-          await outputFile(fileName, fileContent);
-        }),
-      );
-    }),
-  );
+    devDependencies.push('eslint', 'prettier', '@ark120202/eslint-config');
+  }
 
-  packageJson.dependencies = dependencies;
-  packageJson.devDependencies = devDependencies;
+  dependencies.sort((a, b) => a.localeCompare(b));
+  devDependencies.sort((a, b) => a.localeCompare(b));
+
+  await fs.mkdir(internalName);
+  if (useGit) {
+    await execa('git', ['init'], { cwd: internalName });
+  }
+
+  for (const template of templates) {
+    const rootPath = path.join(__dirname, '..', 'templates', template);
+    const files = await globby('**/*', { cwd: rootPath, dot: true });
+    await Promise.all(
+      files.map(async fileName => {
+        let fileContent = await fs.readFile(path.join(rootPath, fileName), 'utf8');
+        fileContent = fileContent
+          .replace(/(\s*)\/\/ if (.+?): (.+)/g, (_, spaces, condition, expression) =>
+            templates.has(condition) ? `${spaces}${expression}` : '',
+          )
+          .replace(/\$\$(.+?)\$\$/g, (match, expression) => {
+            if (!variables.has(expression)) {
+              throw new Error(`Unknown variable '${match}' in ${fileName}`);
+            }
+
+            return variables.get(expression)!;
+          });
+
+        // See https://github.com/npm/npm/issues/1862
+        if (fileName === '_gitignore') {
+          // https://github.com/eslint/eslint/issues/11954
+          // eslint-disable-next-line require-atomic-updates
+          fileName = '.gitignore';
+        }
+
+        await outputFile(fileName, fileContent);
+      }),
+    );
+  }
+
   await outputJson('package.json', sortPackageJson(packageJson));
+
+  let installedDevDependencies = false;
   try {
-    await runPackageManager(['install']);
+    await runPackageManager(['add', '-D', ...devDependencies]);
+    installedDevDependencies = true;
+    await runPackageManager(['add', ...dependencies]);
   } catch {
-    // TODO:
-    // eslint-disable-next-line no-throw-literal
-    throw { message: 'Failed to install dependencies' };
+    console.log('');
+    console.log('Failed to install dependencies.');
+    console.log('To complete project initialization run:');
+    console.log(`$ ${packageManager} add ${dependencies.join(' ')}`);
+    if (!installedDevDependencies) {
+      console.log(`$ ${packageManager} add -D ${devDependencies.join(' ')}`);
+    }
+
+    return 1;
   }
+}
+
+(async () => {
+  process.exitCode = (await main()) || 0;
 })().catch(error => {
   console.error(error);
   process.exitCode = 1;

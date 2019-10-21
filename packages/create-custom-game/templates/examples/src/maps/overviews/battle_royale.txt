@@ -1,8 +1,0 @@
-battle_royale
-{
-	material materials/overviews/battle_royale.vmat
-	pos_x -512
-	pos_y 512
-	scale 1.000
-}
-

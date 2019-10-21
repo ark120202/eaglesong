@@ -1,8 +1,0 @@
-{
-  "df": {
-    "MaxLevel": 11,
-    "BaseClass": "ability_lua",
-    "ScriptFile": "df",
-    "AbilityCastAnimation": "180_LEFT"
-  }
-}

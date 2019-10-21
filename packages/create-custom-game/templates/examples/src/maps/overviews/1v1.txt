@@ -1,8 +1,0 @@
-1v1
-{
-	material materials/overviews/1v1.vmat
-	pos_x -512
-	pos_y 512
-	scale 1.000
-}
-
