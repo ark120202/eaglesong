@@ -15,14 +15,16 @@ export default class VScriptsTask extends Task<void> {
 
   public apply() {
     this.hooks.build.tapPromise(this.constructor.name, async () => {
-      const tsconfigPath = this.resolvePath('src/vscripts/tsconfig.json');
-      const outDir = this.resolvePath('game', 'scripts/vscripts');
-      await copyLuaLib(outDir);
+      let outDir: string | undefined;
+      if (this.dotaPath != null) {
+        outDir = this.resolvePath('game', 'scripts/vscripts');
+        await copyLuaLib(outDir);
+      }
 
       const updateConfigFile = createConfigFileUpdater();
       const forceProgramUpdate = createTsAutoWatch(
         this.resolvePath('src/vscripts'),
-        tsconfigPath,
+        this.resolvePath('src/vscripts/tsconfig.json'),
         { outDir },
         this.isWatching,
         () => {
