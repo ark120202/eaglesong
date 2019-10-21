@@ -7,6 +7,12 @@ export interface Options {
   particles?: boolean;
 }
 
+const DEFAULT_OPTIONS: Options = {
+  materials: true,
+  models: true,
+  particles: true,
+};
+
 export default class ResourcesTask extends Task<Options> {
   private enabledDirectories!: string[];
   constructor(options: Options = {}) {
@@ -14,13 +20,13 @@ export default class ResourcesTask extends Task<Options> {
   }
 
   public apply() {
-    this.enabledDirectories = Object.entries(this.options)
-      .filter(([, enabled]) => enabled !== false)
+    this.enabledDirectories = Object.entries({ ...DEFAULT_OPTIONS, ...this.options })
+      .filter(([, enabled]) => enabled)
       .map(([name]) => name);
 
     this.hooks.build.tapPromise(this.constructor.name, () => this.makeSymlinks());
     this.hooks.compile.tap(this.constructor.name, addResource =>
-      addResource(this.enabledDirectories.map(x => `${x}/**/*`)),
+      addResource(this.enabledDirectories.map(x => `${x}/**/*.{vmat,vtex,vmdl,vpcf}`)),
     );
   }
 

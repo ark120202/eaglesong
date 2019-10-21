@@ -1,5 +1,2 @@
-*.{css,scss,sass,xml}       linguist-detectable
-*.vpcf                      binary linguist-generated
-*.vmat                      binary linguist-generated
-*.vtex                      binary linguist-generated
-*.vmdl                      binary linguist-generated
+*.{css,scss,sass,xml} linguist-detectable
+*.{vmat,vtex,vmdl,vpcf} binary linguist-generated
