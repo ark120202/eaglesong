@@ -12,7 +12,7 @@ import { buildReporter, Reporter, watchReporter } from './reporters';
 import { ResourceCompiler } from './resourcecompiler';
 
 export interface BuildOptions {
-  output?: Partial<OutputOptions>;
+  output?: OutputOptions;
   buildTasks: Task<any>[] | (() => Promise<Task<any>[]>);
 }
 
