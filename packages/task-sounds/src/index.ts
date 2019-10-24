@@ -90,40 +90,39 @@ export default class SoundsTask extends TransformTask<void> {
   private async mapFiles(filePath: string, files: string[]) {
     const fileDirectory = path.dirname(filePath);
     return Promise.all(
-      files.map(async x => {
-        if (typeof x !== 'string') return '';
+      files.map(async fileName => {
+        if (typeof fileName !== 'string') return '';
 
-        const extension = path.extname(x);
-        const isRoot = x.startsWith('/');
-        if (isRoot || x.startsWith('./')) {
+        const extension = path.extname(fileName);
+        const isRoot = fileName.startsWith('/');
+        if (isRoot || fileName.startsWith('./')) {
           let absolute = path.resolve(
             isRoot ? this.srcPath : fileDirectory,
-            x.slice(isRoot ? 1 : 0),
+            fileName.slice(isRoot ? 1 : 0),
           );
 
-          if (!SUPPORTED_AUDIO_EXTENSIONS.includes(extension)) {
-            this.error(filePath, `${x} has an unsupported ${extension} extension`);
-          } else if (!(await fs.pathExists(absolute))) {
-            this.error(filePath, `Couldn't resolve ${x}`);
+          if (!(await fs.pathExists(absolute))) {
+            this.error(filePath, `Could not find '${fileName}'`);
+          } else if (!SUPPORTED_AUDIO_EXTENSIONS.includes(extension)) {
+            this.error(filePath, `'${fileName}' has an unsupported '${extension}' extension`);
           }
 
           absolute = path.changeExt(absolute, '.vsnd');
           return `sounds/custom_game/${path.relative(this.srcPath, absolute)}`;
         }
 
-        if (x.startsWith('sounds')) {
+        if (fileName.startsWith('sounds')) {
           if (extension !== '.vsnd') {
-            this.error(filePath, `${x} expected to have a .vsnd extension`);
+            this.error(filePath, `'${fileName}' expected to have a .vsnd extension`);
           }
         } else {
           this.error(
             filePath,
-            `${x} is invalid. Files should start with a ` +
-              '"./" (file-relative), "/" (root-relative) or "sounds" (no special handling)',
+            `'${fileName}' is invalid. Files should start with a './' (from current file), '/' (from root) or 'sounds' (no resolution)`,
           );
         }
 
-        return x;
+        return fileName;
       }),
     );
   }
