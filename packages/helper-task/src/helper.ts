@@ -24,9 +24,9 @@ export interface WatchEvent {
 
 export type Hooks = ReturnType<typeof createHooks> & NamedType;
 export const createHooks = () => ({
-  definitions: new AsyncParallelHook<[string]>(['definitionsPath']),
-
   boot: new AsyncParallelHook<[]>([]),
+
+  preBuild: new AsyncParallelHook<[]>([]),
 
   build: new AsyncParallelHook<[]>([]),
 

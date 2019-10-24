@@ -63,29 +63,25 @@ export default class NpcTask extends TransformTask<Options> {
       );
     });
 
-    this.hooks.definitions.tapPromise(this.constructor.name, async definitionsPath => {
+    this.hooks.preBuild.tapPromise(this.constructor.name, async () => {
       const schemas: Schemas = {};
       await this.service.hooks.schemas.promise(schemas);
-
       const compiledSchemas = Object.entries(schemas).map(([name, schema]) => {
         const { content, globals } = schema.toTypeScriptRoot(_.upperFirst(_.camelCase(name)));
         return { name, content, globals, schema };
       });
 
-      let types = '';
-      types += Object.keys(schemas)
-        .map(name => `/// <reference types="./${name}" />`)
-        .join('\n');
-      types += '\n\n';
-      types += _.union(...compiledSchemas.map(x => x.globals)).join('\n\n');
-      types += '\n';
+      let globals = _.union(...compiledSchemas.map(x => x.globals))
+        .sort((a, b) => a.localeCompare(b))
+        .join('\n\n');
+      globals += '\n';
 
-      const getPath = (name: string) => path.join(definitionsPath, name);
+      const getPath = (fileName: string) => this.resolvePath(`.eaglesong/${fileName}`);
       await Promise.all([
-        fs.outputFile(getPath('index.d.ts'), types),
+        fs.outputFile(getPath('types/npc-globals.d.ts'), globals),
         ..._.flatMap(compiledSchemas, ({ name, content, schema }) => [
-          fs.outputJson(getPath(`${name}.json`), schema.toSchema(), { spaces: 2 }),
-          fs.outputFile(getPath(`${name}.d.ts`), content),
+          fs.outputFile(getPath(`types/${name}.d.ts`), content),
+          fs.outputJson(getPath(`schemas/npc/${name}.json`), schema.toSchema(), { spaces: 2 }),
         ]),
       ]);
     });

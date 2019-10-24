@@ -1,8 +1,7 @@
 {
   "extends": "@ark120202/typescript-config/node/10.json",
-  "include": ["*", "src/npc", "src/localization"],
+  "include": [".eaglesong/types", "*", "src/npc", "src/localization"],
   "compilerOptions": {
-    "noEmit": true,
-    "types": ["node", ".definitions"]
+    "noEmit": true
   }
 }

@@ -6,7 +6,6 @@ import {
   TaskConstructor,
   TaskMap,
 } from '@eaglesong/helper-task';
-import path from 'upath';
 import yargs from 'yargs';
 import { CommandGroup } from '../../command';
 import { buildReporter, Reporter, watchReporter } from './reporters';
@@ -26,7 +25,6 @@ export default class BuilderCommand extends CommandGroup {
 
   // FIXME:
   public hooks: ReturnType<typeof createHooks> = createHooks();
-  private readonly definitionsPath = path.join(this.context, 'node_modules/.definitions');
   private readonly tasks: TaskMap = new Map();
   private reporter: Reporter = buildReporter;
 
@@ -75,13 +73,13 @@ export default class BuilderCommand extends CommandGroup {
     });
   }
 
-  private async watch() {
+  public async watch() {
     await this.loadTasks(true, Boolean(this.args.noDota));
     this.reporter = watchReporter;
     this.report();
 
     await this.hooks.boot.promise();
-    await this.hooks.definitions.promise(this.definitionsPath);
+    await this.hooks.preBuild.promise();
     await this.hooks.build.promise();
 
     await new Promise<never>(() => {});
@@ -98,7 +96,7 @@ export default class BuilderCommand extends CommandGroup {
     this.report();
 
     await this.hooks.boot.promise();
-    await this.hooks.definitions.promise(this.definitionsPath);
+    await this.hooks.preBuild.promise();
     await this.hooks.build.promise();
 
     if (!(this.args.skipCompilation || this.args.noDota)) {
@@ -115,12 +113,12 @@ export default class BuilderCommand extends CommandGroup {
     return this.isSuccess();
   }
 
-  private async generateStatic() {
+  public async generateStatic() {
     await this.loadTasks(false, true);
     this.report();
 
     await this.hooks.boot.promise();
-    await this.hooks.definitions.promise(this.definitionsPath);
+    await this.hooks.preBuild.promise();
 
     return this.isSuccess();
   }
