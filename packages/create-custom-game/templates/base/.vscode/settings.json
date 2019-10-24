@@ -31,8 +31,8 @@
     }
   ],
   "yaml.schemas": {
-    "./node_modules/@eaglesong/task-maps/lib/metadata.schema.json": "src/maps/metadata.yml",
-    "./node_modules/@eaglesong/task-sounds/lib/soundevents.schema.json": "src/sounds/*.yml",
+    "./.eaglesong/schemas/maps-metadata.json": "src/maps/metadata.yml",
+    "./.eaglesong/schemas/soundevents.json": "src/sounds/*.yml",
     "./.eaglesong/schemas/npc/npc_abilities_custom.json": [
       "src/npc/npc_abilities_custom.yml",
       "src/npc/npc_abilities_custom/*.yml"

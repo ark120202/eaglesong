@@ -31,6 +31,11 @@ export default class SoundsTask extends TransformTask<void> {
   public apply() {
     this.srcPath = this.resolvePath('src/sounds');
 
+    this.hooks.preBuild.tapPromise(this.constructor.name, async () => {
+      const schemaPath = this.resolvePath('.eaglesong/schemas/soundevents.json');
+      await fs.outputJson(schemaPath, schema, { spaces: 2 });
+    });
+
     this.hooks.build.tapPromise(this.constructor.name, async () => {
       if (this.dotaPath != null) {
         await fs.ensureDir(this.srcPath);

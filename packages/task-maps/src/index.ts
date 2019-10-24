@@ -28,6 +28,11 @@ export default class MapsTask extends Task<void> {
     this.mapsPath = this.resolvePath('src/maps');
     this.metadataPath = this.resolvePath('src/maps/metadata.yml');
 
+    this.hooks.preBuild.tapPromise(this.constructor.name, async () => {
+      const schemaPath = this.resolvePath('.eaglesong/schemas/maps-metadata.json');
+      await fs.outputJson(schemaPath, schema, { spaces: 2 });
+    });
+
     this.hooks.build.tapPromise(this.constructor.name, async () => {
       await fs.ensureDir(this.mapsPath);
       if (this.dotaPath != null) {
