@@ -1,15 +1,16 @@
 import _ from 'lodash';
 import posthtml from 'posthtml';
+import webpack from 'webpack';
 
 const xmlCommentRegex = /^<!--(.*?)-->$/s;
-export const banTextNodes = (error: (message: Error) => void): posthtml.Plugin => (
+export const banTextNodes = (context: webpack.loader.LoaderContext): posthtml.Plugin => (
   tree: posthtml.Api,
 ) => {
   tree.match(/^\s*[^\s]/, node => {
     const content = node.trim();
     if (xmlCommentRegex.test(content)) return node;
 
-    error(new Error(`Text node '${content}' is not allowed.`));
+    context.emitError(new Error(`Text node '${content}' is not allowed.`));
 
     const xmlContent = _.escape(content).replace(/\\/g, '\\\\\\\\');
     return {

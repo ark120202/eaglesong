@@ -1,13 +1,15 @@
 import posthtml from 'posthtml';
 import _ from 'lodash';
+import webpack from 'webpack';
 
-export const dependencies = (additionalScripts: string[]): posthtml.Plugin => (
-  tree: posthtml.Api,
-) => {
+export const dependencies = (
+  context: webpack.loader.LoaderContext,
+  additionalScripts: string[],
+): posthtml.Plugin => (tree: posthtml.Api) => {
   const root = tree.find((n): n is posthtml.Node => typeof n === 'object' && n.tag === 'root');
   const newTags: { scripts: string[]; styles: string[] } = {
-    scripts: [...additionalScripts],
     styles: [],
+    scripts: [...additionalScripts],
   };
 
   tree.match({ tag: 'dependency', attrs: { src: true } }, node => {
@@ -17,8 +19,8 @@ export const dependencies = (additionalScripts: string[]): posthtml.Plugin => (
       newTags.scripts.push(src);
     } else if (src.endsWith('.css') || src.endsWith('.vcss_c')) {
       newTags.styles.push(src);
-    } else if (src !== 'ModuleBuildError') {
-      throw new Error(`Dependency "${src}" has invalid extension`);
+    } else if (src !== 'error://') {
+      context.emitError(new Error(`Dependency '${src}' has invalid extension`));
     }
 
     return false;

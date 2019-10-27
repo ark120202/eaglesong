@@ -58,8 +58,8 @@ export default async function panoramaLayoutLoader(
   const commons = [...preserved, ...(isLoadingScreen ? notPreserved : [])];
   const publicPath = this._compiler.options.output!.publicPath!;
   const commonDependencies = commons.map(n => `${publicPath}scripts/${n}.js`);
-  plugins.push(dependencies(commonDependencies));
-  plugins.push(banTextNodes(m => this.emitError(m)));
+  plugins.push(dependencies(this, commonDependencies));
+  plugins.push(banTextNodes(this));
 
   try {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition

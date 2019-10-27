@@ -6,11 +6,12 @@ import webpack from 'webpack';
 
 const { parser, render } = posthtml().constructor;
 
-async function loadModule(context: webpack.loader.LoaderContext, request: string): Promise<string> {
+async function loadModule(context: webpack.loader.LoaderContext, request: string) {
   try {
-    return await promisify((context as any).loadModule)(request);
-  } catch (error) {
-    return `module.exports = ${JSON.stringify(error.name)}`;
+    return await promisify(context.loadModule)(request);
+  } catch {
+    // Actual error is added as a part of child compilation
+    return 'module.exports = "error://"';
   }
 }
 
@@ -46,8 +47,9 @@ export const loadImports = (context: webpack.loader.LoaderContext): posthtml.Plu
   tree: posthtml.Api,
 ) => {
   const compilation: webpack.compilation.Compilation = context._compilation;
-  // eslint-disable-next-line prefer-destructuring
-  const publicPath: string = compilation.outputOptions.publicPath;
+  const publicPath = compilation.getPath(compilation.outputOptions.publicPath || '', {
+    hash: compilation.hash || 'XXXX',
+  });
 
   let html = render(tree);
 
