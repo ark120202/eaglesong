@@ -1,4 +1,4 @@
-import { OutputOptions, getOutputHeader } from '@eaglesong/helper-task';
+import { getOutputHeader, OutputOptions } from '@eaglesong/helper-task';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';

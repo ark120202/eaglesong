@@ -30,16 +30,18 @@ export default async function panoramaLayoutLoader(
   const publicPath = this._compiler.options.output!.publicPath!;
   const commonDependencies = commons.map(n => `${publicPath}scripts/${n}.js`);
 
+  const plugins: posthtml.Plugin[] = [
+    urls(),
+    imports(),
+    loadImports(this),
+    dependencies(this, commonDependencies),
+    banTextNodes(this),
+  ];
+
   try {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     const input = meta && meta.ast && meta.ast.type === 'posthtml' ? meta.ast.root : source;
-    const { html } = await posthtml([
-      urls(),
-      imports(),
-      loadImports(this),
-      dependencies(this, commonDependencies),
-      banTextNodes(this),
-    ]).process(input, {
+    const { html } = await posthtml(plugins).process(input, {
       closingSingleTag: 'slash',
       xmlMode: true,
     });

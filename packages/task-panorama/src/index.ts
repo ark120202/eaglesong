@@ -106,7 +106,6 @@ export default class PanoramaTask extends Task<Options> {
 
     const compiler = webpack(webpackConfig);
     if (this.dotaPath == null) {
-      // @ts-ignore
       compiler.outputFileSystem = new MemoryFS();
     }
 
@@ -145,16 +144,13 @@ export default class PanoramaTask extends Task<Options> {
 
   private displayErrors(errors: WebpackError[], level: 'error' | 'warning') {
     for (const error of errors) {
-      if (!isForkTsCheckerError(error)) {
-        this.error(null, typeof error === 'string' ? error : error.message, level);
+      if (isForkTsCheckerError(error)) {
+        const { line, character } = error.location;
+        this.error(error.file, error.rawMessage.replace(/^ERROR/, `(${line},${character})`), level);
         return;
       }
 
-      const message = error.rawMessage.replace(
-        /^ERROR/,
-        `(${error.location.line},${error.location.character})`,
-      );
-      this.error(error.file, message, level);
+      this.error(null, typeof error === 'string' ? error : error.message, level);
     }
   }
 }
