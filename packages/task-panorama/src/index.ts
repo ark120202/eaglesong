@@ -54,7 +54,7 @@ export default class PanoramaTask extends Task<Options> {
   public apply() {
     this.hooks.build.tapPromise(this.constructor.name, () => this.build());
     this.hooks.compile.tap(this.constructor.name, addResource =>
-      addResource('panorama/**/*.{xml,js,css,png,jpg,tga}'),
+      addResource('panorama/**/*.{xml,js,css}'),
     );
   }
 
