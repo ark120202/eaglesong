@@ -1,19 +1,10 @@
 import { imports, urls } from '@posthtml/esm';
-import validate from '@webpack-contrib/schema-utils';
-import { getOptions } from 'loader-utils';
 import posthtml from 'posthtml';
 import webpack from 'webpack';
 import { getCommonsForCompiler } from '../UseCommonsPlugin';
-import { LoaderOptions, schema } from './options';
 import { banTextNodes } from './posthtml-plugin-ban-text-nodes';
 import { dependencies } from './posthtml-plugin-dependencies';
 import { loadImports } from './posthtml-plugin-load-imports';
-
-// Loader Defaults
-const defaults: LoaderOptions = {
-  url: true,
-  import: true,
-};
 
 export interface PostHTMLLoaderMeta {
   ast?: { type: 'posthtml'; root: posthtml.Node[] };
@@ -26,27 +17,7 @@ export default async function panoramaLayoutLoader(
   _map: never,
   meta?: PostHTMLLoaderMeta,
 ) {
-  const options: LoaderOptions = { ...defaults, ...getOptions(this) };
-  validate({ name: 'Panorama Layout Loader', schema, target: options });
-
   const callback = this.async()!;
-
-  const plugins: posthtml.Plugin[] = [];
-
-  if (options.url !== false) {
-    plugins.push(urls(options.url === true ? {} : { url: options.url }));
-  }
-
-  if (options.import !== false) {
-    plugins.push(
-      imports({
-        import: options.import === true ? undefined : options.import,
-        template: options.template,
-      }),
-    );
-  }
-
-  plugins.push(loadImports(this));
 
   const { preserved, notPreserved } = getCommonsForCompiler(this._compiler)!;
   const isLoadingScreen = this._module.reasons.some(
@@ -58,13 +29,17 @@ export default async function panoramaLayoutLoader(
   const commons = [...preserved, ...(isLoadingScreen ? notPreserved : [])];
   const publicPath = this._compiler.options.output!.publicPath!;
   const commonDependencies = commons.map(n => `${publicPath}scripts/${n}.js`);
-  plugins.push(dependencies(this, commonDependencies));
-  plugins.push(banTextNodes(this));
 
   try {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     const input = meta && meta.ast && meta.ast.type === 'posthtml' ? meta.ast.root : source;
-    const { html } = await posthtml(plugins).process(input, {
+    const { html } = await posthtml([
+      urls(),
+      imports(),
+      loadImports(this),
+      dependencies(this, commonDependencies),
+      banTextNodes(this),
+    ]).process(input, {
       closingSingleTag: 'slash',
       xmlMode: true,
     });
