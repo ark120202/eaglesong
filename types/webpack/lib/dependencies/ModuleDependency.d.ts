@@ -27,7 +27,6 @@ declare class ModuleDependency extends webpack.compilation.Dependency {
   constructor(request: string);
 
   getResourceIdentifier(): string;
-  abstract loc: { name: string };
 }
 
 export = ModuleDependency;
