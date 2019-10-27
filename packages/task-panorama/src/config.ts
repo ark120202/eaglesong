@@ -37,7 +37,7 @@ export function createWebpackConfig({
       path: resolveContent('panorama', 'layout', 'custom_game'),
       publicPath: 'file://{resources}/layout/custom_game/',
       filename: '[name]',
-      globalObject: 'self',
+      globalObject: 'globalThis',
     },
     // TODO: It would be nice to use splitChunks instead of DllPlugin
     // But webpack 4 not supports sharing chunks with child compiler.
@@ -97,7 +97,7 @@ export function createWebpackConfig({
     },
     plugins: [
       new ForkTsCheckerWebpackPlugin({ tsconfig: configFile, async: false, silent: true }),
-      new webpack.BannerPlugin({ banner: 'var self = this;', raw: true, test: /\.js$/ }),
+      new webpack.BannerPlugin({ banner: 'var globalThis = this;', raw: true, test: /\.js$/ }),
     ],
   };
 
