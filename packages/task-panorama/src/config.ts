@@ -46,9 +46,6 @@ export function createWebpackConfig({
     // https://github.com/webpack/webpack/pull/6447
     optimization: { splitChunks: { cacheGroups: { vendor: false, default: false } } },
     mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
-    plugins: [
-      new CopyWebpackPlugin([{ from: 'images', to: resolveContent('panorama', 'images') }]),
-    ],
   };
 
   // TODO: Use custom plugin to pass actual path
@@ -62,6 +59,22 @@ export function createWebpackConfig({
     );
   }
 
+  const resourcesConfig: webpack.Configuration = {
+    module: {
+      rules: [
+        {
+          test: /\.(png|je?pg)$/,
+          loader: 'file-loader',
+          options: { limit: 8192, name: 'images/[name].[hash:8].[ext]' },
+        },
+      ],
+    },
+    plugins: [
+      // Should be applied before `HtmlWebpackPlugin`, since both tap to `emit` hook
+      new CopyWebpackPlugin([{ from: 'images', to: resolveContent('panorama', 'images') }]),
+    ],
+  };
+
   const panoramaPath = path.join(context, 'src', 'panorama');
   const configFile = path.join(panoramaPath, 'tsconfig.json');
 
@@ -69,9 +82,10 @@ export function createWebpackConfig({
     loader: require.resolve('./plugins/entry-loader'),
     options: _.identity<EntryLoaderOptions>({
       ignoredPlugins: [
+        'CopyWebpackPlugin',
+        'ForkTsCheckerWebpackPlugin',
         'HtmlWebpackPlugin',
         'HtmlWebpackXmlPlugin',
-        'ForkTsCheckerWebpackPlugin',
         'PanoramaEntriesPlugin',
       ],
     }),
@@ -147,17 +161,5 @@ export function createWebpackConfig({
     // TODO: Add banner plugin
   };
 
-  const resourcesConfig: webpack.Configuration = {
-    module: {
-      rules: [
-        {
-          test: /\.(png|je?pg)$/,
-          loader: 'file-loader',
-          options: { limit: 8192, name: 'images/[name].[hash:8].[ext]' },
-        },
-      ],
-    },
-  };
-
-  return webpackMerge(mainConfig, scriptsConfig, layoutConfig, stylesConfig, resourcesConfig);
+  return webpackMerge(mainConfig, resourcesConfig, scriptsConfig, layoutConfig, stylesConfig);
 }

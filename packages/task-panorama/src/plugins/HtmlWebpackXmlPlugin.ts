@@ -1,4 +1,6 @@
 import { Hooks } from 'html-webpack-plugin';
+import path from 'path';
+import { URL } from 'url';
 import webpack from 'webpack';
 
 export interface XmlChunk extends webpack.compilation.Chunk {
@@ -32,6 +34,24 @@ export class HtmlWebpackXmlPlugin implements webpack.Plugin {
         });
 
         (args.assets as any).xml = xmlAssets;
+
+        return args;
+      });
+
+      hooks.htmlWebpackPluginAfterHtmlProcessing.tap(this.constructor.name, args => {
+        const { publicPath } = args.assets;
+        const images = Object.keys(compilation.assets)
+          .filter(assetName => /\.(png|je?pg)$/.test(assetName))
+          .map(assetName => {
+            const url = new URL(publicPath);
+            // TODO: Move publicPath higher?
+            url.pathname = path.posix.resolve(url.pathname, assetName);
+            return url.toString();
+          });
+
+        if (images.length > 0) {
+          args.html = `<!--\n${images.map(x => `"${x}"`).join('\n')}\n-->\n${args.html}`;
+        }
 
         return args;
       });
