@@ -13,7 +13,7 @@ const toOperatorVariableValues = (value: Record<string, unknown>) =>
   _.mapValues(value, x => (x == null ? x : toOperatorVariableValue(x)));
 
 function toOperatorVariableValue(value: unknown) {
-  if (Array.isArray(value)) value = _.fromPairs(value.map((v, i) => [`value${i}`, v]));
+  if (Array.isArray(value)) value = Object.fromEntries(value.map((v, i) => [`value${i}`, v]));
   if (typeof value === 'boolean') value = value ? 1 : 0;
 
   return { value };

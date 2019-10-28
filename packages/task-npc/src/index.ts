@@ -79,7 +79,7 @@ export default class NpcTask extends TransformTask<Options> {
       const getPath = (fileName: string) => this.resolvePath(`.eaglesong/${fileName}`);
       await Promise.all([
         fs.outputFile(getPath('types/npc-globals.d.ts'), globals),
-        ..._.flatMap(compiledSchemas, ({ name, content, schema }) => [
+        ...compiledSchemas.flatMap(({ name, content, schema }) => [
           fs.outputFile(getPath(`types/${name}.d.ts`), content),
           fs.outputJson(getPath(`schemas/npc/${name}.json`), schema.toSchema(), { spaces: 2 }),
         ]),

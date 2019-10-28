@@ -47,7 +47,7 @@ export function ItemRecipePlugin(hooks: Hooks) {
           ItemCost: item.Recipe.cost || 0,
           ItemRecipe: true,
           ItemResult: itemName,
-          ItemRequirements: _.fromPairs(
+          ItemRequirements: Object.fromEntries(
             allRequirements.map((requirements, index) => [
               String(index + 1).padStart(2, '0'),
               requirements.join(';'),

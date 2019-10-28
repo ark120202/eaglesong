@@ -108,7 +108,7 @@ export default class MapsTask extends Task<void> {
   private async validateOverviews(maps: MapsMetadata) {
     const mapNames = Object.keys(maps);
     const compare = async (directory: string, extensions: string[]) => {
-      const expected = _.flatMap(mapNames, n => extensions.map(e => path.join(directory, n) + e));
+      const expected = mapNames.flatMap(n => extensions.map(e => path.join(directory, n) + e));
       const actual = (await fs.readdir(directory)).map(name => path.join(directory, name));
       return {
         extra: _.difference(actual, expected),
@@ -122,7 +122,7 @@ export default class MapsTask extends Task<void> {
       compare(this.resolvePath('src/materials/overviews'), ['.tga', '.txt', '.vmat']),
     ]);
 
-    _.flatMap(diff, x => x.extra).forEach(p => this.error(p, 'Map overview file should not exist'));
-    _.flatMap(diff, x => x.missing).forEach(p => this.error(p, 'Map overview file not found'));
+    diff.flatMap(x => x.extra).forEach(p => this.error(p, 'Map overview file should not exist'));
+    diff.flatMap(x => x.missing).forEach(p => this.error(p, 'Map overview file not found'));
   }
 }

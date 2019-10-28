@@ -38,7 +38,7 @@ export async function loadCache(
 }
 
 export const resolveVersions = async (context: string, modules: string[]) =>
-  _.fromPairs(
+  Object.fromEntries(
     await Promise.all(
       modules.map(
         async (moduleName): Promise<[string, string]> => {

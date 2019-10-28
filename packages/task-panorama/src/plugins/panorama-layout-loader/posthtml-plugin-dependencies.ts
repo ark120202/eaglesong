@@ -1,5 +1,4 @@
 import posthtml from 'posthtml';
-import _ from 'lodash';
 import webpack from 'webpack';
 
 export const dependencies = (
@@ -28,7 +27,7 @@ export const dependencies = (
 
   const includes: posthtml.NodeTree = [
     '\n',
-    ..._.flatMap(Object.entries(newTags), ([tag, sources]) => {
+    ...Object.entries(newTags).flatMap(([tag, sources]) => {
       if (sources.length === 0) return [];
 
       const node: posthtml.Node = {
@@ -36,7 +35,7 @@ export const dependencies = (
         attrs: {},
         content: [
           '\n',
-          ..._.flatMap(sources, src => [{ tag: 'include', attrs: { src }, content: [] }, '\n']),
+          ...sources.flatMap(src => [{ tag: 'include', attrs: { src }, content: [] }, '\n']),
         ],
       };
 

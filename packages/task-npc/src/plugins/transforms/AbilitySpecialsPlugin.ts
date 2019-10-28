@@ -55,7 +55,7 @@ export function AbilitySpecialsPlugin(hooks: Hooks, { error }: NpcPluginApi) {
       _.each(file, (ability, abilityName) => {
         if (ability.Specials == null) return;
 
-        ability.AbilitySpecial = _.fromPairs(
+        ability.AbilitySpecial = Object.fromEntries(
           (ability.Specials as Record<string, any>[]).map((special, index) => {
             const fullIndex = String(index + 1).padStart(2, '0');
             for (const [name, recommendation] of Object.entries(reservedFields)) {

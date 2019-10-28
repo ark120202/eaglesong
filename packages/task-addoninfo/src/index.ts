@@ -1,5 +1,4 @@
 import { Task, TaskState } from '@eaglesong/helper-task';
-import _ from 'lodash';
 import PQueue from 'p-queue';
 
 export interface DefaultKey {
@@ -73,9 +72,8 @@ export default class AddonInfoTask extends Task<Options> {
       if (value == null) return;
 
       if (key === 'Default_Keys') {
-        content[key] = _.fromPairs(
-          // TODO: as const
-          (value as DefaultKey[]).map((k, i): [string, DefaultKey] => [String(i + 1), k]),
+        content[key] = Object.fromEntries(
+          (value as DefaultKey[]).map((k, i) => [String(i + 1), k]),
         );
       } else {
         content[key] = value ? '1' : '0';

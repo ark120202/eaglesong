@@ -1,7 +1,6 @@
 import { TransformTask } from '@eaglesong/helper-task';
 import fs from 'fs-extra';
 import LinesAndColumns from 'lines-and-columns';
-import _ from 'lodash';
 import prettier from 'prettier';
 import { generateDifferences, showInvisibles } from 'prettier-linter-helpers';
 
@@ -17,7 +16,8 @@ interface PrettierSyntaxError extends SyntaxError {
 const isPrettierSyntaxError = (error: unknown): error is PrettierSyntaxError =>
   error instanceof SyntaxError && 'loc' in error;
 
-const prettierPatterns = _.flatMap(prettier.getSupportInfo().languages, language => [
+const { languages } = prettier.getSupportInfo();
+const prettierPatterns = languages.flatMap(language => [
   ...(language.filenames || []).map(fileName => `**/${fileName}`),
   ...(language.extensions || []).map(extension => `**/*${extension}`),
 ]);

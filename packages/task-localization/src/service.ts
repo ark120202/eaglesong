@@ -38,7 +38,7 @@ export type LocalizationPlugin = ServicePlugin<Hooks, LocalizationPluginApi>;
 
 function getFilesMeta(files: LocalizationFiles) {
   const fileList = Object.values(files);
-  const values: string[] = _.flatMap(fileList, f => Object.values(f));
+  const values: string[] = fileList.flatMap(Object.values);
   const chars = values.reduce((n, s) => n + s.length, 0);
 
   return {
