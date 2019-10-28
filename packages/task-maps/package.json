@@ -16,7 +16,7 @@
   "dependencies": {
     "@eaglesong/helper-task": "link:../helper-task",
     "@eaglesong/task-addoninfo": "link:../task-addoninfo",
-    "@types/fs-extra": "^8.0.0",
+    "@types/fs-extra": "^8.0.1",
     "@types/lodash": "^4.14.144",
     "ajv": "^6.10.2",
     "fs-extra": "^8.1.0",
