@@ -2,10 +2,10 @@ import * as s from '@dota-data/scripts/lib/schema';
 import { precacheTypes } from '@dota-data/scripts/lib/schemas/resources';
 import _ from 'lodash';
 import vdf from 'vdf-extra';
-import { Hooks } from '../../service';
+import { Plugin } from '../../service';
 
 const fileFilter = new Set(['npc_items_custom', 'npc_abilities_custom']);
-export function AbilityPrecachePlugin(hooks: Hooks) {
+export const AbilityPrecachePlugin: Plugin = hooks => {
   hooks.schemas.tap('AbilityPrecachePlugin', schemas =>
     [schemas.npc_items_custom, schemas.npc_abilities_custom].forEach(schema =>
       schema
@@ -55,4 +55,4 @@ export function AbilityPrecachePlugin(hooks: Hooks) {
       });
     });
   });
-}
+};

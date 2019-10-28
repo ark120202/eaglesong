@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { Hooks } from '../service';
+import { Plugin } from '../service';
 
 function flatten(
   object: Record<string, any>,
@@ -23,7 +23,7 @@ function flatten(
   return tokens;
 }
 
-export function NestingPlugin(hooks: Hooks) {
+export const NestingPlugin: Plugin = hooks => {
   hooks.preprocess.tap('NestingPlugin', file => {
     _.each(file, (value, key) => {
       if (!_.isPlainObject(value)) return;
@@ -33,4 +33,4 @@ export function NestingPlugin(hooks: Hooks) {
       Object.assign(file, flatProperties);
     });
   });
-}
+};

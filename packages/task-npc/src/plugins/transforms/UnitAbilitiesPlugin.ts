@@ -1,10 +1,10 @@
 import * as s from '@dota-data/scripts/lib/schema';
 import _ from 'lodash';
-import { Hooks } from '../../service';
+import { Plugin } from '../../service';
 
 const fileFilter = new Set(['npc_units_custom', 'npc_heroes_custom']);
 
-export function UnitAbilitiesPlugin(hooks: Hooks) {
+export const UnitAbilitiesPlugin: Plugin = hooks => {
   hooks.schemas.tap('UnitAbilitiesPlugin', schemas =>
     Object.entries(schemas)
       .filter(([schemaName]) => fileFilter.has(schemaName))
@@ -47,4 +47,4 @@ export function UnitAbilitiesPlugin(hooks: Hooks) {
       });
     });
   });
-}
+};

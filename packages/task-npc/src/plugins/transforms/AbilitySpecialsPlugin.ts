@@ -1,6 +1,6 @@
 import * as s from '@dota-data/scripts/lib/schema';
 import _ from 'lodash';
-import { Hooks, NpcPluginApi } from '../../service';
+import { Plugin } from '../../service';
 
 const reservedFields = {
   var_type: "it's inferred from value",
@@ -22,7 +22,7 @@ const inferVarType = (value: unknown) => {
 };
 
 const fileFilter = new Set(['npc_items_custom', 'npc_abilities_custom']);
-export function AbilitySpecialsPlugin(hooks: Hooks, { error }: NpcPluginApi) {
+export const AbilitySpecialsPlugin: Plugin = (hooks, { error }) => {
   hooks.schemas.tap('AbilitySpecialsPlugin', schemas =>
     [schemas.npc_items_custom, schemas.npc_abilities_custom].forEach(schema =>
       schema.getRestRootsLike(s.ObjectSchema).forEach(element =>
@@ -142,4 +142,4 @@ export function AbilitySpecialsPlugin(hooks: Hooks, { error }: NpcPluginApi) {
       });
     });
   });
-}
+};

@@ -3,14 +3,11 @@ import { resourcePatterns } from '@dota-data/scripts/lib/schemas/resources';
 import fs from 'fs-extra';
 import _ from 'lodash';
 import path from 'path';
-import { Hooks, NpcPluginApi } from '../../service';
+import { Plugin } from '../../service';
 
-const stringResourcePatterns = _.mapValues(resourcePatterns, String) as Record<
-  keyof typeof resourcePatterns,
-  string
->;
+const stringResourcePatterns = _.mapValues(resourcePatterns, String);
 
-export function CheckFilesPlugin(hooks: Hooks, { error, context, collectedSchemas }: NpcPluginApi) {
+export const CheckFilesPlugin: Plugin = (hooks, { error, context, collectedSchemas }) => {
   hooks.transform.tapPromise('CheckFilesPlugin', async (files, group) => {
     if (collectedSchemas[group] == null) return;
     const promises: Promise<void>[] = [];
@@ -77,4 +74,4 @@ export function CheckFilesPlugin(hooks: Hooks, { error, context, collectedSchema
 
     await Promise.all(promises);
   });
-}
+};

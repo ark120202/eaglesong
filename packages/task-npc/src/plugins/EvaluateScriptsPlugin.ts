@@ -1,10 +1,10 @@
 import { evaluateServiceScript } from '@eaglesong/helper-task';
 import path from 'path';
-import { Hooks, NpcPluginApi } from '../service';
+import { Plugin } from '../service';
 
 const EXTENSIONS: ReadonlySet<string> = new Set(['.ts', '.tsx', '.js', '.jsx']);
 
-export function EvaluateScriptsPlugin(hooks: Hooks, api: NpcPluginApi) {
+export const EvaluateScriptsPlugin: Plugin = (hooks, api) => {
   hooks.transform.tapPromise({ name: 'ExportDefaultPlugin', stage: -20 }, async files => {
     await Promise.all(
       Object.entries(files).map(async ([fileName, file]) => {
@@ -23,4 +23,4 @@ export function EvaluateScriptsPlugin(hooks: Hooks, api: NpcPluginApi) {
       }),
     );
   });
-}
+};

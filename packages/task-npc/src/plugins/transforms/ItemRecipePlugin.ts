@@ -1,13 +1,13 @@
 import * as s from '@dota-data/scripts/lib/schema';
 import _ from 'lodash';
-import { Hooks } from '../../service';
+import { Plugin } from '../../service';
 
 export interface Recipe {
   cost?: number;
   requirements: string[] | string[][];
 }
 
-export function ItemRecipePlugin(hooks: Hooks) {
+export const ItemRecipePlugin: Plugin = hooks => {
   hooks.schemas.tap('ItemRecipePlugin', schemas =>
     schemas.npc_items_custom.getRestRootsLike(s.ObjectSchema).forEach(element =>
       element.field(
@@ -60,4 +60,4 @@ export function ItemRecipePlugin(hooks: Hooks) {
     );
     files.$recipeItems = recipeItems;
   });
-}
+};

@@ -7,12 +7,12 @@ import {
 import fs from 'fs-extra';
 import _ from 'lodash';
 import path from 'upath';
-import { defaultPlugins, NpcPlugin, NpcService, Schemas } from './service';
+import { defaultPlugins, Plugin, NpcService, Schemas } from './service';
 
 export * from './service';
 
 export interface Options {
-  plugins?: NpcPlugin[];
+  plugins?: Plugin[];
   defaultPlugins?: boolean;
 }
 

@@ -14,11 +14,11 @@ import { AsyncSeriesHook } from 'tapable';
 import path from 'upath';
 import * as defaultPlugins from './plugins';
 
-export type Schemas = Record<string, RootSchema>;
-
-export type NpcPluginApi = ServicePluginApi & { collectedSchemas: Schemas };
-export type NpcPlugin = ServicePlugin<Hooks, NpcPluginApi>;
 export { defaultPlugins };
+
+export type Plugin = ServicePlugin<Hooks, PluginApi>;
+export type PluginApi = ServicePluginApi & { collectedSchemas: Schemas };
+export type Schemas = Record<string, RootSchema>;
 
 export type File = Record<string, any> & NamedType;
 export type Files = Record<string, File> & NamedType;
@@ -45,7 +45,7 @@ export class NpcService {
 
   constructor(
     context: string,
-    plugins: NpcPlugin[],
+    plugins: Plugin[],
     serviceProvider: ServiceProvider,
     private readonly error: ServiceErrorReporter,
     triggerChange: TriggerChange,
@@ -59,7 +59,7 @@ export class NpcService {
       Object.assign(collectedSchemas, schemas);
     });
 
-    const api: NpcPluginApi = {
+    const api: PluginApi = {
       serviceProvider,
       error,
       triggerChange,

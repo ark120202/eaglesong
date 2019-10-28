@@ -1,9 +1,9 @@
-import { Hooks, NpcPluginApi } from '../../service';
+import { Plugin } from '../../service';
 
-export function EnsureSchemaExistsPlugin(hooks: Hooks, { error, collectedSchemas }: NpcPluginApi) {
+export const EnsureSchemaExistsPlugin: Plugin = (hooks, { error, collectedSchemas }) => {
   hooks.transform.tap({ name: 'ValidateSchemasPlugin', stage: -10 }, (_files, group) => {
     if (collectedSchemas[group] == null) {
       error(null, `Group "${group}" has no schema`, 'warning');
     }
   });
-}
+};

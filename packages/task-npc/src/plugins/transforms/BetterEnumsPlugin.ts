@@ -1,6 +1,6 @@
 import { EnumsSchema, TsContext, ValidationContext } from '@dota-data/scripts/lib/schema';
 import _ from 'lodash';
-import { Hooks, NpcPluginApi } from '../../service';
+import { Plugin } from '../../service';
 
 class CustomEnumsSchema extends EnumsSchema {
   public static from(schema: EnumsSchema) {
@@ -61,7 +61,7 @@ class CustomEnumsSchema extends EnumsSchema {
   }
 }
 
-export function BetterEnumsPlugin(hooks: Hooks, { collectedSchemas }: NpcPluginApi) {
+export const BetterEnumsPlugin: Plugin = (hooks, { collectedSchemas }) => {
   hooks.schemas.tap('BetterEnumsPlugin', schemas =>
     Object.values(schemas).forEach(schema =>
       schema
@@ -82,4 +82,4 @@ export function BetterEnumsPlugin(hooks: Hooks, { collectedSchemas }: NpcPluginA
       });
     });
   });
-}
+};

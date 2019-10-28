@@ -1,7 +1,7 @@
 import _ from 'lodash';
-import { Hooks, NpcPluginApi } from '../../service';
+import { Plugin } from '../../service';
 
-export function ValidateSchemasPlugin(hooks: Hooks, { error, collectedSchemas }: NpcPluginApi) {
+export const ValidateSchemasPlugin: Plugin = (hooks, { error, collectedSchemas }) => {
   hooks.transform.tap({ name: 'ValidateSchemasPlugin', stage: -10 }, (files, group) => {
     if (collectedSchemas[group] == null) return;
     _.each(files, (file, fileName) => {
@@ -11,4 +11,4 @@ export function ValidateSchemasPlugin(hooks: Hooks, { error, collectedSchemas }:
       errors.forEach(message => error(fileName, message));
     });
   });
-}
+};

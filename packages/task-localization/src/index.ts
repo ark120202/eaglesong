@@ -10,7 +10,7 @@ import {
   defaultPlugins,
   DotaLanguage,
   FlatLocalizationFile,
-  LocalizationPlugin,
+  Plugin,
   LocalizationService,
   ProviderOptions,
 } from './service';
@@ -20,7 +20,7 @@ export * from './service';
 export interface Options {
   defaultLanguage?: DotaLanguage;
   provider?: ProviderOptions;
-  plugins?: LocalizationPlugin[];
+  plugins?: Plugin[];
   defaultPlugins?: boolean;
 }
 

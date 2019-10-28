@@ -1,6 +1,6 @@
 import { ServiceErrorReporter } from '@eaglesong/helper-task';
 import _ from 'lodash';
-import { Hooks, LocalizationPluginApi } from '../service';
+import { Plugin } from '../service';
 import { FlatLocalizationFiles } from '../types';
 
 const VARIABLE_REGEXP = /#{([$\w]+)}/g;
@@ -46,7 +46,7 @@ function localize(
   });
 }
 
-export function VariablePlugin(hooks: Hooks, { error }: LocalizationPluginApi) {
+export const VariablePlugin: Plugin = (hooks, { error }) => {
   hooks.postprocess.tap('VariablePlugin', files => {
     _.each(files, (file, fileName) =>
       _.each(file, (value, key) => {
@@ -61,4 +61,4 @@ export function VariablePlugin(hooks: Hooks, { error }: LocalizationPluginApi) {
       _.each(file, (v, k) => (v.replace(VARIABLE_REGEXP, '').length > 0 ? null : delete file[k])),
     ),
   );
-}
+};

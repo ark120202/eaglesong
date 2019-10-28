@@ -23,7 +23,6 @@ import {
 } from './types';
 
 export {
-  defaultPlugins,
   DotaLanguage,
   FlatLocalizationFile,
   FlatLocalizationFiles,
@@ -31,10 +30,11 @@ export {
   LocalizationFiles,
   Provider,
   ProviderOptions,
+  defaultPlugins,
 };
 
-export type LocalizationPluginApi = ServicePluginApi;
-export type LocalizationPlugin = ServicePlugin<Hooks, LocalizationPluginApi>;
+export type Plugin = ServicePlugin<Hooks, PluginApi>;
+export type PluginApi = ServicePluginApi;
 
 function getFilesMeta(files: LocalizationFiles) {
   const fileList = Object.values(files);
@@ -83,7 +83,7 @@ export class LocalizationService {
   private readonly provider: Provider;
   constructor(
     context: string,
-    plugins: LocalizationPlugin[],
+    plugins: Plugin[],
     serviceProvider: ServiceProvider,
     private readonly error: ServiceErrorReporter,
     triggerChange: TriggerChange,
@@ -91,7 +91,7 @@ export class LocalizationService {
     platformOptions: ProviderOptions,
   ) {
     this.provider = mapTypeToPlatform(platformOptions);
-    const api: LocalizationPluginApi = { serviceProvider, error, triggerChange, context };
+    const api: PluginApi = { serviceProvider, error, triggerChange, context };
     plugins.forEach(p => p(this.hooks, api));
   }
 

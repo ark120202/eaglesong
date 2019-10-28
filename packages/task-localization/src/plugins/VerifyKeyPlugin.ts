@@ -1,8 +1,8 @@
-import { Hooks, LocalizationPluginApi } from '../service';
+import { Plugin } from '../service';
 
 const VALID_LOCALIZATION_KEY_REGEXP = /^[$\w]+$/;
 
-export function VerifyKeyPlugin(hooks: Hooks, { error }: LocalizationPluginApi) {
+export const VerifyKeyPlugin: Plugin = (hooks, { error }) => {
   hooks.preprocess.tap('VerifyKeyPlugin', (file, fileName) =>
     Object.keys(file).forEach(key => {
       if (VALID_LOCALIZATION_KEY_REGEXP.test(key)) return;
@@ -14,4 +14,4 @@ export function VerifyKeyPlugin(hooks: Hooks, { error }: LocalizationPluginApi) 
       );
     }),
   );
-}
+};

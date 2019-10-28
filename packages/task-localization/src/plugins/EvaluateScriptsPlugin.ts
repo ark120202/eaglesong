@@ -1,10 +1,10 @@
 import { evaluateServiceScript } from '@eaglesong/helper-task';
 import path from 'path';
-import { Hooks, LocalizationPluginApi } from '../service';
+import { Plugin } from '../service';
 
 const EXTENSIONS: ReadonlySet<string> = new Set(['.ts', '.tsx', '.js', '.jsx']);
 
-export function EvaluateScriptsPlugin(hooks: Hooks, api: LocalizationPluginApi) {
+export const EvaluateScriptsPlugin: Plugin = (hooks, api) => {
   hooks.preprocess.tapPromise('EvaluateFunctionsPlugin', async (file, fileName) => {
     if (!EXTENSIONS.has(path.extname(fileName))) return;
 
@@ -19,4 +19,4 @@ export function EvaluateScriptsPlugin(hooks: Hooks, api: LocalizationPluginApi) 
       Object.assign(file, def);
     }
   });
-}
+};
