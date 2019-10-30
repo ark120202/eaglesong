@@ -1,6 +1,19 @@
-import schema from './soundevents.schema.json';
+import Ajv from 'ajv';
+import soundEventsSchema from './soundevents.schema.json';
 
-export { schema };
+export { soundEventsSchema };
+
+const ajv = new Ajv({ allErrors: true, useDefaults: true });
+export const validateSoundEvents = ajv.compile(soundEventsSchema);
+
+export type SoundEvents = Record<string, SoundEvent>;
+export interface SoundEvent extends OperatorVariables {
+  /**
+   * @default dota_update_default
+   */
+  type?: string;
+  files: string | string[];
+}
 
 // https://raw.githubusercontent.com/SteamDatabase/GameTracking-Dota2/master/game/dota/pak01_dir/scripts/sound_operator_stacks.txt
 export interface OperatorVariables {
@@ -33,13 +46,3 @@ export interface OperatorVariables {
 
   spread_radius?: number;
 }
-
-export interface SoundEvent extends OperatorVariables {
-  /**
-   * @default dota_update_default
-   */
-  type?: string;
-  files: string | string[];
-}
-
-export type SoundEvents = Record<string, SoundEvent>;

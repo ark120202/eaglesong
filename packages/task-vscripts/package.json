@@ -21,7 +21,7 @@
     "fs-extra": "^8.1.0"
   },
   "devDependencies": {
-    "typescript": "^3.6.4"
+    "typescript": "^3.8.0-dev.20191026"
   },
   "peerDependencies": {
     "typescript": "^3.0.0"

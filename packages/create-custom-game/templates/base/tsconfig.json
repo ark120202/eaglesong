@@ -1,6 +1,6 @@
 {
   "extends": "@ark120202/typescript-config/node/12.json",
-  "include": [".eaglesong/types", "*", "src/npc", "src/localization"],
+  "include": ["*", ".eaglesong/**/*", "src/npc/**/*", "src/localization/**/*"],
   "compilerOptions": {
     "noEmit": true
   }

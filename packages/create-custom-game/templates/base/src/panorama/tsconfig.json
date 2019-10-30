@@ -1,6 +1,6 @@
 {
   "extends": "@ark120202/typescript-config/base.json",
-  "include": [".", "../common"],
+  "include": ["**/*", "../common/**/*"],
   "compilerOptions": {
     "target": "es5",
     "lib": ["esnext"],

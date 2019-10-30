@@ -1,14 +1,10 @@
 import { Task } from '@eaglesong/helper-task';
 import AddonInfoTask from '@eaglesong/task-addoninfo';
-import Ajv from 'ajv';
 import fs from 'fs-extra';
 import _ from 'lodash';
 import PQueue from 'p-queue';
 import path from 'upath';
-import { MapsMetadata, schema } from './metadata.schema';
-
-const ajv = new Ajv({ allErrors: true, useDefaults: true });
-const compiledSchema = ajv.compile(schema);
+import { MapsMetadata, metadataSchema, validateMetadata } from './metadata';
 
 export default class MapsTask extends Task<void> {
   private readonly queue = new PQueue({ concurrency: 1 });
@@ -30,7 +26,7 @@ export default class MapsTask extends Task<void> {
 
     this.hooks.preBuild.tapPromise(this.constructor.name, async () => {
       const schemaPath = this.resolvePath('.eaglesong/schemas/maps-metadata.json');
-      await fs.outputJson(schemaPath, schema, { spaces: 2 });
+      await fs.outputJson(schemaPath, metadataSchema, { spaces: 2 });
     });
 
     this.hooks.build.tapPromise(this.constructor.name, async () => {
@@ -88,9 +84,9 @@ export default class MapsTask extends Task<void> {
   }
 
   private validateMetadata(maps: MapsMetadata) {
-    const valid = compiledSchema(maps);
-    if (!valid && compiledSchema.errors != null) {
-      for (const { message, dataPath } of compiledSchema.errors) {
+    const valid = validateMetadata(maps);
+    if (!valid && validateMetadata.errors != null) {
+      for (const { message, dataPath } of validateMetadata.errors) {
         this.error(this.metadataPath, `${dataPath} ${message}`);
       }
     }

@@ -1,13 +1,9 @@
 import { TransformTask } from '@eaglesong/helper-task';
-import Ajv from 'ajv';
 import fs from 'fs-extra';
 import _ from 'lodash';
 import pProps from 'p-props';
 import path from 'upath';
-import { schema, SoundEvents } from './soundevents.schema';
-
-const ajv = new Ajv({ allErrors: true, useDefaults: true });
-const compiledSchema = ajv.compile(schema);
+import { SoundEvents, soundEventsSchema, validateSoundEvents } from './soundevents';
 
 const toOperatorVariableValues = (value: Record<string, unknown>) =>
   _.mapValues(value, x => (x == null ? x : toOperatorVariableValue(x)));
@@ -33,7 +29,7 @@ export default class SoundsTask extends TransformTask<void> {
 
     this.hooks.preBuild.tapPromise(this.constructor.name, async () => {
       const schemaPath = this.resolvePath('.eaglesong/schemas/soundevents.json');
-      await fs.outputJson(schemaPath, schema, { spaces: 2 });
+      await fs.outputJson(schemaPath, soundEventsSchema, { spaces: 2 });
     });
 
     this.hooks.build.tapPromise(this.constructor.name, async () => {
@@ -55,9 +51,9 @@ export default class SoundsTask extends TransformTask<void> {
 
   protected async transformFile(filePath: string) {
     const content: SoundEvents = await this.import(filePath);
-    const valid = compiledSchema(content);
-    if (!valid && compiledSchema.errors != null) {
-      for (const { message, dataPath } of compiledSchema.errors) {
+    const valid = validateSoundEvents(content);
+    if (!valid && validateSoundEvents.errors != null) {
+      for (const { message, dataPath } of validateSoundEvents.errors) {
         this.error(filePath, `${dataPath} ${message}`);
       }
     }

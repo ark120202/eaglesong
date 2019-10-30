@@ -3,9 +3,13 @@ import { getOptions, interpolateName } from 'loader-utils';
 import path from 'upath';
 import webpack from 'webpack';
 import SingleEntryPlugin from 'webpack/lib/SingleEntryPlugin';
-import { LoaderOptions, schema } from './options';
+import schema from './options.schema.json';
 
-export { LoaderOptions as EntryLoaderOptions };
+export interface EntryLoaderOptions {
+  filename?: string;
+  plugins?: boolean | (string | webpack.Plugin)[];
+  ignoredPlugins?: string[];
+}
 
 export function pitch(this: webpack.loader.LoaderContext, request: string) {
   // @ts-ignore
@@ -21,7 +25,7 @@ export function pitch(this: webpack.loader.LoaderContext, request: string) {
   let target = getOptions(this);
   if (target == null) target = {};
   validate({ name: 'Entry Loader', schema, target });
-  const options: LoaderOptions & { filename: string } = {
+  const options: EntryLoaderOptions & { filename: string } = {
     filename: 'scripts/[name].js',
     ...target,
   };
@@ -50,7 +54,7 @@ function runCompiler(compiler: webpack.Compiler, callback: webpack.loader.loader
 function createCompiler(
   loader: webpack.loader.LoaderContext,
   filename: string,
-  options: LoaderOptions,
+  options: EntryLoaderOptions,
 ) {
   const oldCompilation: webpack.compilation.Compilation = loader._compilation;
   const oldCompiler = loader._compiler;

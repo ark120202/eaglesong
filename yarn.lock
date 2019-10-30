@@ -8599,10 +8599,10 @@ typescript-to-lua@^0.28.0:
     source-map "^0.7.3"
     typescript "^3.6.2"
 
-typescript@^3.6.2, typescript@^3.6.4:
-  version "3.6.4"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.6.4.tgz#b18752bb3792bc1a0281335f7f6ebf1bbfc5b91d"
-  integrity sha512-unoCll1+l+YK4i4F8f22TaNVPRHcD9PA3yCuZ8g5e0qGqlVlJ/8FSateOLLSagn+Yg5+ZwuPkL8LFUc0Jcvksg==
+typescript@^3.6.2, typescript@^3.8.0-dev.20191026:
+  version "3.8.0-dev.20191026"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.8.0-dev.20191026.tgz#3cb679d3c087068e2724f1069d662bd05680792a"
+  integrity sha512-Q2a6ZranolX+5b9Olq83xbb8vbvrMSWQUBMNpOl6vyReH6n0kyLybXQ7A30+oJ2yOG7l//6Q6HSeV/ZPGafacA==
 
 uglify-js@3.4.x:
   version "3.4.10"
