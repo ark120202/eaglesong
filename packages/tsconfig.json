@@ -4,7 +4,6 @@
     { "path": "create-custom-game" },
     { "path": "eaglesong" },
     { "path": "helper-task" },
-    { "path": "helper-tstl" },
     { "path": "task-addoninfo" },
     { "path": "task-eslint" },
     { "path": "task-images" },

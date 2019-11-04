@@ -86,17 +86,6 @@
     upath "^1.2.0"
     vdf-extra "^2.2.2"
 
-"@eaglesong/helper-tstl@link:packages/helper-tstl":
-  version "0.0.0"
-  dependencies:
-    "@types/luaparse" "^0.2.6"
-    "@types/resolve" "^0.0.8"
-    luaparse "^0.2.1"
-    resolve "^1.12.0"
-    tslib "^1.10.0"
-    typescript-to-lua "^0.28.0"
-    upath "^1.2.0"
-
 "@eaglesong/task-addoninfo@link:packages/task-addoninfo":
   version "0.0.0"
   dependencies:
@@ -247,8 +236,14 @@
   version "0.0.0"
   dependencies:
     "@eaglesong/helper-task" "link:packages/helper-task"
-    "@eaglesong/helper-tstl" "link:packages/helper-tstl"
+    "@types/luaparse" "^0.2.6"
+    "@types/resolve" "^0.0.8"
     fs-extra "^8.1.0"
+    luaparse "^0.2.1"
+    resolve "^1.12.0"
+    tslib "^1.10.0"
+    typescript-to-lua "^0.28.1"
+    upath "^1.2.0"
 
 "@evocateur/libnpmaccess@^3.1.2":
   version "3.1.2"
@@ -8590,10 +8585,10 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript-to-lua@^0.28.0:
-  version "0.28.0"
-  resolved "https://registry.yarnpkg.com/typescript-to-lua/-/typescript-to-lua-0.28.0.tgz#d2b82317b5f8cf773c94ba12b09e43ca1c5a5ad0"
-  integrity sha512-pwfkftKvGEE2FUcw1wF7zlQqkr5HFXMAf8TlI+dG4MQ5QFblzWl1jpVhleZBl9/NPM2301pqp0HwLjdfayFbVQ==
+typescript-to-lua@^0.28.1:
+  version "0.28.1"
+  resolved "https://registry.yarnpkg.com/typescript-to-lua/-/typescript-to-lua-0.28.1.tgz#d8e58a17c7b7a2169afbb0ea10644ee5f4789273"
+  integrity sha512-RTH4QthGfTxElcr9aPSJ4eIIN+u6cL++/FGf8/rif1YQjpdA9gnHPVQyCnC5SbF8UW2OfyeEhDCgoqLWcq4ILQ==
   dependencies:
     resolve "^1.11.0"
     source-map "^0.7.3"

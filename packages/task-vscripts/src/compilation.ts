@@ -3,7 +3,7 @@ import * as ts from 'typescript';
 import path from 'upath';
 import { Compilation, CompilationHost } from './transpiler/compilation';
 
-export class AppCompilation extends Compilation {
+export class CustomCompilation extends Compilation {
   constructor(
     program: ts.Program,
     host: CompilationHost | undefined,
