@@ -39,14 +39,22 @@ export function transpileProgram(
   commonRoot?: string,
 ): { diagnostics: ts.Diagnostic[]; errors: ModuleLoadingError[] } {
   const transformer = new CustomLuaTransformer(program);
-  const { diagnostics: emitDiagnostics, transpiledFiles } = tstl.transpile({
+  const { diagnostics: transpileDiagnostics, transpiledFiles } = tstl.transpile({
     program,
     customTransformers: { before: [createDotaTransformer()] },
     transformer,
   });
 
+  const diagnostics = ts.sortAndDeduplicateDiagnostics([
+    ...program.getOptionsDiagnostics(),
+    ...program.getSyntacticDiagnostics(),
+    ...program.getGlobalDiagnostics(),
+    ...program.getSemanticDiagnostics(),
+    ...transpileDiagnostics,
+  ]);
+
   const compilation = new AppCompilation(program, undefined, commonRoot);
   const { errors } = compilation.emit(transpiledFiles);
 
-  return { diagnostics: [...emitDiagnostics], errors };
+  return { diagnostics: [...diagnostics], errors };
 }

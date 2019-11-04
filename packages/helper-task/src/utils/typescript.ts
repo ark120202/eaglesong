@@ -2,27 +2,24 @@ import _ from 'lodash';
 import * as ts from 'typescript';
 import { ServiceErrorReporter } from '../service';
 
-export function reportTsDiagnostic(error: ServiceErrorReporter, diagnostic: ts.Diagnostic) {
-  const level = diagnostic.category === ts.DiagnosticCategory.Error ? 'error' : 'warning';
-  if (!diagnostic.file) {
-    error(null, `${ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n')}`, level);
-    return;
+export const createDiagnosticReporter = (error: ServiceErrorReporter) => (diag: ts.Diagnostic) => {
+  const level = diag.category === ts.DiagnosticCategory.Error ? 'error' : 'warning';
+  const message = ts.flattenDiagnosticMessageText(diag.messageText, '\n');
+
+  if (diag.file && diag.start != null) {
+    const { line, character } = diag.file.getLineAndCharacterOfPosition(diag.start);
+    error(diag.file.fileName, `(${line + 1},${character + 1}) TS${diag.code}: ${message}`, level);
+  } else {
+    error(null, message, level);
   }
+};
 
-  const { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start!);
-  const message = ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n');
-  const { fileName } = diagnostic.file;
-  error(fileName, `(${line + 1},${character + 1}) TS${diagnostic.code}: ${message}`, level);
-}
-
-export type Program = ts.Program;
 export function createTsAutoWatch(
   currentDirectory: string,
   configPath: string,
   optionsToExtend: ts.CompilerOptions | undefined,
   isWatching: boolean,
   onWatchStart: () => void,
-  error: ServiceErrorReporter,
   onProgram: (program: ts.SemanticDiagnosticsBuilderProgram) => void,
 ) {
   const system: ts.System = { ...ts.sys, getCurrentDirectory: () => currentDirectory };
@@ -36,7 +33,7 @@ export function createTsAutoWatch(
     optionsToExtend,
     system,
     ts.createSemanticDiagnosticsBuilderProgram,
-    diag => reportTsDiagnostic(error, diag),
+    undefined, // Used only in standard `afterProgramCreate` handler
     ({ code }) => {
       if (code === 6032) onWatchStart();
     },

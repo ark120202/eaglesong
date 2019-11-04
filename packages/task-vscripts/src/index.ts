@@ -1,4 +1,4 @@
-import { createTsAutoWatch, reportTsDiagnostic, Task } from '@eaglesong/helper-task';
+import { createTsAutoWatch, createDiagnosticReporter, Task } from '@eaglesong/helper-task';
 import { createConfigFileUpdater, transpileProgram } from '@eaglesong/helper-tstl';
 import fs from 'fs-extra';
 import path from 'path';
@@ -21,7 +21,6 @@ export default class VScriptsTask extends Task<void> {
         await copyLuaLib(outDir);
       }
 
-      const updateConfigFile = createConfigFileUpdater();
       const forceProgramUpdate = createTsAutoWatch(
         this.resolvePath('src/vscripts'),
         this.resolvePath('src/vscripts/tsconfig.json'),
@@ -31,16 +30,8 @@ export default class VScriptsTask extends Task<void> {
           this.removeErrors();
           this.start();
         },
-        this.error,
         builderProgram => {
-          const options = builderProgram.getCompilerOptions();
-          updateConfigFile(options);
-          if (!options.noEmit) {
-            options.noEmit = this.dotaPath == null;
-          }
-
-          const program = builderProgram.getProgram();
-          this.emit(program);
+          this.emit(builderProgram.getProgram());
           this.finish();
         },
       );
@@ -53,9 +44,20 @@ export default class VScriptsTask extends Task<void> {
     });
   }
 
+  private readonly reportDiagnostic = createDiagnosticReporter(this.error);
+  private readonly updateConfigFile = createConfigFileUpdater();
   private emit(program: ts.Program) {
+    const options = program.getCompilerOptions();
+    const configFileParsingDiagnostics = this.updateConfigFile(options);
+    if (!options.noEmit) {
+      options.noEmit = this.dotaPath == null;
+    }
+
     const { diagnostics, errors } = transpileProgram(program, this.resolvePath('src/common'));
+
     errors.forEach(x => this.error(x.fileName, x.message));
-    diagnostics.forEach(x => reportTsDiagnostic(this.error, x));
+    ts.sortAndDeduplicateDiagnostics([...configFileParsingDiagnostics, ...diagnostics]).forEach(
+      this.reportDiagnostic,
+    );
   }
 }

@@ -15,5 +15,11 @@
   "types": "lib/index.d.ts",
   "dependencies": {
     "@eaglesong/helper-task": "link:../helper-task"
+  },
+  "devDependencies": {
+    "typescript": "^3.8.0-dev.20191026"
+  },
+  "peerDependencies": {
+    "typescript": "^3.0.0"
   }
 }

@@ -1,10 +1,12 @@
-import { createTsAutoWatch, Task } from '@eaglesong/helper-task';
+import * as ts from 'typescript';
+import { createTsAutoWatch, Task, createDiagnosticReporter } from '@eaglesong/helper-task';
 
 export default class RootScriptsTask extends Task<void> {
   constructor() {
     super(undefined);
   }
 
+  private readonly reportDiagnostic = createDiagnosticReporter(this.error);
   public apply() {
     this.hooks.build.tap(this.constructor.name, () => {
       createTsAutoWatch(
@@ -16,8 +18,10 @@ export default class RootScriptsTask extends Task<void> {
           this.removeErrors();
           this.start();
         },
-        this.error,
-        () => this.finish(),
+        builderProgram => {
+          ts.getPreEmitDiagnostics(builderProgram.getProgram()).forEach(this.reportDiagnostic);
+          this.finish();
+        },
       );
     });
   }
