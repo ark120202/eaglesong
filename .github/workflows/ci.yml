@@ -9,7 +9,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+      # TODO: Remove once Node.js 12 would be default
+      - name: Use Node.js 12
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
       - run: yarn --frozen-lockfile
       - run: yarn build
       - run: yarn lint
