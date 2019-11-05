@@ -41,7 +41,6 @@ export const loadOptions = mem(
       (await import('ts-node')).register({ transpileOnly: true });
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    return require(configPath).default;
+    return (await import(configPath)).default;
   },
 );

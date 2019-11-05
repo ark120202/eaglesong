@@ -35,8 +35,8 @@ export async function _import(id: string): Promise<any> {
       const resolved = require.resolve(id);
       // TODO: Consider using decache
       delete require.cache[resolved];
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      const result = require(resolved);
+      const result = await import(resolved);
+
       const copy = _.clone(result);
       if (result.__esModule) copy.__esModule = true;
       return copy;
