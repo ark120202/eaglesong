@@ -14,4 +14,4 @@ try {
   require('source-map-support/register');
 } catch {}
 
-require('../lib/cli');
+require('./cli');

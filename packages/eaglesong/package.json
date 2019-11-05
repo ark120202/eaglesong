@@ -13,6 +13,7 @@
   "author": "ark120202",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "bin": "lib/eaglesong.js",
   "dependencies": {
     "@eaglesong/helper-task": "link:../helper-task",
     "@eaglesong/task-localization": "link:../task-localization",
