@@ -1,4 +1,3 @@
-import luaparse from 'luaparse';
 import * as ts from 'typescript';
 import path from 'upath';
 import { Compilation, CompilationHost } from './transpiler/compilation';
@@ -10,17 +9,6 @@ export class CustomCompilation extends Compilation {
     private readonly commonRoot?: string,
   ) {
     super(program, host);
-  }
-
-  protected transformLuaFile(filePath: string, fileContent: string) {
-    try {
-      luaparse.parse(fileContent);
-    } catch (error) {
-      if (!(error instanceof SyntaxError)) throw error;
-      this.errors.push({ fileName: filePath, message: error.message });
-    }
-
-    return super.transformLuaFile(filePath, fileContent);
   }
 
   protected toOutputStructure(filePath: string) {
