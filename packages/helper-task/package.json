@@ -18,7 +18,7 @@
     "@types/js-yaml": "^3.12.1",
     "@types/json-parse-better-errors": "^1.0.0",
     "@types/lodash": "^4.14.144",
-    "chokidar": "^3.2.3",
+    "chokidar": "^3.3.0",
     "fs-extra": "^8.1.0",
     "globby": "^10.0.1",
     "js-yaml": "^3.13.0",
@@ -32,7 +32,7 @@
     "vdf-extra": "^2.2.2"
   },
   "devDependencies": {
-    "typescript": "^3.8.0-dev.20191026"
+    "typescript": "^3.8.0-dev.20191102"
   },
   "peerDependencies": {
     "typescript": "^3.0.0"

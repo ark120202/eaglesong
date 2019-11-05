@@ -33,7 +33,7 @@
     "@ark120202/typescript-config": "^2.0.0",
     "@types/fs-extra": "^8.0.1",
     "@types/htmlparser2": "^3.10.1",
-    "@types/node": "^12.11.7",
+    "@types/node": "^12.12.5",
     "eslint": "^6.6.0",
     "fs-extra": "^8.1.0",
     "lerna": "^3.18.3",
@@ -43,10 +43,10 @@
     "ts-node": "^8.4.1",
     "tsc-pnp": "^0.1.0",
     "tslib": "^1.10.0",
-    "typescript": "^3.8.0-dev.20191026"
+    "typescript": "^3.8.0-dev.20191102"
   },
   "resolutions": {
-    "**/typescript-to-lua/typescript": "^3.8.0-dev.20191026"
+    "**/typescript-to-lua/typescript": "^3.8.0-dev.20191102"
   },
   "installConfig": {
     "pnp": false

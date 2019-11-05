@@ -60,7 +60,7 @@
     "yargs": "^14.2.0"
   },
   "devDependencies": {
-    "source-map-support": "^0.5.13",
+    "source-map-support": "^0.5.16",
     "time-require": "^0.1.2"
   },
   "engines": {
