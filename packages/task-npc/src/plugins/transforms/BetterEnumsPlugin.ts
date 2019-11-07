@@ -11,11 +11,12 @@ class CustomEnumsSchema extends EnumsSchema {
 
   public toTypeScript(context: TsContext) {
     const members = this.getShortNames()
-      .map(
-        name => `    ${/^\d/.test(name) ? JSON.stringify(name) : name} = ${JSON.stringify(name)},`,
-      )
+      .map(n => `    ${/^\d/.test(n) ? JSON.stringify(n) : n} = ${JSON.stringify(n)},`)
       .join('\n');
-    context.addGlobal(`declare const enum ${this._name} {\n${members}\n}`);
+
+    // TODO: Get rid of side effects
+    (global as any)[this._name] = _.keyBy(this.getShortNames());
+    context.addGlobal(`declare enum ${this._name} {\n${members}\n}`);
     return this._name + (this._flags ? ` | ${this._name}[]` : '');
   }
 
