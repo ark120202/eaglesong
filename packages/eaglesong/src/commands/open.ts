@@ -4,31 +4,66 @@ import path from 'upath';
 import { CommandGroup } from '../command';
 
 export default class OpenCommand extends CommandGroup {
+  protected args!: {
+    query: string;
+  };
+
   public register() {
+    const command = 'open <query>';
+    const describe = "Opens selected directory in your system's file manager.";
     this.command({
-      command: 'open <game|content>/...',
-      describe: 'Open addon directory',
-      handler: async args => {
-        const query: string = args.game;
-        const [from, ...components] = query.split(/[/\\]/g);
-        if (from !== 'game' && from !== 'content') {
-          throw new Error(`Unknown open argument: ${from}`);
-        }
+      command,
+      describe,
+      builder: argv =>
+        argv.usage(`$0 open <directory>/...
 
-        const dotaPath = await this.getDotaPath();
-        const addonName = await this.getAddonName();
-        const requestedPath = path.join(dotaPath, from, 'dota_addons', addonName, ...components);
+${describe}
 
-        if (!(await fs.pathExists(requestedPath))) {
-          throw new Error(`Path not exists: ${requestedPath}`);
-        }
-
-        if (!(await fs.stat(requestedPath)).isDirectory()) {
-          throw new Error(`Path is not a directory: ${requestedPath}`);
-        }
-
-        await open(requestedPath);
-      },
+Available base directories:
+  \`.\` - root of your addon
+  \`src\` - alias to \`./src\`
+  \`game\` - \`game\` part of your addon inside \`dota 2 beta\` directory
+  \`content\` - \`content\` part of your addon inside \`dota 2 beta\` directory
+  \`scripts\` - alias to \`game/scripts\`
+  \`vscripts\` - alias to \`scripts/vscripts\`
+  \`panorama\` - alias to \`content/panorama\``),
+      handler: () => this.open(),
     });
+  }
+
+  private async open() {
+    const [from, ...components] = this.args.query.split('/');
+
+    const dotaPath = await this.getDotaPath();
+    const addonName = await this.getAddonName();
+
+    let base;
+    if (from === '.') {
+      base = this.context;
+    } else if (from === 'game' || from === 'content') {
+      base = path.join(dotaPath, from, 'dota_addons', addonName);
+    } else if (from === 'src') {
+      base = path.join(this.context, 'src');
+    } else if (from === 'scripts') {
+      base = path.join(dotaPath, 'game', 'dota_addons', addonName, 'scripts');
+    } else if (from === 'vscripts') {
+      base = path.join(dotaPath, 'game', 'dota_addons', addonName, 'scripts', 'vscripts');
+    } else if (from === 'panorama') {
+      base = path.join(dotaPath, 'content', 'dota_addons', addonName, 'panorama');
+    } else {
+      throw new Error(`Unknown base directory: ${from}`);
+    }
+
+    let requestedPath = path.resolve(base, ...components);
+
+    if (!(await fs.pathExists(requestedPath))) {
+      throw new Error(`Could not find requested path: ${requestedPath}`);
+    }
+
+    if (!(await fs.stat(requestedPath)).isDirectory()) {
+      requestedPath = path.dirname(requestedPath);
+    }
+
+    await open(requestedPath);
   }
 }
