@@ -14,7 +14,7 @@ export const AbilityPrecachePlugin: Plugin = hooks => {
           element.field(
             'precache',
             s
-              .obj()
+              .obj('Precache')
               .fields(
                 Object.entries(precacheTypes).map(([n, pattern]) => [
                   n,

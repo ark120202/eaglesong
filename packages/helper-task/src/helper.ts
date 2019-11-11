@@ -29,8 +29,9 @@ export interface WatchEvent {
   file: string;
 }
 
-export type Hooks = ReturnType<typeof createHooks> & NamedType;
-export const createHooks = () => ({
+export const createHooks = (): Hooks => createHooksInternal();
+export type Hooks = ReturnType<typeof createHooksInternal> & NamedType;
+const createHooksInternal = () => ({
   boot: new AsyncParallelHook<[]>([]),
 
   preBuild: new AsyncParallelHook<[]>([]),

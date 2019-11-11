@@ -58,7 +58,11 @@ export const VariablePlugin: Plugin = (hooks, { error }) => {
   // Don't localize strings consisting only of variables
   hooks.push.tap('VariablePlugin', files =>
     _.each(files, file =>
-      _.each(file, (v, k) => (v.replace(VARIABLE_REGEXP, '').length > 0 ? null : delete file[k])),
+      _.each(file, (value, key) => {
+        if (value.replace(VARIABLE_REGEXP, '').replace(/\s/g, '').length === 0) {
+          delete file[key];
+        }
+      }),
     ),
   );
 };

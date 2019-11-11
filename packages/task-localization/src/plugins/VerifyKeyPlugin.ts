@@ -9,8 +9,7 @@ export const VerifyKeyPlugin: Plugin = (hooks, { error }) => {
 
       error(
         fileName,
-        `String ${key} has invalid key. ` +
-          'Key may contain only alphanumeric characters and underscores',
+        `String ${key} has invalid key. Key may contain only alphanumeric characters and underscores`,
       );
     }),
   );

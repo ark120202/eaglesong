@@ -8,7 +8,7 @@ import {
 } from '@eaglesong/helper-task';
 import yargs from 'yargs';
 import { CommandGroup } from '../../command';
-import { buildReporter, Reporter, watchReporter } from './reporters';
+import { buildReporter, watchReporter } from './reporters';
 import { ResourceCompiler } from './resourcecompiler';
 
 export interface BuildOptions {
@@ -23,10 +23,9 @@ export default class BuilderCommand extends CommandGroup {
     noDota?: boolean;
   } = {};
 
-  // FIXME:
-  public hooks: ReturnType<typeof createHooks> = createHooks();
+  public readonly hooks = createHooks();
   private readonly tasks: TaskMap = new Map();
-  private reporter: Reporter = buildReporter;
+  private reporter = buildReporter;
 
   public register() {
     const errorOnFailure = (promise: Promise<boolean>) =>
