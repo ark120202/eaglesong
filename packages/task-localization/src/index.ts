@@ -1,17 +1,17 @@
 import {
-  TransformTask,
-  ServiceProvider,
   ServiceErrorReporter,
+  ServiceProvider,
+  TransformTask,
   TriggerChange,
 } from '@eaglesong/helper-task';
 import pProps from 'p-props';
 import path from 'upath';
+import * as defaultPlugins from './plugins';
 import {
-  defaultPlugins,
   DotaLanguage,
   FlatLocalizationFile,
-  Plugin,
   LocalizationService,
+  Plugin,
   ProviderOptions,
 } from './service';
 
@@ -20,8 +20,8 @@ export * from './service';
 export interface Options {
   defaultLanguage?: DotaLanguage;
   provider?: ProviderOptions;
-  plugins?: Plugin[];
-  defaultPlugins?: boolean;
+  defaultPlugins?: boolean | Partial<Record<keyof typeof defaultPlugins, boolean>>;
+  customPlugins?: Plugin[];
 }
 
 export function createLocalizationService(
@@ -31,10 +31,19 @@ export function createLocalizationService(
   error: ServiceErrorReporter,
   triggerChange: TriggerChange,
 ) {
-  const plugins = [
-    ...(options.plugins != null ? options.plugins : []),
-    ...(options.defaultPlugins !== false ? Object.values(defaultPlugins) : []),
-  ];
+  const plugins = [];
+
+  if (options.defaultPlugins !== false) {
+    for (const name of Object.keys(defaultPlugins) as (keyof typeof defaultPlugins)[]) {
+      if (typeof options.defaultPlugins !== 'object' || options.defaultPlugins[name] !== false) {
+        plugins.push(defaultPlugins[name]);
+      }
+    }
+  }
+
+  if (options.customPlugins) {
+    plugins.push(...options.customPlugins);
+  }
 
   return new LocalizationService(
     context,

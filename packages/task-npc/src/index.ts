@@ -7,13 +7,14 @@ import {
 import fs from 'fs-extra';
 import _ from 'lodash';
 import path from 'upath';
-import { defaultPlugins, Plugin, NpcService, Schemas } from './service';
+import * as defaultPlugins from './plugins';
+import { NpcService, Plugin, Schemas } from './service';
 
 export * from './service';
 
 export interface Options {
-  plugins?: Plugin[];
-  defaultPlugins?: boolean;
+  defaultPlugins?: boolean | Partial<Record<keyof typeof defaultPlugins, boolean>>;
+  customPlugins?: Plugin[];
 }
 
 export function createNpcService(
@@ -23,10 +24,19 @@ export function createNpcService(
   error: ServiceErrorReporter,
   triggerChange: TriggerChange,
 ) {
-  const plugins = [
-    ...(options.plugins != null ? options.plugins : []),
-    ...(options.defaultPlugins !== false ? Object.values(defaultPlugins) : []),
-  ];
+  const plugins = [];
+
+  if (options.defaultPlugins !== false) {
+    for (const name of Object.keys(defaultPlugins) as (keyof typeof defaultPlugins)[]) {
+      if (typeof options.defaultPlugins !== 'object' || options.defaultPlugins[name] !== false) {
+        plugins.push(defaultPlugins[name]);
+      }
+    }
+  }
+
+  if (options.customPlugins) {
+    plugins.push(...options.customPlugins);
+  }
 
   return new NpcService(context, plugins, serviceProvider, error, triggerChange);
 }

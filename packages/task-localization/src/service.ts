@@ -10,7 +10,6 @@ import dedent from 'dedent';
 import _ from 'lodash';
 import pProps from 'p-props';
 import { AsyncSeriesHook, Hook } from 'tapable';
-import * as defaultPlugins from './plugins';
 import { mapTypeToPlatform, Provider, ProviderOptions } from './providers';
 import {
   DotaLanguage,
@@ -30,7 +29,6 @@ export {
   LocalizationFiles,
   Provider,
   ProviderOptions,
-  defaultPlugins,
 };
 
 export type Plugin = ServicePlugin<Hooks, PluginApi>;

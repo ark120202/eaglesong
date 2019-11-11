@@ -12,9 +12,6 @@ import _ from 'lodash';
 import pProps from 'p-props';
 import { AsyncSeriesHook } from 'tapable';
 import path from 'upath';
-import * as defaultPlugins from './plugins';
-
-export { defaultPlugins };
 
 export type Plugin = ServicePlugin<Hooks, PluginApi>;
 export type PluginApi = ServicePluginApi & { collectedSchemas: Schemas };
