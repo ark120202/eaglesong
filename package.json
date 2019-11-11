@@ -8,6 +8,7 @@
     "build:clean": "rimraf packages/*/lib packages/*/tsconfig.tsbuildinfo",
     "build:tsc": "tsc -b packages",
     "dev": "tsc -b packages --watch",
+    "docs": "ts-node scripts/serve-docs.ts",
     "lint": "run-p lint:prettier lint:eslint",
     "lint:eslint": "eslint . --ext .js,.ts",
     "lint:prettier": "prettier --check **/*.{ts,md,yml,json}",
