@@ -1,36 +1,26 @@
 import _ from 'lodash';
 import { Plugin } from '../service';
 
-function flatten(
-  object: Record<string, any>,
-  previousKey: string,
-  tokens: Record<string, any> = {},
-) {
-  _.each(object, (value, currentKey) => {
-    const isVariable = currentKey.startsWith('$');
-
-    if (isVariable) currentKey = currentKey.slice(1);
-    let newKey = currentKey === '_' ? previousKey : `${previousKey}_${currentKey}`;
-    if (isVariable) newKey = `$${newKey}`;
-
-    if (_.isPlainObject(value)) {
-      flatten(value, newKey, tokens);
-    } else {
-      tokens[newKey] = value;
-    }
-  });
-
-  return tokens;
-}
-
 export const NestingPlugin: Plugin = hooks => {
   hooks.preprocess.tap('NestingPlugin', file => {
-    _.each(file, (value, key) => {
-      if (!_.isPlainObject(value)) return;
+    function flatten(object: Record<string, any>, previousKey?: string) {
+      _.each(object, (value, key) => {
+        if (typeof value === 'string') return;
 
-      const flatProperties = flatten(value, key);
-      delete file[key];
-      Object.assign(file, flatProperties);
-    });
+        const fullKey =
+          previousKey == null ? key : key === '_' ? previousKey : `${previousKey}_${key}`;
+
+        delete object[key];
+        if (_.isPlainObject(value)) {
+          flatten(value, fullKey);
+        } else if (Array.isArray(value)) {
+          flatten(Object.fromEntries(value.map((v, i) => [i + 1, v])), fullKey);
+        } else {
+          file[fullKey] = String(value);
+        }
+      });
+    }
+
+    flatten(file);
   });
 };
