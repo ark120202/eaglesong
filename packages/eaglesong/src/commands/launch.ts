@@ -17,11 +17,11 @@ export default class LaunchCommand extends CommandGroup {
     this.command({
       command: 'launch',
       describe: 'Launch Dota 2 Workshop Tools',
-      handler: () => this.launch(),
+      handler: () => this.run(),
     });
   }
 
-  private async launch() {
+  private async run() {
     const win64 = path.join(await this.getDotaPath(), 'game', 'bin', 'win64');
     const args = ['-tools', '-addon', await this.getAddonName()];
 

@@ -78,6 +78,7 @@ export default class PublishCommand extends CommandGroup {
     this.command({
       command: 'publish <strategy>',
       describe: 'Prepare and publish custom game to Steam Workshop',
+      handler: () => this.run(),
       builder: argv =>
         argv
           .positional('strategy', { type: 'string' })
@@ -102,11 +103,10 @@ export default class PublishCommand extends CommandGroup {
             type: 'boolean',
             default: false,
           }),
-      handler: () => this.publish(),
     });
   }
 
-  private async publish() {
+  private async run() {
     const options = await this.getOptions();
     const strategies = (options.publish || {}).strategies || {};
     const strategyName = this.args.strategy;
@@ -253,11 +253,11 @@ export default class PublishCommand extends CommandGroup {
     const build =
       this.strategy.build != null && this.strategy.build !== true ? this.strategy.build : {};
     if (build.clean !== false) {
-      await new Clean().clean();
+      await new Clean().run();
     }
 
     console.log('Starting build...');
-    const success = await new Builder().build();
+    const success = await new Builder().runBuild();
     console.log('');
     console.log(success ? 'Build finished' : 'Build failed');
 

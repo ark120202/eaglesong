@@ -17,15 +17,15 @@ export default class ChangelogCommand extends CommandGroup {
 
   public register() {
     this.command({
-      builder: argv =>
-        argv.option('previous', { type: 'string', describe: 'Previous revision hash/tag' }),
       command: 'changelog',
       describe: 'Generate changelog',
-      handler: () => this.changelog(),
+      handler: () => this.run(),
+      builder: argv =>
+        argv.option('previous', { type: 'string', describe: 'Previous revision hash/tag' }),
     });
   }
 
-  private async changelog() {
+  private async run() {
     if (!(await this.git.checkIsRepo())) {
       throw new Error(`"${this.context}" is not a valid git repository`);
     }

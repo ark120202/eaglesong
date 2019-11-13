@@ -14,6 +14,7 @@ export default class OpenCommand extends CommandGroup {
     this.command({
       command,
       describe,
+      handler: () => this.run(),
       builder: argv =>
         argv.usage(`$0 open <directory>/...
 
@@ -27,11 +28,10 @@ Available base directories:
   \`scripts\` - alias to \`game/scripts\`
   \`vscripts\` - alias to \`scripts/vscripts\`
   \`panorama\` - alias to \`content/panorama\``),
-      handler: () => this.open(),
     });
   }
 
-  private async open() {
+  private async run() {
     const [from, ...components] = this.args.query.split('/');
 
     const dotaPath = await this.getDotaPath();

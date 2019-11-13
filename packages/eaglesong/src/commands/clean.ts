@@ -7,11 +7,11 @@ export default class CleanCommand extends CommandGroup {
     this.command({
       command: 'clean',
       describe: 'Remove all addon files outside of project directory',
-      handler: () => this.clean(),
+      handler: () => this.run(),
     });
   }
 
-  public async clean() {
+  public async run() {
     const dotaPath = await this.getDotaPath();
     const addonName = await this.getAddonName();
     const game = path.join(dotaPath, 'game', 'dota_addons', addonName);

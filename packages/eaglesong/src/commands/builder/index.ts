@@ -44,13 +44,16 @@ export default class BuilderCommand extends CommandGroup {
     };
 
     this.command({
-      builder: argv => argv.options(buildOptions),
       command: 'dev',
       describe: 'Build and watch for resources',
-      handler: () => this.watch(),
+      handler: () => this.runWatch(),
+      builder: argv => argv.options(buildOptions),
     });
 
     this.command({
+      command: 'build',
+      describe: 'Build and compile all resources for production environment',
+      handler: () => errorOnFailure(this.runBuild()),
       builder: argv =>
         argv.options({
           ...buildOptions,
@@ -60,19 +63,16 @@ export default class BuilderCommand extends CommandGroup {
             default: false,
           },
         }),
-      command: 'build',
-      describe: 'Build and compile all resources for production environment',
-      handler: () => errorOnFailure(this.build()),
     });
 
     this.command({
       command: 'generate-static',
       describe: 'Generate static files for other tools',
-      handler: () => errorOnFailure(this.generateStatic()),
+      handler: () => errorOnFailure(this.runGenerateStatic()),
     });
   }
 
-  public async watch() {
+  public async runWatch() {
     await this.loadTasks(true, Boolean(this.args.noDota));
     this.reporter = watchReporter;
     this.report();
@@ -84,7 +84,7 @@ export default class BuilderCommand extends CommandGroup {
     await new Promise<never>(() => {});
   }
 
-  public async build() {
+  public async runBuild() {
     if (this.args.skipCompilation && this.args.noDota) {
       console.log('--no-dota implies --skip-compilation, so they should not be specified together');
       return false;
@@ -112,7 +112,7 @@ export default class BuilderCommand extends CommandGroup {
     return this.isSuccess();
   }
 
-  public async generateStatic() {
+  public async runGenerateStatic() {
     await this.loadTasks(false, true);
     this.report();
 
