@@ -20,9 +20,17 @@ interface PublishUpdateInfo {
 
 export interface PublishStrategy {
   workshopId: number;
-  forceBranch?: string;
-  /** @default false */
-  allowDirty?: boolean;
+
+  validate?: {
+    forceBranch?: string;
+    /** @default false */
+    allowDirty?: boolean;
+  };
+
+  build?: {
+    /** @default true */
+    clean?: boolean;
+  };
 
   /** @default true */
   bump?:
@@ -43,11 +51,6 @@ export interface PublishStrategy {
         /** @default true */
         push?: boolean;
       };
-
-  build?: {
-    /** @default true */
-    clean?: boolean;
-  };
 
   workshopMessage?(args: PublishUpdateInfo): string;
   afterSuccess?(args: PublishUpdateInfo): void | Promise<void>;
@@ -73,6 +76,8 @@ export default class PublishCommand extends CommandGroup {
 
   public register() {
     this.command({
+      command: 'publish <strategy>',
+      describe: 'Prepare and publish custom game to Steam Workshop',
       builder: argv =>
         argv
           .positional('strategy', { type: 'string' })
@@ -97,8 +102,6 @@ export default class PublishCommand extends CommandGroup {
             type: 'boolean',
             default: false,
           }),
-      command: 'publish <strategy>',
-      describe: 'Bump version, make git tag, build .vpk and push it to Steam Workshop',
       handler: () => this.publish(),
     });
   }
@@ -118,7 +121,7 @@ export default class PublishCommand extends CommandGroup {
       throw new Error(`Unknown strategy name '${strategyName}'. ${recommendation}`);
     }
 
-    await this.validateRepo();
+    await this.validate();
     await this.computeVersions();
     await this.bumpVersion();
 
@@ -144,12 +147,12 @@ export default class PublishCommand extends CommandGroup {
     }
   }
 
-  private async validateRepo() {
+  private async validate() {
     if (!(await this.git.checkIsRepo())) return;
 
+    const { allowDirty, forceBranch } = this.strategy.validate || {};
     const currentBranch = (await this.git.branchLocal()).current;
 
-    const { forceBranch } = this.strategy;
     if (forceBranch != null && currentBranch !== forceBranch && !this.args.anyBranch) {
       throw new Error(`Not on '${forceBranch}' branch. Use --any-branch to publish anyway.`);
     }
@@ -162,7 +165,7 @@ export default class PublishCommand extends CommandGroup {
       );
     }
 
-    if (!isClean() && !this.args.allowDirty) {
+    if (!(this.args.allowDirty || allowDirty || isClean())) {
       throw new Error(
         'Unclean working tree. Commit or stash changes first. Use --allow-dirty to publish anyway.',
       );
