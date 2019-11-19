@@ -1,6 +1,4 @@
 node_modules
-.pnp*
-.yarn
 /packages/*/lib
 *.tsbuildinfo
 .vscode
