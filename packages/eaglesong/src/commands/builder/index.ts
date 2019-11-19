@@ -45,14 +45,16 @@ export default class BuilderCommand extends CommandGroup {
 
     this.command({
       command: 'dev',
-      describe: 'Build and watch for resources',
+      describe:
+        'Runs tasks in development mode, watching for resources and building them as-needed.',
       handler: () => this.runWatch(),
       builder: argv => argv.options(buildOptions),
     });
 
     this.command({
       command: 'build',
-      describe: 'Build and compile all resources for production environment',
+      describe:
+        'Runs tasks in production mode, optimizing resources and compiling them with resourcecompiler.',
       handler: () => errorOnFailure(this.runBuild()),
       builder: argv =>
         argv.options({
@@ -67,7 +69,7 @@ export default class BuilderCommand extends CommandGroup {
 
     this.command({
       command: 'generate-static',
-      describe: 'Generate static files for other tools',
+      describe: 'Generates support information, such as TypeScript declarations.',
       handler: () => errorOnFailure(this.runGenerateStatic()),
     });
   }

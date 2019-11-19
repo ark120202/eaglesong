@@ -1,13 +1,10 @@
 # publish
 
-Usage:
-
 ```shell
-eaglesong publish [--preset]
+eaglesong publish <strategy>
 ```
 
-Publish is a interactive way to publish an update, inspired by
-[np](https://github.com/sindresorhus/np).
+Prepare and publish custom game to Steam Workshop.
 
 ## Additional requirements
 

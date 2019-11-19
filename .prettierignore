@@ -1,7 +1,6 @@
-/packages/*/lib
 .yarn
 .pnp
-/example
 /types/html-webpack-plugin.d.ts
 /types/tapable.d.ts
 /types/webpack/index.d.ts
+/packages/*/lib

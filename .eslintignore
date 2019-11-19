@@ -1,5 +1,5 @@
 node_modules
-/example
+/docs
 /types
 /packages/*/lib
 /packages/create-custom-game/templates

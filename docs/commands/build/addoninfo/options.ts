@@ -1,0 +1,1 @@
+../../../../packages/task-addoninfo/src/options.ts

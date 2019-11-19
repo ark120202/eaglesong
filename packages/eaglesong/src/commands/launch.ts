@@ -16,7 +16,7 @@ export default class LaunchCommand extends CommandGroup {
   public register() {
     this.command({
       command: 'launch',
-      describe: 'Launch Dota 2 Workshop Tools',
+      describe: 'Launch Dota 2 Workshop Tools.',
       handler: () => this.run(),
     });
   }

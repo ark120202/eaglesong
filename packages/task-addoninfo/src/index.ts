@@ -1,41 +1,9 @@
 import { Task, TaskState } from '@eaglesong/helper-task';
 import PQueue from 'p-queue';
-
-export interface DefaultKey {
-  Key: string;
-  Command: string;
-  Name: string;
-}
-
 // FIXME: check
-export interface Options {
-  /**
-   * Enables check for AFK / Fountain idling players.
-   *
-   * Disabled by default.
-   */
-  CheckAFKPlayers?: boolean;
-  /**
-   * Enables leave penalties.
-   *
-   * Disabled by default.
-   */
-  PenaltiesEnabled?: boolean;
-  /** Enabled by default. */
-  HeroGuidesSupported?: boolean;
-  /** Enabled by default. */
-  ShouldForceDefaultGuide?: boolean;
-  /**
-   * Enables ban phase.
-   *
-   * Disabled by default.
-   */
-  EnablePickRules?: boolean;
-  /**
-   * Binds keys to console commands.
-   */
-  Default_Keys?: DefaultKey[];
-}
+import { DefaultKey, Options } from './options';
+
+export { DefaultKey, Options };
 
 export default class AddonInfoTask extends Task<Options> {
   constructor(options: Options = {}) {

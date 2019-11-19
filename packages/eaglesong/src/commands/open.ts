@@ -10,7 +10,7 @@ export default class OpenCommand extends CommandGroup {
 
   public register() {
     const command = 'open <query>';
-    const describe = "Opens selected directory in your system's file manager.";
+    const describe = "Open selected directory in your system's file manager.";
     this.command({
       command,
       describe,

@@ -6,7 +6,7 @@ export default class CleanCommand extends CommandGroup {
   public register() {
     this.command({
       command: 'clean',
-      describe: 'Remove all addon files outside of project directory',
+      describe: 'Remove all addon files inside Dota 2 directory.',
       handler: () => this.run(),
     });
   }

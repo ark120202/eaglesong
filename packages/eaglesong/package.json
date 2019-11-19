@@ -1,7 +1,7 @@
 {
   "name": "eaglesong",
   "version": "0.0.0",
-  "description": "Build tool for Dota 2 Custom Games",
+  "description": "Command line tool that makes Dota 2 custom game development better",
   "keywords": [
     "dota 2",
     "eaglesong"

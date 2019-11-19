@@ -77,7 +77,7 @@ export default class PublishCommand extends CommandGroup {
   public register() {
     this.command({
       command: 'publish <strategy>',
-      describe: 'Prepare and publish custom game to Steam Workshop',
+      describe: 'Prepare and publish custom game to Steam Workshop.',
       handler: () => this.run(),
       builder: argv =>
         argv

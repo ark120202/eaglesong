@@ -1,10 +1,10 @@
 # Eaglesong
 
-Eaglesong is a build tool for Dota 2 Custom Game development.
+Eaglesong is a command line tool that makes Dota 2 custom game development:
 
-## Documentation
+🚀 Faster: various transformations reduce boilerplate and duplication in your code\
+🛡️ Safer: your scripts are validated against auto-generated schemas\
+🥚 Easier: improved editor support helps to create addons without remembering Dota 2 API
 
-Visit [eaglesong.js.org](https://eaglesong.js.org) for documentation or check out a
-
-- [Getting started from scratch](https://eaglesong.js.org/docs/getting-started/from-scratch)
-- [Getting started with an existing custom game](https://eaglesong.js.org/docs/getting-started/existing)
+Visit [eaglesong.netlify.com](https://eaglesong.netlify.com) for documentation and check out a
+[getting started](https://eaglesong.netlify.com/getting-started) page.
