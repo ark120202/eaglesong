@@ -10,7 +10,7 @@ const config: Options = {
       },
     },
   },
-  buildTasks: buildTasks(),
+  buildTasks: buildTasks($$buildTasks$$),
 };
 
 export default config;

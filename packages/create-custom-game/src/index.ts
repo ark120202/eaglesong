@@ -60,7 +60,7 @@ async function main() {
     fs.outputJson(path.join(internalName, filePath), data, { spaces: 2 });
 
   const templates = new Set(['base']);
-  const variables = new Map([['displayName', displayName]]);
+  const variables = new Map([['displayName', displayName], ['buildTasks', '']]);
 
   const packageJson: Record<string, any> = {
     name: internalName,
@@ -124,7 +124,17 @@ async function main() {
       trailingComma: 'all',
     };
 
-    devDependencies.push('eslint', 'prettier', '@ark120202/eslint-config');
+    devDependencies.push('prettier');
+  }
+
+  const disabledTasks: string[] = [];
+  if (!useESLint) disabledTasks.push('eslint');
+  if (!usePrettier) disabledTasks.push('prettier');
+  if (disabledTasks.length > 0) {
+    variables.set(
+      'buildTasks',
+      ['{', ...disabledTasks.map(task => `    ${task}: false,`), '  }'].join('\n'),
+    );
   }
 
   dependencies.sort((a, b) => a.localeCompare(b));
