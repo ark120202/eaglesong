@@ -10,18 +10,24 @@ class CustomEnumsSchema extends EnumsSchema {
   }
 
   public toTypeScript(context: TsContext) {
-    const members = this.getShortNames()
-      .map(n => `    ${/^\d/.test(n) ? JSON.stringify(n) : n} = ${JSON.stringify(n)},`)
+    // TODO: Get rid of side effects
+    (global as any)[this._name] = Object.fromEntries(
+      this.getDefinition().members.map(({ name, originalName }) => [name, originalName]),
+    );
+
+    const memberDeclarations = this.getDefinition()
+      .members.map(({ name, originalName }) => {
+        const escapedName = /^\d/.test(name) ? JSON.stringify(name) : name;
+        return `    ${escapedName} = ${JSON.stringify(originalName)},`;
+      })
       .join('\n');
 
-    // TODO: Get rid of side effects
-    (global as any)[this._name] = _.keyBy(this.getShortNames());
-    context.addGlobal(`declare enum ${this._name} {\n${members}\n}`);
+    context.addGlobal(`declare enum ${this._name} {\n${memberDeclarations}\n}`);
     return this._name + (this._flags ? ` | ${this._name}[]` : '');
   }
 
   public toSchema(): object {
-    const names = this.getShortNames();
+    const names = this.getNames();
     const namesSchema = { enum: names };
     if (!this._flags) return namesSchema;
 
@@ -36,18 +42,16 @@ class CustomEnumsSchema extends EnumsSchema {
       return;
     }
 
-    const names = this.getShortNames();
+    const validNames = this.getNames();
     if (Array.isArray(value)) {
-      _.castArray(value).forEach((v, i) => {
-        if (!names.includes(v)) context.of(i).addErrorThere(`should be a ${this._name} enum`);
-      });
-    } else if (!names.includes(value)) {
+      for (const [index, element] of value) {
+        if (!validNames.includes(element)) {
+          context.of(index).addErrorThere(`should be a ${this._name} enum`);
+        }
+      }
+    } else if (!validNames.includes(value)) {
       context.addErrorThere(`should be a ${this._name} enum`);
     }
-  }
-
-  private getShortNames() {
-    return this.getDefinition().members.map(x => x.name);
   }
 
   public mapValue(value: unknown) {
