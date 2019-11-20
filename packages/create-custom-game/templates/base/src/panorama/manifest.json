@@ -1,10 +1,1 @@
-[
-  {
-    "name": "custom_loading_screen.xml",
-    "source": "./loading-screen"
-  },
-  {
-    "name": "races.xml",
-    "source": "./races"
-  }
-]
+[]
