@@ -12,14 +12,14 @@ import {
   FlatLocalizationFile,
   LocalizationService,
   Plugin,
-  ProviderOptions,
+  ProviderOption,
 } from './service';
 
 export * from './service';
 
 export interface Options {
+  provider?: ProviderOption;
   defaultLanguage?: DotaLanguage;
-  provider?: ProviderOptions;
   defaultPlugins?: boolean | Partial<Record<keyof typeof defaultPlugins, boolean>>;
   customPlugins?: Plugin[];
 }
@@ -52,7 +52,7 @@ export function createLocalizationService(
     error,
     triggerChange,
     options.defaultLanguage != null ? options.defaultLanguage : 'english',
-    options.provider != null ? options.provider : { type: 'fs' },
+    options.provider,
   );
 }
 
@@ -111,14 +111,15 @@ export default class LocalizationTask extends TransformTask<Options> {
     if (this.errorLevel) return;
 
     const artifacts = await this.service.emit();
-    if (this.hasFlag('push-localization')) {
+    // TODO:
+    // if (this.hasFlag('push-localization')) {
+    if (process.env.EAGLESONG_PUSH_LOCALIZATION) {
       if (this.service.canPushBaseLocalizations()) {
         await this.service.pushBaseLocalizations(console.log);
       } else {
         this.error(
           null,
-          'Eaglesong used with a --push-localization flag, ' +
-            'but localization provider not supports remote features',
+          '--push-localization flag cannot be used with a localization provider without remote features',
           'warning',
         );
       }

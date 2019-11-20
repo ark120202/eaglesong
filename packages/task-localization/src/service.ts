@@ -10,7 +10,7 @@ import dedent from 'dedent';
 import _ from 'lodash';
 import pProps from 'p-props';
 import { AsyncSeriesHook, Hook } from 'tapable';
-import { mapTypeToPlatform, Provider, ProviderOptions } from './providers';
+import { resolveProviderOption, Provider, ProviderOption } from './providers';
 import {
   DotaLanguage,
   FlatLocalizationFile,
@@ -28,7 +28,7 @@ export {
   LocalizationFile,
   LocalizationFiles,
   Provider,
-  ProviderOptions,
+  ProviderOption,
 };
 
 export type Plugin = ServicePlugin<Hooks, PluginApi>;
@@ -40,9 +40,9 @@ function getFilesMeta(files: LocalizationFiles) {
   const chars = values.reduce((n, s) => n + s.length, 0);
 
   return {
-    chars,
     files: fileList.length,
     strings: values.length,
+    chars,
   };
 }
 
@@ -50,30 +50,27 @@ export type Hooks = LocalizationService['hooks'] & NamedType;
 export class LocalizationService {
   public hooks = {
     /**
-     * Called for all files before they are pushed to localization platform.
+     * Called for all files before they are pushed to localization provider.
      *
      * Used for making custom syntax rules.
      */
     preprocess: new AsyncSeriesHook<[LocalizationFile, string]>(['file', 'fileName']),
 
     /**
-     * Called either for local files and localized ones, received from platform.
+     * Called either for local files and localiz
+     * ed ones, received from provider.
      *
      * Used to implement any custom behavior.
      */
     postprocess: new AsyncSeriesHook<[FlatLocalizationFiles, DotaLanguage]>(['files', 'language']),
 
     /**
-     * Called before sending strings to localization platform.
-     *
-     * Used to exclude some strings from being localized.
+     * Called before sending strings to localization provider.
      */
     push: new AsyncSeriesHook<[FlatLocalizationFiles]>(['files']),
 
     /**
-     * The last hook before releasing files (which are already merged).
-     *
-     * Can be used to exclude something from output.
+     * The last hook before emitting merged files.
      */
     emit: new AsyncSeriesHook<[FlatLocalizationFile, DotaLanguage]>(['file', 'language']),
   };
@@ -86,9 +83,9 @@ export class LocalizationService {
     private readonly error: ServiceErrorReporter,
     triggerChange: TriggerChange,
     private readonly defaultLanguage: DotaLanguage,
-    platformOptions: ProviderOptions,
+    providerOption: ProviderOption,
   ) {
-    this.provider = mapTypeToPlatform(platformOptions);
+    this.provider = resolveProviderOption(providerOption);
     const api: PluginApi = { serviceProvider, error, triggerChange, context };
     plugins.forEach(p => p(this.hooks, api));
   }
@@ -130,7 +127,7 @@ export class LocalizationService {
 
     const { files, strings, chars } = getFilesMeta(baseFiles);
     log(dedent`
-      [LOCALIZATION] Pushing update to ${this.provider.name} consisting of:
+      [Localization] Pushing update to ${this.provider.name} consisting of:
         - ${files} files
         - ${strings} strings
         - ${chars} chars
@@ -139,11 +136,10 @@ export class LocalizationService {
     try {
       const { removed } = await this.provider.pushFiles!(baseFiles);
 
-      if (removed.length > 0) log(`[LOCALIZATION] Removed ${removed.length} files`);
-      log('[LOCALIZATION] Push complete');
+      if (removed.length > 0) log(`[Localization] Removed ${removed.length} files`);
+      log('[Localization] Push complete');
     } catch (error) {
-      error.message = `[LOCALIZATION] Push error:\n${error.message}`;
-      throw error;
+      log(`[Localization] Push error:\n${error.toString()}`);
     }
   }
 
@@ -156,16 +152,14 @@ export class LocalizationService {
       throw new Error('Localization provider not supports remote features');
     }
 
-    const localized = await this.provider.fetchFiles!();
-    return this.postprocessAll(localized);
+    return this.postprocessAll(await this.provider.fetchFiles!());
   }
 
   public async emit(): Promise<Multilingual<FlatLocalizationFile>> {
-    const groups: Multilingual<FlatLocalizationFiles> =
-      this.provider.makeGroups != null
-        ? this.provider.makeGroups(this.baseFiles)
-        : { [this.defaultLanguage]: this.baseFiles };
-    return this.postprocessAll(groups, this.hooks.emit);
+    return this.postprocessAll(
+      this.provider.makeLocalGroups(this.baseFiles, this.defaultLanguage),
+      this.hooks.emit,
+    );
   }
 
   private async preprocess(
@@ -203,14 +197,14 @@ export class LocalizationService {
       }),
     );
 
-    Object.entries(keyCache)
-      .filter(([, fileList]) => fileList.length > 1)
-      .forEach(([key, fileList]) => {
+    for (const [key, fileList] of Object.entries(keyCache)) {
+      if (fileList.length > 0) {
         this.error(
           null,
           `Key ${key} is defined in [${fileList.join(', ')}], yet only one definition is allowed.`,
         );
-      });
+      }
+    }
 
     return Object.assign({}, ...Object.values(files));
   }

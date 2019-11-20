@@ -4,18 +4,21 @@ import request from 'request-promise-native';
 import { Provider } from '.';
 import { DotaLanguage, FlatLocalizationFile, FlatLocalizationFiles, Multilingual } from '../types';
 
-const escapeFileName = (fileName: string) => fileName.replace(/(\\|\/)/g, ' -> ');
+const escapeFileName = (fileName: string) => fileName.replace(/\//g, ' -> ');
 const unescapeFileName = (fileName: string) => fileName.replace(/ -> /g, '/');
 
-const time = () => Math.floor(Date.now() / 1000);
+/* eslint sort-keys: "error" */
 
-const languageMap: Record<DotaLanguage, string> = {
+// TODO: Move to dota-data
+// https://partner.steamgames.com/doc/store/localization#supported_languages
+const originalLanguageMap: Record<DotaLanguage | 'arabic', string> = {
+  arabic: 'ar',
   brazilian: 'pt-BR',
   bulgarian: 'bg',
   czech: 'cs',
   danish: 'da',
   dutch: 'nl',
-  english: 'en-US', // TODO: en?
+  english: 'en',
   finnish: 'fi',
   french: 'fr',
   german: 'de',
@@ -29,7 +32,7 @@ const languageMap: Record<DotaLanguage, string> = {
   polish: 'pl',
   portuguese: 'pt',
   romanian: 'ro',
-  russian: 'ru-RU', // TODO: ru?
+  russian: 'ru',
   schinese: 'zh-CN',
   spanish: 'es',
   swedish: 'sv',
@@ -37,10 +40,24 @@ const languageMap: Record<DotaLanguage, string> = {
   thai: 'th',
   turkish: 'tr',
   ukrainian: 'uk',
+  vietnamese: 'vn',
+};
+
+const languageMap: Record<DotaLanguage, string> = {
+  ...originalLanguageMap,
+  english: 'en-US',
+  russian: 'ru-RU',
   vietnamese: 'vi',
 };
 
-interface StringsOutputResponse {
+/* eslint sort-keys: "off" */
+
+type StringsOutputResponse =
+  | { response: 'Initializing output for API. Will be ready within 5 minutes' }
+  | { response: 'up-to-date' }
+  | StringsOutputSuccessResponse;
+
+interface StringsOutputSuccessResponse {
   translation: Record<string, Record<string, FlatLocalizationFile>>;
   md5: string;
 }
@@ -53,33 +70,35 @@ type FileListResponse = {
   uploaded_at_timestamp: number;
 }[];
 
-export interface ProviderOptionsOneSky {
-  type: 'onesky';
-  projectID: number;
+export interface OneSkyProviderOptions {
+  projectId: number;
   apiKey: string;
-  secret?: string;
 }
 
-export class OneSky implements Provider {
+export class OneSkyProvider implements Provider {
   public name = this.constructor.name;
-  private readonly projectID: number;
+  private readonly projectId: number;
   private readonly apiKey: string;
-  private readonly secret?: string;
-  constructor(options: ProviderOptionsOneSky) {
-    this.projectID = options.projectID;
+  private readonly secret = process.env.EAGLESONG_ONESKY_SECRET;
+  constructor(options: OneSkyProviderOptions) {
+    this.projectId = options.projectId;
     this.apiKey = options.apiKey;
-    this.secret = options.secret != null ? options.secret : process.env.ONESKY_SECRET;
+  }
+
+  public makeLocalGroups(baseFiles: FlatLocalizationFiles, defaultLanguage: DotaLanguage) {
+    return { [defaultLanguage]: baseFiles };
   }
 
   public async fetchFiles() {
     const result: StringsOutputResponse = await this.request({
-      qs: { 'platform-id': this.projectID },
       uri: 'https://api.oneskyapp.com/2/string/output',
+      qs: { 'platform-id': this.projectId, md5: '0e594afa458e2edefd9956cbf4d44a46' },
     });
 
     const map: Multilingual<FlatLocalizationFiles> = {};
 
-    _.each(result.translation, (languages, fileName) =>
+    // TODO:
+    _.each((result as StringsOutputSuccessResponse).translation, (languages, fileName) =>
       _.each(languages, (tokens, oneSkyLang) => {
         const dotaLang = _.findKey(languageMap, x => x === oneSkyLang) as DotaLanguage | undefined;
         if (dotaLang == null) {
@@ -108,17 +127,17 @@ export class OneSky implements Provider {
 
   private async uploadFile(fileName: string, content: FlatLocalizationFile) {
     const result = await this.request({
+      uri: `https://platform.api.onesky.io/1/projects/${this.projectId}/files`,
+      method: 'POST',
       formData: {
         file: {
           options: { filename: escapeFileName(fileName) },
           value: JSON.stringify(content),
         },
         file_format: 'HIERARCHICAL_JSON',
-        is_allow_translation_same_as_original: 'false',
+        // is_allow_translation_same_as_original: 'false',
         is_keeping_all_strings: 'false',
       },
-      method: 'POST',
-      uri: `https://platform.api.onesky.io/1/projects/${this.projectID}/files`,
     });
 
     if (result.meta.status !== 201) {
@@ -128,9 +147,9 @@ export class OneSky implements Provider {
 
   private async removeFile(fileName: string) {
     const result = await this.request({
+      uri: `https://platform.api.onesky.io/1/projects/${this.projectId}/files`,
       method: 'DELETE',
-      qs: { file_name: fileName },
-      uri: `https://platform.api.onesky.io/1/projects/${this.projectID}/files`,
+      qs: { file_name: escapeFileName(fileName) },
     });
 
     return result.data;
@@ -152,19 +171,23 @@ export class OneSky implements Provider {
 
   private async listFilesOnPage(page: number): Promise<FileListResponse> {
     const result = await this.request({
+      uri: `https://platform.api.onesky.io/1/projects/${this.projectId}/files`,
       qs: { page, per_page: 100 },
-      uri: `https://platform.api.onesky.io/1/projects/${this.projectID}/files`,
     });
 
     return result.data;
   }
 
-  private getDevHash() {
-    if (this.secret == null) return;
+  private getSecrets() {
+    if (this.secret == null) return {};
 
-    return createHash('md5')
-      .update(String(time()) + this.secret)
-      .digest('hex');
+    const timestamp = Math.floor(Date.now() / 1000);
+    return {
+      timestamp,
+      dev_hash: createHash('md5')
+        .update(String(timestamp) + this.secret)
+        .digest('hex'),
+    };
   }
 
   private async request(options: request.Options) {
@@ -176,8 +199,7 @@ export class OneSky implements Provider {
         'api-key': this.apiKey,
 
         api_key: this.apiKey,
-        dev_hash: this.getDevHash(),
-        timestamp: time(),
+        ...this.getSecrets(),
         ...options.qs,
       },
     });

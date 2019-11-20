@@ -2,13 +2,9 @@ import _ from 'lodash';
 import { Provider } from '.';
 import { FlatLocalizationFiles, isDotaLanguage, Multilingual } from '../types';
 
-export interface ProviderOptionsFs {
-  type: 'fs';
-}
-
-export class Fs implements Provider {
+export class FileSystemProvider implements Provider {
   public name = this.constructor.name;
-  public makeGroups(baseFiles: FlatLocalizationFiles) {
+  public makeLocalGroups(baseFiles: FlatLocalizationFiles) {
     const result: Multilingual<FlatLocalizationFiles> = {};
 
     for (const [name, content] of Object.entries(baseFiles)) {
