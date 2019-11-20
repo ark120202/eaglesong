@@ -21,7 +21,11 @@ export interface GetTasksOptions {
   panorama?: null | boolean | PanoramaOptions;
 }
 
-export const buildTasks = (options: GetTasksOptions = {}) => () => getTasks(options);
+export function buildTasks(options: GetTasksOptions = {}) {
+  const create = Object.assign(() => getTasks(create.options), { options });
+  return create;
+}
+
 export async function getTasks(options: GetTasksOptions = {}): Promise<Task<any>[]> {
   const tasks: Promise<Task<any>>[] = [];
 
