@@ -1,4 +1,5 @@
 import { createHash } from 'crypto';
+import { dotaLanguagesData } from 'dota-data/lib/localization';
 import _ from 'lodash';
 import request from 'request-promise-native';
 import { Provider } from '.';
@@ -7,50 +8,12 @@ import { DotaLanguage, FlatLocalizationFile, FlatLocalizationFiles, Multilingual
 const escapeFileName = (fileName: string) => fileName.replace(/\//g, ' -> ');
 const unescapeFileName = (fileName: string) => fileName.replace(/ -> /g, '/');
 
-/* eslint sort-keys: "error" */
-
-// TODO: Move to dota-data
-// https://partner.steamgames.com/doc/store/localization#supported_languages
-const originalLanguageMap: Record<DotaLanguage | 'arabic', string> = {
-  arabic: 'ar',
-  brazilian: 'pt-BR',
-  bulgarian: 'bg',
-  czech: 'cs',
-  danish: 'da',
-  dutch: 'nl',
-  english: 'en',
-  finnish: 'fi',
-  french: 'fr',
-  german: 'de',
-  greek: 'el',
-  hungarian: 'hu',
-  italian: 'it',
-  japanese: 'ja',
-  koreana: 'ko',
-  latam: 'es-419',
-  norwegian: 'no',
-  polish: 'pl',
-  portuguese: 'pt',
-  romanian: 'ro',
-  russian: 'ru',
-  schinese: 'zh-CN',
-  spanish: 'es',
-  swedish: 'sv',
-  tchinese: 'zh-TW',
-  thai: 'th',
-  turkish: 'tr',
-  ukrainian: 'uk',
-  vietnamese: 'vn',
-};
-
-const languageMap: Record<DotaLanguage, string> = {
-  ...originalLanguageMap,
+const languageCodeToDotaLanguage = _.invert({
+  ..._.mapValues(dotaLanguagesData, d => d.code),
   english: 'en-US',
   russian: 'ru-RU',
   vietnamese: 'vi',
-};
-
-/* eslint sort-keys: "off" */
+}) as Record<string, DotaLanguage>;
 
 type StringsOutputResponse =
   | { response: 'Initializing output for API. Will be ready within 5 minutes' }
@@ -98,16 +61,14 @@ export class OneSkyProvider implements Provider {
     const map: Multilingual<FlatLocalizationFiles> = {};
 
     // TODO:
-    _.each((result as StringsOutputSuccessResponse).translation, (languages, fileName) =>
-      _.each(languages, (tokens, oneSkyLang) => {
-        const dotaLang = _.findKey(languageMap, x => x === oneSkyLang) as DotaLanguage | undefined;
-        if (dotaLang == null) {
-          throw new Error(
-            `File ${fileName} has an unknown ${oneSkyLang} translation. Check language map.`,
-          );
+    _.each((result as StringsOutputSuccessResponse).translation, (tokenGroups, fileName) =>
+      _.each(tokenGroups, (tokens, languageCode) => {
+        const language = languageCodeToDotaLanguage[languageCode];
+        if (language == null) {
+          throw new Error(`File '${fileName}' has an unknown '${languageCode}' translation`);
         }
 
-        (map[dotaLang] || (map[dotaLang] = {}))[fileName] = tokens;
+        (map[language] || (map[language] = {}))[fileName] = tokens;
       }),
     );
 

@@ -30,9 +30,9 @@
     "upath": "^1.2.0"
   },
   "devDependencies": {
-    "@dota-data/localization": "^0.1.5"
+    "dota-data": "^0.5.0"
   },
   "peerDependencies": {
-    "@dota-data/localization": "^0.1.2"
+    "dota-data": "^0.5.0"
   }
 }

@@ -1,16 +1,8 @@
 import _ from 'lodash';
+import path from 'upath';
 import { Plugin } from '../service';
-import { FlatLocalizationFiles } from '../types';
-
-const VARIABLE_REGEXP = /\${(.+?)}/g;
-
-function findString(files: FlatLocalizationFiles, token: string) {
-  for (const [fileName, file] of Object.entries(files)) {
-    if (file[token] != null) {
-      return { fileName, value: file[token] };
-    }
-  }
-}
+import { FlatLocalizationFiles, DotaLanguage } from '../types';
+import { getLocalization } from 'dota-data/lib/localization';
 
 type Filter = (value: string, parameters: unknown[]) => string | { error: string };
 const defaultFilters: Record<string, Filter> = {
@@ -63,76 +55,122 @@ const defaultFilters: Record<string, Filter> = {
   },
 };
 
-export const VariablePlugin: Plugin = (hooks, { error: addError }) => {
-  function localize(
-    files: FlatLocalizationFiles,
-    fileName: string,
-    key: string,
-    value: string,
-    keyStack: string[],
-  ) {
-    const firstKey = _.defaultTo(keyStack[0], key);
-    return value.replace(VARIABLE_REGEXP, (fullMatch: string, expression: string) => {
-      const [variable, ...filters] = expression.split(' | ');
-      const found = findString(files, variable);
-      if (found == null) {
-        addError(fileName, `${firstKey} > can't resolve variable "${variable}"`, 'warning');
-        return fullMatch;
-      }
+function applyFilter(variableValue: string, filterExpression: string) {
+  const [, filterName, rawFilterParametersExpression] = filterExpression.match(
+    /([^ ]*)(?: (.*))?/,
+  )!;
 
-      let variableValue = found.value;
-      if (VARIABLE_REGEXP.test(variableValue)) {
-        if (keyStack.includes(key)) {
-          addError(fileName, `${firstKey} > recursive variable "${variable}"`);
-          return fullMatch;
-        }
-
-        keyStack.push(key);
-        variableValue = localize(files, found.fileName, variable, variableValue, keyStack);
-      }
-
-      for (const filterExpression of filters) {
-        const [, filterName, rawFilterParametersExpression] = filterExpression.match(
-          /([^ ]*)(?: (.*))?/,
-        )!;
-
-        let filterParameters: unknown[];
-        try {
-          filterParameters = rawFilterParametersExpression
-            ? JSON.parse(`[${rawFilterParametersExpression}]`)
-            : [];
-        } catch (error) {
-          addError(
-            fileName,
-            `${firstKey} > filter '${filterName}' has invalid parameters:\n  ${error.message}`,
-          );
-          continue;
-        }
-
-        const filter = defaultFilters[filterName];
-        if (filter != null) {
-          const result = filter(variableValue, filterParameters);
-          if (typeof result === 'string') {
-            variableValue = result;
-          } else {
-            addError(
-              fileName,
-              `${firstKey} > error applying '${filterName}' filter: ${result.error}`,
-            );
-          }
-        } else {
-          addError(fileName, `${firstKey} > unknown filter '${filterName}'`);
-        }
-      }
-
-      return variableValue;
-    });
+  let filterParameters: unknown[];
+  try {
+    filterParameters = rawFilterParametersExpression
+      ? JSON.parse(`[${rawFilterParametersExpression}]`)
+      : [];
+  } catch (error) {
+    return { error: `filter '${filterName}' has invalid parameters:\n  ${error.message}` };
   }
 
-  hooks.postprocess.tap('VariablePlugin', files => {
+  const filter = defaultFilters[filterName];
+  if (filter == null) {
+    return { error: `unknown filter '${filterName}'` };
+  }
+
+  const result = filter(variableValue, filterParameters);
+  if (typeof result !== 'string') {
+    return { error: `error applying '${filterName}' filter: ${result.error}` };
+  }
+
+  return result;
+}
+
+const VARIABLE_REGEXP = /\${(.+?)}/g;
+
+function findString(files: FlatLocalizationFiles, token: string) {
+  for (const [fileName, file] of Object.entries(files)) {
+    if (file[token] != null) {
+      return { fileName, value: file[token] };
+    }
+  }
+}
+
+const fetchedLanguages = new Map<DotaLanguage, Record<string, string>>();
+export const VariablePlugin: Plugin = (hooks, { error: addError, context }) => {
+  hooks.postprocess.tapPromise('VariablePlugin', async (files, language) => {
+    function localize(fileName: string, key: string, value: string, keyStack: string[]) {
+      const firstKey = _.defaultTo(keyStack[0], key);
+      const isFirstKey = keyStack.length === 0;
+      return value.replace(VARIABLE_REGEXP, (fullMatch: string, expression: string) => {
+        let variableValue: string;
+        const [variable, ...filters] = expression.split(' | ');
+        if (variable.startsWith('dota:')) {
+          const dotaLocalization = fetchedLanguages.get(language);
+          if (dotaLocalization == null) {
+            throw new Error(`Data for language '${language}' not found`);
+          }
+
+          const rawToken = variable.slice(5);
+          variableValue = dotaLocalization[rawToken];
+          if (variableValue == null) {
+            if (isFirstKey) {
+              addError(fileName, `${key}: cannot resolve dota variable '${rawToken}'`, 'warning');
+            }
+
+            return fullMatch;
+          }
+        } else {
+          const found = findString(files, variable);
+          if (found == null) {
+            if (isFirstKey) {
+              addError(fileName, `${key}: cannot resolve variable '${variable}'`, 'warning');
+            }
+
+            return fullMatch;
+          }
+
+          variableValue = found.value;
+          if (VARIABLE_REGEXP.test(variableValue)) {
+            if (keyStack.includes(key)) {
+              const keyPath = [...keyStack.slice(1), key].join(' > ');
+              addError(fileName, `${firstKey}: recursive variable '${keyPath}'`);
+              return fullMatch;
+            }
+
+            keyStack.push(key);
+            variableValue = localize(found.fileName, variable, variableValue, keyStack);
+          }
+        }
+
+        for (const filterExpression of filters) {
+          const result = applyFilter(variableValue, filterExpression);
+          if (typeof result === 'string') {
+            variableValue = result;
+          } else if (isFirstKey) {
+            addError(fileName, `${key}: ${result.error}`);
+          }
+        }
+
+        return variableValue;
+      });
+    }
+
+    const usesDotaVariables = Object.values(files)
+      .flatMap(file => Object.values(file))
+      .flatMap(value => [...value.matchAll(VARIABLE_REGEXP)])
+      .some(([, expression]) => {
+        const [variable] = expression.split(' | ');
+        return variable.startsWith('dota:');
+      });
+
+    if (usesDotaVariables && !fetchedLanguages.has(language)) {
+      const cachePath = path.join(context, 'node_modules/.cache/dota-data/localization');
+      fetchedLanguages.set(
+        language,
+        await getLocalization(language, { cache: { path: cachePath } }),
+      );
+    }
+
     _.each(files, (file, fileName) =>
       _.each(file, (value, key) => {
-        file[key] = localize(files, fileName, key, value, []);
+        file[key] = localize(fileName, key, value, []);
       }),
     );
   });

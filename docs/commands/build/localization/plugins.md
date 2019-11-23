@@ -18,7 +18,16 @@ Expressions can reference other localization keys:
 ```yaml
 ability_description: Deals 100 damage.
 upgraded_ability_description: ${ability_description} Stuns for 5 seconds.
-# Deals 100 damage. Stuns for 3 seconds.
+# Deals 100 damage. Stuns for 5 seconds.
+```
+
+Expressions starting with `dota:` would be resolved with a value from original localization:
+
+```yaml
+DOTA_Tooltip_ability_antimage_mana_break_Description: >-
+  ${dota:DOTA_Tooltip_ability_antimage_mana_break_Description}
+
+  <font color="lime">Has increased damage</font>
 ```
 
 ### Filters
