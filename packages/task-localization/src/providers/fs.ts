@@ -10,7 +10,7 @@ export class FileSystemProvider implements Provider {
     for (const [name, content] of Object.entries(baseFiles)) {
       const [language] = name.split('/');
       if (!isDotaLanguage(language)) {
-        throw new Error(`Unexpected language ${language}`);
+        throw new Error(`Language '${language}' is unsupported`);
       }
 
       let files = result[language];

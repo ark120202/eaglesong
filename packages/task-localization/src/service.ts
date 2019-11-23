@@ -198,7 +198,7 @@ export class LocalizationService {
     );
 
     for (const [key, fileList] of Object.entries(keyCache)) {
-      if (fileList.length > 0) {
+      if (fileList.length > 1) {
         this.error(
           null,
           `Key ${key} is defined in [${fileList.join(', ')}], yet only one definition is allowed.`,
@@ -215,7 +215,9 @@ export class LocalizationService {
   ): Promise<Multilingual<FlatLocalizationFile>> {
     const localizedFiles = await pProps(groups, async (files, language) => {
       if (files == null) return;
-      if (!isDotaLanguage(language)) throw new Error(`Unexpected language ${language}`);
+      if (!isDotaLanguage(language)) {
+        throw new Error(`Language '${language}' is unsupported`);
+      }
 
       const processed = await this.postprocess(files, language);
       if (hook != null) {
