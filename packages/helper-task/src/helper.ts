@@ -3,6 +3,7 @@ import fs from 'fs-extra';
 import globby from 'globby';
 import { AsyncParallelHook } from 'tapable';
 import path from 'upath';
+import assert from 'assert';
 import vdf from 'vdf-extra';
 import { NamedType, ServiceConstructor, ServiceMap, ServiceProvider } from './service';
 import { ReadonlyTaskMap, TaskProvider } from './tasks';
@@ -83,16 +84,21 @@ export class BuildHelper {
     watcher.on('unlink', file => callback({ event: 'unlink', file: toPath(file) }));
   }
 
-  public async outputKV1(filePath: string, data: Record<string, any>) {
-    if (!path.isAbsolute(filePath)) throw new Error('Expected absolute file path');
+  public async outputKV1(filePath: string, data: Record<string, any>, utf16 = false) {
+    assert(path.isAbsolute(filePath), 'filePath should be absolute');
 
     let fileContent = vdf.stringify(data, this.outputOptions);
+
     const headerMessage = getOutputHeader(this.outputOptions, filePath);
     if (headerMessage != null) {
       fileContent = `// ${headerMessage.replace(/\n/g, '\n// ')}\n\n${fileContent}`;
     }
 
-    await fs.outputFile(filePath, fileContent);
+    if (utf16) {
+      fileContent = `\uFEFF${fileContent}`;
+    }
+
+    await fs.outputFile(filePath, fileContent, { encoding: utf16 ? 'ucs2' : 'utf8' });
   }
 
   public async import(id: string) {

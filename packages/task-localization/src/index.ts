@@ -126,7 +126,7 @@ export default class LocalizationTask extends TransformTask<Options> {
     }
 
     if (this.dotaPath == null) return;
-    await pProps(artifacts, (tokens, lang) => this.outputFile(lang, tokens!));
+    await pProps(artifacts, (tokens, lang) => this.emitFile(lang, tokens!));
   }
 
   private async fetchLocalizations() {
@@ -136,13 +136,11 @@ export default class LocalizationTask extends TransformTask<Options> {
     const localizations = await this.service.fetchLocalizations();
     delete localizations[this.options.defaultLanguage || 'english'];
 
-    await pProps(localizations, (file, lang) => this.outputFile(lang, file!));
+    await pProps(localizations, (file, lang) => this.emitFile(lang, file!));
   }
 
-  private async outputFile(language: string, tokens: FlatLocalizationFile) {
-    const kv = { '': { Language: language, Tokens: tokens } };
-    // Since localization merging patch, dota not requires separate file for panorama and not requires BOM
-    // TODO: Check if UTF-16 LE is still required
-    await this.outputKV1(this.resolvePath('game', `resource/addon_${language}.txt`), kv);
+  private async emitFile(language: string, tokens: FlatLocalizationFile) {
+    const filePath = this.resolvePath('game', `resource/addon_${language}.txt`);
+    await this.outputKV1(filePath, { lang: tokens }, true);
   }
 }

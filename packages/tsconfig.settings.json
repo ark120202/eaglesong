@@ -4,6 +4,7 @@
     "composite": true,
     // TODO:
     "skipLibCheck": true,
+    "lib": ["es2019", "es2020.string", "esnext.bigint"],
 
     "baseUrl": "..",
     "paths": {
