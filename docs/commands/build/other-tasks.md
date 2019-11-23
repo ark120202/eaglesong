@@ -11,7 +11,8 @@ directory are `128x128`.
 ## Resources
 
 This task creates symbolic links for resource directories, that don't have any special handling or
-validation. By default it creates links for `materials`, `models` and `particles` directories.
+validation. By default it creates links for `itembuilds`, `materials`, `models` and `particles`
+directories.
 
 ## Root Scripts
 
