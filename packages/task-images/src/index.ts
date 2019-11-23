@@ -2,16 +2,16 @@ import { TransformTask } from '@eaglesong/helper-task';
 import fs from 'fs-extra';
 import { imageSize } from 'image-size';
 import path from 'upath';
+import { promisify } from 'util';
 
-export interface SizeGroup {
+export interface Options {
+  verifySizes?: SizeRule[] | false;
+}
+
+export interface SizeRule {
   name: string;
   test: RegExp | string[] | ((filePath: string, content: Buffer) => boolean);
   sizes: [number, number][];
-}
-
-export interface Options {
-  verifySizes?: SizeGroup[] | false;
-  transform?(content: Buffer, filePath: string): Buffer | boolean | void;
 }
 
 export default class ImagesTask extends TransformTask<Options> {
@@ -25,6 +25,13 @@ export default class ImagesTask extends TransformTask<Options> {
   public apply() {
     super.apply();
     this.srcPath = this.resolvePath('src/images');
+
+    this.hooks.build.tapPromise(this.constructor.name, async () => {
+      if (this.dotaPath != null) {
+        await fs.ensureDir(this.srcPath);
+        await fs.ensureSymlink(this.srcPath, this.resolvePath('game', 'resource/flash3/images'));
+      }
+    });
   }
 
   protected async transformFile(filePath: string) {
@@ -33,34 +40,14 @@ export default class ImagesTask extends TransformTask<Options> {
       return;
     }
 
-    let content = await fs.readFile(filePath);
+    const content = await fs.readFile(filePath);
     const fileName = path.relative(this.srcPath, filePath);
-    if (this.options.transform) {
-      const transformResult = this.options.transform(content, fileName);
-      if (Buffer.isBuffer(transformResult)) {
-        content = transformResult;
-      } else if (transformResult === false) {
-        return;
-      }
-    }
 
-    if (!this.verifyFile(filePath, fileName, content)) return;
-    if (this.dotaPath == null) return;
-
-    await fs.outputFile(this.getDestinationPath(filePath), content);
+    await this.verifyFile(filePath, fileName, content);
   }
 
-  protected async removeFile(filePath: string) {
-    await fs.remove(this.getDestinationPath(filePath));
-  }
-
-  private getDestinationPath(filePath: string) {
-    const fileName = path.changeExt(path.relative(this.srcPath, filePath), '.png');
-    return this.resolvePath('game', `resource/flash3/images/${fileName}`);
-  }
-
-  private verifyFile(fullPath: string, fileName: string, content: Buffer) {
-    const verifySizes: SizeGroup[] = [];
+  private async verifyFile(filePath: string, fileName: string, content: Buffer) {
+    const verifySizes: SizeRule[] = [];
     if (Array.isArray(this.options.verifySizes)) {
       verifySizes.push(...this.options.verifySizes);
     } else if (this.options.verifySizes == null) {
@@ -70,35 +57,35 @@ export default class ImagesTask extends TransformTask<Options> {
       );
     }
 
-    const eSizes = verifySizes.find(({ test }) => {
+    const rules = verifySizes.filter(({ test }) => {
       if (Array.isArray(test)) {
         const parts = fileName.split(/\//g);
         return test.every((value, index) => parts[index] === value);
       }
 
-      return typeof test === 'function' ? test(fullPath, content) : test.test(fullPath);
+      return typeof test === 'function' ? test(filePath, content) : test.test(filePath);
     });
 
-    if (!eSizes) return true;
+    if (rules.length === 0) return;
 
-    let rSizes: [number, number];
+    let realSizes: [number, number];
     try {
-      const { width, height } = imageSize(content);
+      const { width, height } = (await promisify(imageSize)(filePath))!;
       // @ts-ignore Is it really nullable?
-      rSizes = [width, height];
+      realSizes = [width, height];
     } catch (error) {
-      this.error(fullPath, error.message);
-      return false;
+      this.error(filePath, error.message);
+      return;
     }
 
-    if (!eSizes.sizes.some(x => x[0] === rSizes[0] && x[1] === rSizes[1])) {
-      this.error(
-        fullPath,
-        `Image has ${rSizes[0]}x${rSizes[1]} size, which not matches ${eSizes.name} rule.`,
-        'warning',
-      );
+    for (const rule of rules) {
+      if (!rule.sizes.some(x => x[0] === realSizes[0] && x[1] === realSizes[1])) {
+        this.error(
+          filePath,
+          `Image has ${realSizes[0]}x${realSizes[1]} size, which not matches ${rule.name} rule.`,
+          'warning',
+        );
+      }
     }
-
-    return true;
   }
 }
