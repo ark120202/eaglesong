@@ -30,7 +30,7 @@ localization platform. It can be used by specifying a `provider` option:
 
 ```ts
 const config: Options = {
-  buildTasks: buildTasks({
+  tasks: buildTasks({
     localization: {
       provider: {
         type: 'onesky',

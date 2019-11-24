@@ -35,11 +35,11 @@ export default class ChangelogCommand extends CommandGroup {
     const [old, current] = await Promise.all(
       [true, false].map(async isOld => {
         const tasks: TaskMap = new Map();
-        let { buildTasks } = await this.getOptions();
-        if (buildTasks == null) throw new Error('Builder got empty task list');
-        if (typeof buildTasks === 'function') buildTasks = await buildTasks();
-        if (buildTasks.length === 0) throw new Error('Builder got empty task list');
-        buildTasks.forEach(t => tasks.set(t.constructor as TaskConstructor<any>, t));
+        let { tasks: tasksOption } = await this.getOptions();
+        if (tasksOption == null) throw new Error('Builder got empty task list');
+        if (typeof tasksOption === 'function') tasksOption = await tasksOption();
+        if (tasksOption.length === 0) throw new Error('Builder got empty task list');
+        tasksOption.forEach(t => tasks.set(t.constructor as TaskConstructor<any>, t));
 
         const services: ServiceMap = new Map();
         const hooks = createHooks();

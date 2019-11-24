@@ -8,7 +8,7 @@ import { buildTasks } from '@eaglesong/tasks';
 import { Options } from 'eaglesong';
 
 const config: Options = {
-  buildTasks: buildTasks(/* Task options */),
+  tasks: buildTasks(/* Task options */),
 };
 
 export default config;

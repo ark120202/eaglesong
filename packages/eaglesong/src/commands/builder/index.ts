@@ -13,7 +13,7 @@ import { ResourceCompiler } from './resourcecompiler';
 
 export interface BuildOptions {
   output?: OutputOptions;
-  buildTasks: Task<any>[] | (() => Promise<Task<any>[]>);
+  tasks: Task<any>[] | (() => Promise<Task<any>[]>);
 }
 
 export default class BuilderCommand extends CommandGroup {
@@ -133,10 +133,10 @@ export default class BuilderCommand extends CommandGroup {
   }
 
   private async loadTasks(isWatching: boolean, noDota: boolean) {
-    let { buildTasks, output } = await this.getOptions();
-    if (typeof buildTasks === 'function') buildTasks = await buildTasks();
-    if (buildTasks.length === 0) throw new Error('Builder got an empty task list');
-    buildTasks.forEach(t => this.tasks.set(t.constructor as TaskConstructor<any>, t));
+    let { tasks, output } = await this.getOptions();
+    if (typeof tasks === 'function') tasks = await tasks();
+    if (tasks.length === 0) throw new Error('Builder got an empty task list');
+    tasks.forEach(t => this.tasks.set(t.constructor as TaskConstructor<any>, t));
 
     const helper = new BuildHelper(
       this.context,
