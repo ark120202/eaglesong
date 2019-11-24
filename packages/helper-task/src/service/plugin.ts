@@ -7,8 +7,3 @@ export interface ServicePluginApi {
   triggerChange: TriggerChange;
   context: string;
 }
-
-export type ServicePlugin<THooks, TApi extends ServicePluginApi> = (
-  hooks: THooks,
-  api: TApi,
-) => void;

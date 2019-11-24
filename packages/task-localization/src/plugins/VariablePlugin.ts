@@ -1,8 +1,8 @@
+import { getLocalization } from 'dota-data/lib/localization';
 import _ from 'lodash';
 import path from 'upath';
 import { Plugin } from '../service';
-import { FlatLocalizationFiles, DotaLanguage } from '../types';
-import { getLocalization } from 'dota-data/lib/localization';
+import { DotaLanguage, FlatLocalizationFiles } from '../types';
 
 type Filter = (value: string, parameters: unknown[]) => string | { error: string };
 const defaultFilters: Record<string, Filter> = {
@@ -93,7 +93,7 @@ function findString(files: FlatLocalizationFiles, token: string) {
 }
 
 const fetchedLanguages = new Map<DotaLanguage, Record<string, string>>();
-export const VariablePlugin: Plugin = (hooks, { error: addError, context }) => {
+export const VariablePlugin: Plugin = ({ hooks, error: addError, context }) => {
   hooks.postprocess.tapPromise('VariablePlugin', async (files, language) => {
     function localize(fileName: string, key: string, value: string, keyStack: string[]) {
       const firstKey = _.defaultTo(keyStack[0], key);

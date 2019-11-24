@@ -66,7 +66,7 @@ class CustomEnumsSchema extends EnumsSchema {
   }
 }
 
-export const BetterEnumsPlugin: Plugin = (hooks, { collectedSchemas }) => {
+export const BetterEnumsPlugin: Plugin = ({ hooks, collectedSchemas }) => {
   hooks.schemas.tap('BetterEnumsPlugin', schemas =>
     Object.values(schemas).forEach(schema =>
       schema

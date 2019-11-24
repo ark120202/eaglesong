@@ -3,7 +3,7 @@ import { Plugin } from '../service';
 
 const DOTA_VARIABLE_REGEXP = /^%?\+?\$\w+$/;
 
-export const DoNotLocalizeDotaVariablesPlugin: Plugin = hooks => {
+export const DoNotLocalizeDotaVariablesPlugin: Plugin = ({ hooks }) => {
   hooks.push.tap('DoNotLocalizeDotaVariablesPlugin', files =>
     _.each(files, file =>
       _.each(file, (v, k) => {

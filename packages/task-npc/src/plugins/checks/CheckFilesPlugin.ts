@@ -7,7 +7,7 @@ import { Plugin } from '../../service';
 
 const stringResourcePatterns = _.mapValues(resourcePatterns, String);
 
-export const CheckFilesPlugin: Plugin = (hooks, { error, context, collectedSchemas }) => {
+export const CheckFilesPlugin: Plugin = ({ hooks, error, context, collectedSchemas }) => {
   hooks.transform.tapPromise('CheckFilesPlugin', async (files, group) => {
     if (collectedSchemas[group] == null) return;
     const promises: Promise<void>[] = [];

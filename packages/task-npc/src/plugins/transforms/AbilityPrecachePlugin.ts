@@ -5,7 +5,7 @@ import vdf from 'vdf-extra';
 import { Plugin } from '../../service';
 
 const fileFilter = new Set(['npc_items_custom', 'npc_abilities_custom']);
-export const AbilityPrecachePlugin: Plugin = hooks => {
+export const AbilityPrecachePlugin: Plugin = ({ hooks }) => {
   hooks.schemas.tap('AbilityPrecachePlugin', schemas =>
     [schemas.npc_items_custom, schemas.npc_abilities_custom].forEach(schema =>
       schema

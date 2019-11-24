@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { Plugin } from '../service';
 
-export const NestingPlugin: Plugin = hooks => {
+export const NestingPlugin: Plugin = ({ hooks }) => {
   hooks.preprocess.tap('NestingPlugin', file => {
     function flatten(object: Record<string, any>, previousKey?: string) {
       _.each(object, (value, key) => {

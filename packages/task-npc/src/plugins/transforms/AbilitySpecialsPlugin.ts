@@ -22,7 +22,7 @@ const inferVarType = (value: unknown) => {
 };
 
 const fileFilter = new Set(['npc_items_custom', 'npc_abilities_custom']);
-export const AbilitySpecialsPlugin: Plugin = (hooks, { error }) => {
+export const AbilitySpecialsPlugin: Plugin = ({ hooks, error }) => {
   hooks.schemas.tap('AbilitySpecialsPlugin', schemas =>
     [schemas.npc_items_custom, schemas.npc_abilities_custom].forEach(schema =>
       schema.getRestRootsLike(s.ObjectSchema).forEach(element =>

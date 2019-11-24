@@ -3,7 +3,6 @@ import { RootSchema } from '@dota-data/scripts/lib/schema';
 import {
   NamedType,
   ServiceErrorReporter,
-  ServicePlugin,
   ServicePluginApi,
   ServiceProvider,
   TriggerChange,
@@ -13,8 +12,8 @@ import pProps from 'p-props';
 import { AsyncSeriesHook } from 'tapable';
 import path from 'upath';
 
-export type Plugin = ServicePlugin<Hooks, PluginApi>;
-export type PluginApi = ServicePluginApi & { collectedSchemas: Schemas };
+export type Plugin = (api: PluginApi) => void;
+export type PluginApi = ServicePluginApi & { hooks: Hooks; collectedSchemas: Schemas };
 export type Schemas = Record<string, RootSchema>;
 
 export type File = Record<string, any> & NamedType;
@@ -57,6 +56,7 @@ export class NpcService {
     });
 
     const api: PluginApi = {
+      hooks: this.hooks,
       serviceProvider,
       error,
       triggerChange,
@@ -64,7 +64,7 @@ export class NpcService {
       collectedSchemas,
     };
 
-    plugins.forEach(p => p(this.hooks, api));
+    plugins.forEach(p => p(api));
   }
 
   private groups: FileGroups = {};

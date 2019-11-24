@@ -1,7 +1,6 @@
 import {
   NamedType,
   ServiceErrorReporter,
-  ServicePlugin,
   ServicePluginApi,
   ServiceProvider,
   TriggerChange,
@@ -31,8 +30,8 @@ export {
   ProviderOption,
 };
 
-export type Plugin = ServicePlugin<Hooks, PluginApi>;
-export type PluginApi = ServicePluginApi;
+export type Plugin = (api: PluginApi) => void;
+export type PluginApi = ServicePluginApi & { hooks: Hooks };
 
 function getFilesMeta(files: LocalizationFiles) {
   const fileList = Object.values(files);
@@ -86,8 +85,16 @@ export class LocalizationService {
     providerOption: ProviderOption,
   ) {
     this.provider = resolveProviderOption(providerOption);
-    const api: PluginApi = { serviceProvider, error, triggerChange, context };
-    plugins.forEach(p => p(this.hooks, api));
+
+    const api: PluginApi = {
+      hooks: this.hooks,
+      serviceProvider,
+      error,
+      triggerChange,
+      context,
+    };
+
+    plugins.forEach(p => p(api));
   }
 
   private readonly baseFiles: FlatLocalizationFiles = {};

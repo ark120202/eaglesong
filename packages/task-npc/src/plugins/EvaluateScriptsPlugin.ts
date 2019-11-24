@@ -4,8 +4,8 @@ import { Plugin } from '../service';
 
 const EXTENSIONS: ReadonlySet<string> = new Set(['.ts', '.tsx', '.js', '.jsx']);
 
-export const EvaluateScriptsPlugin: Plugin = (hooks, api) => {
-  hooks.transform.tapPromise({ name: 'ExportDefaultPlugin', stage: -20 }, async files => {
+export const EvaluateScriptsPlugin: Plugin = api => {
+  api.hooks.transform.tapPromise({ name: 'ExportDefaultPlugin', stage: -20 }, async files => {
     await Promise.all(
       Object.entries(files).map(async ([fileName, file]) => {
         if (!EXTENSIONS.has(path.extname(fileName))) return;

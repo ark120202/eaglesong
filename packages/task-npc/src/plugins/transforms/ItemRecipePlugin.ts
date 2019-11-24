@@ -7,7 +7,7 @@ export interface Recipe {
   requirements: string[] | string[][];
 }
 
-export const ItemRecipePlugin: Plugin = hooks => {
+export const ItemRecipePlugin: Plugin = ({ hooks }) => {
   hooks.schemas.tap('ItemRecipePlugin', schemas =>
     schemas.npc_items_custom.getRestRootsLike(s.ObjectSchema).forEach(element =>
       element.field(

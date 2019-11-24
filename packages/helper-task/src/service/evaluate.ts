@@ -6,14 +6,14 @@ export interface FunctionApi extends ServicePluginApi {
 }
 
 export async function evaluateServiceScript(
-  pluginApi: ServicePluginApi,
+  api: ServicePluginApi,
   file: Record<string, unknown>,
   fileName: string,
 ) {
   const functionApi: FunctionApi = {
-    ...pluginApi,
+    ...api,
     fileName,
-    triggerChange: () => pluginApi.triggerChange(fileName),
+    triggerChange: () => api.triggerChange(fileName),
   };
 
   await Promise.all(
@@ -22,9 +22,9 @@ export async function evaluateServiceScript(
       .map(async ([key, value]) => {
         try {
           file[key] = await value(functionApi);
-          if (file[key] == null) pluginApi.error(fileName, `${key}() returned ${file[key]}`);
+          if (file[key] == null) api.error(fileName, `${key}() returned ${file[key]}`);
         } catch (error) {
-          pluginApi.error(fileName, error.message);
+          api.error(fileName, error.message);
         }
       }),
   );
