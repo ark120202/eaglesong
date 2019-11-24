@@ -1,3 +1,4 @@
+import assert from 'assert';
 import path from 'upath';
 import { BuildHelper } from '../helper';
 import { ServiceErrorReporter } from '../service';
@@ -83,9 +84,7 @@ export abstract class Task<T> {
   }
 
   public error: ServiceErrorReporter = (file, message, level = 'error') => {
-    if (file != null && !path.isAbsolute(file)) {
-      throw new Error('Task.error got relative file path. Absolute path is expected.');
-    }
+    assert(file == null || path.isAbsolute(file), 'file path should be absolute');
 
     if (this.state !== TaskState.Working) {
       throw new Error('Task shown signs of life in incorrect state');
@@ -102,11 +101,11 @@ export abstract class Task<T> {
     this.errors = [];
   }
 
-  public async import(id: string) {
+  public async import(filePath: string) {
     try {
-      return await this._helper.import(id);
+      return await this._helper.import(filePath);
     } catch (error) {
-      this.error(id, error.message);
+      this.error(filePath, error.message);
       return {};
     }
   }
