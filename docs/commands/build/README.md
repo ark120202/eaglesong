@@ -24,14 +24,14 @@ Generates support information, such as TypeScript declarations.
 ---
 
 Every task is located in it's own package, prefixed with `@eaglesong/task-`. All standard tasks are
-wrapped in a `@eaglesong/tasks` helper:
+included in a `@eaglesong/tasks` package:
 
 ```ts
-import { buildTasks } from '@eaglesong/tasks';
+import { getTasks } from '@eaglesong/tasks';
 import { Options } from 'eaglesong';
 
 const config: Options = {
-  tasks: buildTasks(/* Task options */),
+  tasks: getTasks(/* Task options */),
 };
 
 export default config;

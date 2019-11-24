@@ -4,7 +4,7 @@ By default Eaglesong ships few standard plugins that change the way you can writ
 can disable them with a `defaultPlugins` option.
 
 ```ts
-buildTasks({
+getTasks({
   npc: {
     defaultPlugins: {
       EnsureSchemaExistsPlugin: false,

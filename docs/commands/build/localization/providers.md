@@ -29,17 +29,15 @@ Currently Eaglesong includes one builtin custom provider, for [OneSky](https://w
 localization platform. It can be used by specifying a `provider` option:
 
 ```ts
-const config: Options = {
-  tasks: buildTasks({
-    localization: {
-      provider: {
-        type: 'onesky',
-        apiKey: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-        projectId: 123456,
-      },
+getTasks({
+  localization: {
+    provider: {
+      type: 'onesky',
+      apiKey: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+      projectId: 123456,
     },
-  }),
-};
+  },
+});
 ```
 
 The exact workflow with custom providers depends on the API that localization platform provides.

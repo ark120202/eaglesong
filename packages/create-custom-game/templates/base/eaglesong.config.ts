@@ -1,4 +1,4 @@
-import { buildTasks } from '@eaglesong/tasks';
+import { getTasks } from '@eaglesong/tasks';
 import { Options } from 'eaglesong';
 
 const config: Options = {
@@ -10,7 +10,7 @@ const config: Options = {
       },
     },
   },
-  tasks: buildTasks($$buildTasks$$),
+  tasks: getTasks($$getTasks$$),
 };
 
 export default config;

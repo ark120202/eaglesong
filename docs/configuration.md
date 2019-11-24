@@ -4,11 +4,11 @@ Eaglesong requires a `eaglesong.config.ts` configuration file to exist in the ro
 It should be a TypeScript file, with a default export:
 
 ```ts
-import { buildTasks } from '@eaglesong/tasks';
+import { getTasks } from '@eaglesong/tasks';
 import { Options } from 'eaglesong';
 
 const config: Options = {
-  tasks: buildTasks(/* Task options */),
+  tasks: getTasks(/* Task options */),
 };
 
 export default config;

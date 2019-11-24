@@ -60,7 +60,7 @@ async function main() {
     fs.outputJson(path.join(internalName, filePath), data, { spaces: 2 });
 
   const templates = new Set(['base']);
-  const variables = new Map([['displayName', displayName], ['buildTasks', '']]);
+  const variables = new Map([['displayName', displayName], ['getTasks', '']]);
 
   const packageJson: Record<string, any> = {
     name: internalName,
@@ -132,7 +132,7 @@ async function main() {
   if (!usePrettier) disabledTasks.push('prettier');
   if (disabledTasks.length > 0) {
     variables.set(
-      'buildTasks',
+      'getTasks',
       ['{', ...disabledTasks.map(task => `    ${task}: false,`), '  }'].join('\n'),
     );
   }

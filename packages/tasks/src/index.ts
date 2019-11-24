@@ -19,15 +19,17 @@ export interface GetTasksOptions {
   localization?: null | boolean | LocalizationOptions;
   vscripts?: null | boolean;
   panorama?: null | boolean | PanoramaOptions;
+
+  extraTasks?: (Task<any> | Promise<Task<any>>)[];
 }
 
-export function buildTasks(options: GetTasksOptions = {}) {
-  const create = Object.assign(() => getTasks(create.options), { options });
+export function getTasks(options: GetTasksOptions = {}) {
+  const create = Object.assign(() => loadTasks(create.options), { options });
   return create;
 }
 
-export async function getTasks(options: GetTasksOptions = {}): Promise<Task<any>[]> {
-  const tasks: Promise<Task<any>>[] = [];
+async function loadTasks(options: GetTasksOptions = {}): Promise<Task<any>[]> {
+  const tasks: Promise<Task<any>>[] = (options.extraTasks || []).map(x => Promise.resolve(x));
 
   const addTask = <T>(
     load: () => Promise<{ default: new (arg?: T) => Task<T> }>,
@@ -37,7 +39,7 @@ export async function getTasks(options: GetTasksOptions = {}): Promise<Task<any>
     tasks.push(
       (async () => {
         const LoadedTask = (await load()).default;
-        return option != null && option !== true ? new LoadedTask(option) : new LoadedTask();
+        return option == null || option === true ? new LoadedTask() : new LoadedTask(option);
       })(),
     );
   };
