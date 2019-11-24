@@ -3,11 +3,8 @@ import PQueue from 'p-queue';
 import { WatchEvent } from '../helper';
 import { Task, TaskError, TaskState } from './task';
 
-type TransformWatchEvent = WatchEvent | { event: 'synthetic'; file: string };
-
 export abstract class TransformTask<T> extends Task<T> {
   protected abstract pattern: string | string[];
-  private readonly syntheticChanges = new Set<string>();
   private readonly queue = new PQueue({ autoStart: false });
 
   public apply() {
@@ -23,21 +20,14 @@ export abstract class TransformTask<T> extends Task<T> {
     });
   }
 
-  protected triggerChange(file: string) {
-    if (this.syntheticChanges.has(file)) return;
-    this.syntheticChanges.add(file);
-    this.addEventToStack({ event: 'synthetic', file });
-    setImmediate(() => this.syntheticChanges.delete(file));
-  }
-
   protected transformFile?(_filePath: string): void | Promise<void>;
   protected removeFile?(_filePath: string): void | Promise<void>;
   protected beforeWatch?(_initial: boolean): void | Promise<void>;
   protected afterWatch?(_initial: boolean): void | Promise<void>;
 
-  private addEventToStack(info: TransformWatchEvent) {
+  private addEventToStack(event: WatchEvent) {
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    this.queue.add(() => this.processWatchEvent(info));
+    this.queue.add(() => this.processWatchEvent(event));
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     if (this.state !== TaskState.Working) this.startWatchCycle();
   }
@@ -71,14 +61,13 @@ export abstract class TransformTask<T> extends Task<T> {
 
   private readonly watchEventErrors = new Map<string, TaskError[]>();
   private readonly currentCycleFiles = new Set<string>();
-  private async processWatchEvent({ event, file }: TransformWatchEvent) {
+  private async processWatchEvent({ event, file }: WatchEvent) {
     this.currentCycleFiles.add(file);
     this.watchEventErrors.delete(file);
     const oldErrors = [...this.errors];
     switch (event) {
       case 'add':
       case 'change':
-      case 'synthetic':
         if (this.transformFile) await this.transformFile(file);
         break;
       case 'unlink':

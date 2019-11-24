@@ -5,7 +5,6 @@ import {
   ServiceErrorReporter,
   ServicePluginApi,
   ServiceProvider,
-  TriggerChange,
 } from '@eaglesong/helper-task';
 import _ from 'lodash';
 import pProps from 'p-props';
@@ -44,7 +43,6 @@ export class NpcService {
     plugins: Plugin[],
     serviceProvider: ServiceProvider,
     private readonly error: ServiceErrorReporter,
-    triggerChange: TriggerChange,
   ) {
     this.hooks.schemas.tap({ name: 'NpcService', stage: -1000 }, schemas => {
       Object.assign(schemas, _.cloneDeep(standardSchemas));
@@ -59,7 +57,6 @@ export class NpcService {
       hooks: this.hooks,
       serviceProvider,
       error,
-      triggerChange,
       context,
       collectedSchemas,
     };

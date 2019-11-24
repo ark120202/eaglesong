@@ -2,7 +2,6 @@ import { ServicePluginApi } from './plugin';
 
 export interface FunctionApi extends ServicePluginApi {
   fileName: string;
-  triggerChange(): void;
 }
 
 export async function evaluateServiceScript(
@@ -10,12 +9,7 @@ export async function evaluateServiceScript(
   file: Record<string, unknown>,
   fileName: string,
 ) {
-  const functionApi: FunctionApi = {
-    ...api,
-    fileName,
-    triggerChange: () => api.triggerChange(fileName),
-  };
-
+  const functionApi: FunctionApi = { ...api, fileName };
   await Promise.all(
     Object.entries(file)
       .filter((x): x is [string, (...args: any) => any] => typeof x[1] === 'function')

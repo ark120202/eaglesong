@@ -1,9 +1,4 @@
-import {
-  ServiceErrorReporter,
-  ServiceProvider,
-  TransformTask,
-  TriggerChange,
-} from '@eaglesong/helper-task';
+import { ServiceErrorReporter, ServiceProvider, TransformTask } from '@eaglesong/helper-task';
 import pProps from 'p-props';
 import path from 'upath';
 import * as defaultPlugins from './plugins';
@@ -29,7 +24,6 @@ export function createLocalizationService(
   options: Options,
   serviceProvider: ServiceProvider,
   error: ServiceErrorReporter,
-  triggerChange: TriggerChange,
 ) {
   const plugins = [];
 
@@ -50,7 +44,6 @@ export function createLocalizationService(
     plugins,
     serviceProvider,
     error,
-    triggerChange,
     options.defaultLanguage != null ? options.defaultLanguage : 'english',
     options.provider,
   );
@@ -83,7 +76,6 @@ export default class LocalizationTask extends TransformTask<Options> {
               message,
               level,
             ),
-          fileName => this.triggerChange(fileName),
         ),
       );
     });

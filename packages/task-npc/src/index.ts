@@ -1,9 +1,4 @@
-import {
-  ServiceErrorReporter,
-  ServiceProvider,
-  TransformTask,
-  TriggerChange,
-} from '@eaglesong/helper-task';
+import { ServiceErrorReporter, ServiceProvider, TransformTask } from '@eaglesong/helper-task';
 import fs from 'fs-extra';
 import _ from 'lodash';
 import path from 'upath';
@@ -22,7 +17,6 @@ export function createNpcService(
   options: Options,
   serviceProvider: ServiceProvider,
   error: ServiceErrorReporter,
-  triggerChange: TriggerChange,
 ) {
   const plugins = [];
 
@@ -38,7 +32,7 @@ export function createNpcService(
     plugins.push(...options.customPlugins);
   }
 
-  return new NpcService(context, plugins, serviceProvider, error, triggerChange);
+  return new NpcService(context, plugins, serviceProvider, error);
 }
 
 export default class NpcTask extends TransformTask<Options> {
@@ -68,7 +62,6 @@ export default class NpcTask extends TransformTask<Options> {
               message,
               level,
             ),
-          fileName => this.triggerChange(fileName),
         ),
       );
     });

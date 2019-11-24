@@ -3,7 +3,6 @@ import {
   ServiceErrorReporter,
   ServicePluginApi,
   ServiceProvider,
-  TriggerChange,
 } from '@eaglesong/helper-task';
 import dedent from 'dedent';
 import _ from 'lodash';
@@ -80,7 +79,6 @@ export class LocalizationService {
     plugins: Plugin[],
     serviceProvider: ServiceProvider,
     private readonly error: ServiceErrorReporter,
-    triggerChange: TriggerChange,
     private readonly defaultLanguage: DotaLanguage,
     providerOption: ProviderOption,
   ) {
@@ -90,7 +88,6 @@ export class LocalizationService {
       hooks: this.hooks,
       serviceProvider,
       error,
-      triggerChange,
       context,
     };
 
