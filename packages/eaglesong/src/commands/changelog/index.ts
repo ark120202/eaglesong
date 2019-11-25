@@ -1,10 +1,4 @@
-import {
-  BuildHelper,
-  createHooks,
-  ServiceMap,
-  TaskConstructor,
-  TaskMap,
-} from '@eaglesong/helper-task';
+import { BuildHelper, createHooks, TaskConstructor, TaskMap } from '@eaglesong/helper-task';
 import _ from 'lodash';
 import simpleGit from 'simple-git/promise';
 import { CommandGroup } from '../../command';
@@ -41,7 +35,6 @@ export default class ChangelogCommand extends CommandGroup {
         if (tasksOption.length === 0) throw new Error('Builder got empty task list');
         tasksOption.forEach(t => tasks.set(t.constructor as TaskConstructor<any>, t));
 
-        const services: ServiceMap = new Map();
         const hooks = createHooks();
         const context = isOld
           ? await makeFakeRepo(this.context, previousHash, ['src', 'tsconfig.json'])
@@ -51,7 +44,6 @@ export default class ChangelogCommand extends CommandGroup {
           undefined,
           await this.getAddonName(),
           {},
-          services,
           hooks,
           tasks,
           false,
@@ -65,7 +57,7 @@ export default class ChangelogCommand extends CommandGroup {
 
         await Promise.all([...tasks.values()].map(p => p.apply()));
         await hooks.boot.promise();
-        return { isOld, hooks, tasks, services };
+        return { hooks, tasks };
       }),
     );
 
@@ -84,7 +76,6 @@ export default class ChangelogCommand extends CommandGroup {
     await current.hooks.changelog.promise({
       write: message => console.log(message),
       oldTaskProvider: x => old.tasks.get(x),
-      oldServiceProvider: x => old.services.get(x),
     });
   }
 }

@@ -1,4 +1,4 @@
-import { ServiceErrorReporter, ServiceProvider, TransformTask } from '@eaglesong/helper-task';
+import { ServiceErrorReporter, TaskProvider, TransformTask } from '@eaglesong/helper-task';
 import fs from 'fs-extra';
 import _ from 'lodash';
 import path from 'upath';
@@ -15,7 +15,7 @@ export interface Options {
 export function createNpcService(
   context: string,
   options: Options,
-  serviceProvider: ServiceProvider,
+  taskProvider: TaskProvider,
   error: ServiceErrorReporter,
 ) {
   const plugins = [];
@@ -32,7 +32,7 @@ export function createNpcService(
     plugins.push(...options.customPlugins);
   }
 
-  return new NpcService(context, plugins, serviceProvider, error);
+  return new NpcService(context, plugins, taskProvider, error);
 }
 
 export default class NpcTask extends TransformTask<Options> {
@@ -42,29 +42,19 @@ export default class NpcTask extends TransformTask<Options> {
     super(options);
   }
 
-  private get service() {
-    const service = this.serviceProvider(NpcService);
-    if (!service) throw new Error('Service not found');
-
-    return service;
-  }
-
+  private service!: NpcService;
   public apply() {
-    this.hooks.boot.tap(this.constructor.name, () => {
-      this.registerService(
-        createNpcService(
-          this.context,
-          this.options,
-          this.serviceProvider,
-          ({ fileName, ...error }) => {
-            this.error({
-              ...error,
-              filePath: fileName != null ? this.resolvePath(`src/npc/${fileName}`) : fileName,
-            });
-          },
-        ),
-      );
-    });
+    this.service = createNpcService(
+      this.context,
+      this.options,
+      this.taskProvider,
+      ({ fileName, ...error }) => {
+        this.error({
+          ...error,
+          filePath: fileName != null ? this.resolvePath(`src/npc/${fileName}`) : fileName,
+        });
+      },
+    );
 
     this.hooks.preBuild.tapPromise(this.constructor.name, async () => {
       const schemas: Schemas = {};

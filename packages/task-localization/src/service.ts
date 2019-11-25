@@ -2,7 +2,7 @@ import {
   NamedType,
   ServiceErrorReporter,
   ServicePluginApi,
-  ServiceProvider,
+  TaskProvider,
 } from '@eaglesong/helper-task';
 import dedent from 'dedent';
 import _ from 'lodash';
@@ -77,7 +77,7 @@ export class LocalizationService {
   constructor(
     context: string,
     plugins: Plugin[],
-    serviceProvider: ServiceProvider,
+    taskProvider: TaskProvider,
     private readonly error: ServiceErrorReporter,
     private readonly defaultLanguage: DotaLanguage,
     providerOption: ProviderOption,
@@ -86,7 +86,7 @@ export class LocalizationService {
 
     const api: PluginApi = {
       hooks: this.hooks,
-      serviceProvider,
+      taskProvider,
       error,
       context,
     };

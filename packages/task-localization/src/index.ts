@@ -1,4 +1,4 @@
-import { ServiceErrorReporter, ServiceProvider, TransformTask } from '@eaglesong/helper-task';
+import { ServiceErrorReporter, TaskProvider, TransformTask } from '@eaglesong/helper-task';
 import pProps from 'p-props';
 import path from 'upath';
 import * as defaultPlugins from './plugins';
@@ -22,7 +22,7 @@ export interface Options {
 export function createLocalizationService(
   context: string,
   options: Options,
-  serviceProvider: ServiceProvider,
+  taskProvider: TaskProvider,
   error: ServiceErrorReporter,
 ) {
   const plugins = [];
@@ -42,7 +42,7 @@ export function createLocalizationService(
   return new LocalizationService(
     context,
     plugins,
-    serviceProvider,
+    taskProvider,
     error,
     options.defaultLanguage != null ? options.defaultLanguage : 'english',
     options.provider,
@@ -56,30 +56,19 @@ export default class LocalizationTask extends TransformTask<Options> {
     super(options);
   }
 
-  private get service() {
-    const service = this.serviceProvider(LocalizationService);
-    if (!service) throw new Error('Service not found');
-
-    return service;
-  }
-
+  private service!: LocalizationService;
   public apply() {
-    this.hooks.boot.tap(this.constructor.name, () => {
-      this.registerService(
-        createLocalizationService(
-          this.context,
-          this.options,
-          this.serviceProvider,
-          ({ fileName, ...error }) => {
-            this.error({
-              ...error,
-              filePath:
-                fileName != null ? this.resolvePath(`src/localization/${fileName}`) : fileName,
-            });
-          },
-        ),
-      );
-    });
+    this.service = createLocalizationService(
+      this.context,
+      this.options,
+      this.taskProvider,
+      ({ fileName, ...error }) => {
+        this.error({
+          ...error,
+          filePath: fileName != null ? this.resolvePath(`src/localization/${fileName}`) : fileName,
+        });
+      },
+    );
 
     super.apply();
   }

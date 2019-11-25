@@ -1,7 +1,8 @@
-import { ServiceErrorReporter, ServiceProvider } from '.';
+import { ServiceErrorReporter } from '.';
+import { TaskProvider } from '../tasks';
 
 export interface ServicePluginApi {
-  serviceProvider: ServiceProvider;
+  taskProvider: TaskProvider;
   error: ServiceErrorReporter;
   context: string;
 }

@@ -4,7 +4,7 @@ import {
   NamedType,
   ServiceErrorReporter,
   ServicePluginApi,
-  ServiceProvider,
+  TaskProvider,
 } from '@eaglesong/helper-task';
 import _ from 'lodash';
 import pProps from 'p-props';
@@ -41,7 +41,7 @@ export class NpcService {
   constructor(
     context: string,
     plugins: Plugin[],
-    serviceProvider: ServiceProvider,
+    taskProvider: TaskProvider,
     private readonly error: ServiceErrorReporter,
   ) {
     this.hooks.schemas.tap({ name: 'NpcService', stage: -1000 }, schemas => {
@@ -55,7 +55,7 @@ export class NpcService {
 
     const api: PluginApi = {
       hooks: this.hooks,
-      serviceProvider,
+      taskProvider,
       error,
       context,
       collectedSchemas,

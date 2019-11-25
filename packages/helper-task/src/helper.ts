@@ -1,11 +1,11 @@
+import assert from 'assert';
 import chokidar from 'chokidar';
 import fs from 'fs-extra';
 import globby from 'globby';
 import { AsyncParallelHook } from 'tapable';
 import path from 'upath';
-import assert from 'assert';
 import vdf from 'vdf-extra';
-import { NamedType, ServiceConstructor, ServiceMap, ServiceProvider } from './service';
+import { NamedType } from './service';
 import { ReadonlyTaskMap, TaskProvider } from './tasks';
 import { _import } from './utils';
 
@@ -46,7 +46,6 @@ const createHooksInternal = () => ({
       {
         write(message: string): void;
         oldTaskProvider: TaskProvider;
-        oldServiceProvider: ServiceProvider;
       },
     ]
   >(['options']),
@@ -58,7 +57,6 @@ export class BuildHelper {
     public readonly dotaPath: string | undefined,
     public readonly addonName: string,
     public readonly outputOptions: OutputOptions,
-    private readonly services: ServiceMap,
     public readonly hooks: Readonly<Hooks>,
     private readonly tasks: ReadonlyTaskMap,
     public readonly isWatching: boolean,
@@ -122,10 +120,6 @@ export class BuildHelper {
   }
 
   public taskProvider: TaskProvider = key => this.tasks.get(key);
-  public serviceProvider: ServiceProvider = key => this.services.get(key);
-  public registerService(service: object) {
-    this.services.set(service.constructor as ServiceConstructor, service);
-  }
 
   public hasFlag(flag: string) {
     return Boolean(this.flags[flag]);
