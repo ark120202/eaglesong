@@ -24,7 +24,7 @@ export default class ChangelogCommand extends CommandGroup {
       throw new Error(`"${this.context}" is not a valid git repository`);
     }
 
-    const previousHash = this.args.previous || (await this.git.tags()).latest || 'HEAD';
+    const previousHash = this.args.previous ?? (await this.git.tags()).latest ?? 'HEAD';
 
     const [old, current] = await Promise.all(
       [true, false].map(async isOld => {

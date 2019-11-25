@@ -62,7 +62,7 @@ function createCompiler(
   let plugins: webpack.Plugin[] = [];
   if (options.plugins !== false) {
     if (options.plugins == null || options.plugins === true) {
-      const ignoredPlugins = options.ignoredPlugins != null ? options.ignoredPlugins : [];
+      const ignoredPlugins = options.ignoredPlugins ?? [];
       plugins = oldCompiler.options.plugins!.filter(
         p => !ignoredPlugins.includes(p.constructor.name),
       );

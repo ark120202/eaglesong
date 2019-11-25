@@ -72,8 +72,9 @@ export class PanoramaEntriesPlugin {
       compilation.hooks.reviveChunks.tap(this.constructor.name, chunks => {
         for (const chunk of chunks) {
           const entry = entries.find(e => e.name === chunk.name);
-          if (!entry || entry.type === null) return;
-          (chunk as XmlChunk).__type = entry.type;
+          if (entry && entry.type != null) {
+            (chunk as XmlChunk).__type = entry.type;
+          }
         }
       });
     });

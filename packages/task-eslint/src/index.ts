@@ -6,7 +6,7 @@ export interface Options {
 }
 
 export default class ESLintTask extends TransformTask<Options> {
-  private readonly extensions = this.options.extensions || ['.js', '.jsx', '.ts', '.tsx'];
+  private readonly extensions = this.options.extensions ?? ['.js', '.jsx', '.ts', '.tsx'];
   private readonly cliEngine = new CLIEngine({ extensions: this.extensions });
   protected pattern = [`**/*{${this.extensions.join(',')}}`, '!node_modules'];
 

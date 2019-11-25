@@ -18,8 +18,8 @@ const isPrettierSyntaxError = (error: unknown): error is PrettierSyntaxError =>
 
 const { languages } = prettier.getSupportInfo();
 const prettierPatterns = languages.flatMap(language => [
-  ...(language.filenames || []).map(fileName => `**/${fileName}`),
-  ...(language.extensions || []).map(extension => `**/*${extension}`),
+  ...(language.filenames ?? []).map(fileName => `**/${fileName}`),
+  ...(language.extensions ?? []).map(extension => `**/*${extension}`),
 ]);
 
 export default class PrettierTask extends TransformTask<void> {
@@ -59,8 +59,8 @@ export default class PrettierTask extends TransformTask<void> {
     }
 
     for (const difference of generateDifferences(fileContent, formatted)) {
-      const insertText = showInvisibles(difference.insertText != null ? difference.insertText : '');
-      const deleteText = showInvisibles(difference.deleteText != null ? difference.deleteText : '');
+      const insertText = showInvisibles(difference.insertText ?? '');
+      const deleteText = showInvisibles(difference.deleteText ?? '');
       const { line, column } = lines.locationForIndex(difference.offset)!;
       const position = `(${line}:${column})`;
 

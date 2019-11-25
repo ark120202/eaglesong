@@ -36,7 +36,7 @@ export class Compilation {
   constructor(program: ts.Program, protected host: CompilationHost = ts.sys) {
     this.options = program.getCompilerOptions();
     // TODO: Infer
-    this.rootDir = this.options.rootDir || '';
+    this.rootDir = this.options.rootDir ?? '';
   }
 
   protected used = false;
@@ -48,7 +48,7 @@ export class Compilation {
       .filter(({ lua }) => lua !== undefined)
       .forEach(({ fileName }) => this.files.add(fileName));
 
-    const emitBOM = this.options.emitBOM || false;
+    const emitBOM = this.options.emitBOM ?? false;
     for (const { fileName, lua, sourceMap, declaration, declarationMap } of files) {
       const pathWithoutExtension = this.toAbsolutePath(this.toOutputStructure(fileName));
 
@@ -115,7 +115,7 @@ export class Compilation {
     }
 
     const pathWithoutExtension = this.toAbsolutePath(this.toOutputStructure(filePath));
-    this.host.writeFile(`${pathWithoutExtension}.lua`, result, this.options.emitBOM || false);
+    this.host.writeFile(`${pathWithoutExtension}.lua`, result, this.options.emitBOM ?? false);
   }
 
   protected transformLuaFile(filePath: string, fileContent: string) {
@@ -150,7 +150,7 @@ export class Compilation {
           if (typeof lua === 'string') {
             pkg.main = lua;
           } else if (typeof lua === 'object') {
-            const luaTarget = this.options.luaTarget || tstl.LuaTarget.LuaJIT;
+            const luaTarget = this.options.luaTarget ?? tstl.LuaTarget.LuaJIT;
             pkg.main = lua[luaTarget];
             if (pkg.main === undefined) {
               throw new Error(`${pkgFile} not supports Lua ${luaTarget} target`);

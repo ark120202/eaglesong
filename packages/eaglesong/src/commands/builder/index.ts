@@ -142,7 +142,7 @@ export default class BuilderCommand extends CommandGroup {
       this.context,
       noDota ? undefined : await this.getDotaPath(),
       await this.getAddonName(),
-      output != null ? output : {},
+      output ?? {},
       this.hooks,
       this.tasks,
       isWatching,

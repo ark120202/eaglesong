@@ -29,7 +29,7 @@ export function getTasks(options: GetTasksOptions = {}) {
 }
 
 async function loadTasks(options: GetTasksOptions = {}): Promise<Task<any>[]> {
-  const tasks: Promise<Task<any>>[] = (options.extraTasks || []).map(x => Promise.resolve(x));
+  const tasks: Promise<Task<any>>[] = (options.extraTasks ?? []).map(x => Promise.resolve(x));
 
   const addTask = <T>(
     load: () => Promise<{ default: new (arg?: T) => Task<T> }>,

@@ -44,7 +44,7 @@ export function createLocalizationService(
     plugins,
     taskProvider,
     error,
-    options.defaultLanguage != null ? options.defaultLanguage : 'english',
+    options.defaultLanguage ?? 'english',
     options.provider,
   );
 }
@@ -116,7 +116,7 @@ export default class LocalizationTask extends TransformTask<Options> {
     if (!this.service.canFetchLocalizations()) return;
 
     const localizations = await this.service.fetchLocalizations();
-    delete localizations[this.options.defaultLanguage || 'english'];
+    delete localizations[this.options.defaultLanguage ?? 'english'];
 
     await pProps(localizations, (file, lang) => this.emitFile(lang, file!));
   }

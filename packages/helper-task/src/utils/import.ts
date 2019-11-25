@@ -15,7 +15,7 @@ export async function _import(filePath: string): Promise<any> {
     case '.yaml': {
       const content = await fs.readFile(filePath, 'utf8');
       const result = yaml.safeLoad(content, { filename: filePath });
-      return result != null ? result : {};
+      return result ?? {};
     }
 
     case '.json': {

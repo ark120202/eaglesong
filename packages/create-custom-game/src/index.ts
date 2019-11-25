@@ -25,7 +25,7 @@ const isGitAvailable = (() => {
   }
 })();
 
-async function main() {
+async function main(): Promise<number> {
   const argv = yargs
     .alias('h', 'help')
     .alias('v', 'version')
@@ -196,10 +196,12 @@ async function main() {
 
     return 1;
   }
+
+  return 0;
 }
 
 (async () => {
-  process.exitCode = (await main()) || 0;
+  process.exitCode = await main();
 })().catch(error => {
   console.error(error);
   process.exitCode = 1;

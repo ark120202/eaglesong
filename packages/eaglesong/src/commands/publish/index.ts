@@ -108,7 +108,7 @@ export default class PublishCommand extends CommandGroup {
 
   private async run() {
     const options = await this.getOptions();
-    const strategies = (options.publish || {}).strategies || {};
+    const strategies = options.publish?.strategies ?? {};
     const strategyName = this.args.strategy;
     this.strategy = strategies[strategyName];
     if (this.strategy == null) {
@@ -150,7 +150,7 @@ export default class PublishCommand extends CommandGroup {
   private async validate() {
     if (!(await this.git.checkIsRepo())) return;
 
-    const { allowDirty, forceBranch } = this.strategy.validate || {};
+    const { allowDirty, forceBranch } = this.strategy.validate ?? {};
     const currentBranch = (await this.git.branchLocal()).current;
 
     if (forceBranch != null && currentBranch !== forceBranch && !this.args.anyBranch) {
