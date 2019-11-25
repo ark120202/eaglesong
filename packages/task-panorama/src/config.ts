@@ -46,6 +46,7 @@ export function createWebpackConfig({
     // https://github.com/webpack/webpack/pull/6447
     optimization: { splitChunks: { cacheGroups: { vendor: false, default: false } } },
     mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
+    plugins: [],
   };
 
   // TODO: Use custom plugin to pass actual path
