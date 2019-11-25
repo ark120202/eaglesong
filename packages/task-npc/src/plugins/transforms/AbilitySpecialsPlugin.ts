@@ -60,10 +60,10 @@ export const AbilitySpecialsPlugin: Plugin = ({ hooks, error }) => {
             const fullIndex = String(index + 1).padStart(2, '0');
             for (const [name, recommendation] of Object.entries(reservedFields)) {
               if (name in special) {
-                error(
+                error({
                   fileName,
-                  `${abilityName}.Specials(${name}) may not be specified, ${recommendation}.`,
-                );
+                  message: `${abilityName}.Specials(${name}) may not be specified, ${recommendation}.`,
+                });
               }
             }
 
@@ -71,17 +71,19 @@ export const AbilitySpecialsPlugin: Plugin = ({ hooks, error }) => {
             const mainCandidates = fields.filter(x => !(x in reservedFields) && !x.startsWith('$'));
 
             if (mainCandidates.length === 0) {
-              error(fileName, `${abilityName}.Specials[${index}] not contains special name`);
+              error({
+                fileName,
+                message: `${abilityName}.Specials[${index}] not contains special name`,
+              });
               return [fullIndex, special];
             }
 
             if (mainCandidates.length > 1) {
-              error(
+              const conflictingSpecials = mainCandidates.join(', ');
+              error({
                 fileName,
-                `${abilityName}.Specials[${index}] has conflicting specials: ${mainCandidates.join(
-                  ', ',
-                )}. If you meant to add metadata prepend it with $.`,
-              );
+                message: `${abilityName}.Specials[${index}] has conflicting specials: ${conflictingSpecials}. If you meant to add metadata prepend it with $.`,
+              });
               return [fullIndex, special];
             }
 
@@ -89,11 +91,11 @@ export const AbilitySpecialsPlugin: Plugin = ({ hooks, error }) => {
             const mainValue = special[mainName];
             const mainIndex = fields.findIndex(x => x === mainName);
             if (mainIndex !== 0) {
-              error(
+              error({
                 fileName,
-                `${abilityName}.Specials(${mainName}) has main field at ${mainIndex} index. Main field should come first.`,
-                'warning',
-              );
+                level: 'warning',
+                message: `${abilityName}.Specials(${mainName}) has main field at ${mainIndex} index. Main field should come first.`,
+              });
             }
 
             const newSpecial: Record<string, any> = {

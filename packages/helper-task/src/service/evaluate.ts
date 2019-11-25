@@ -16,9 +16,11 @@ export async function evaluateServiceScript(
       .map(async ([key, value]) => {
         try {
           file[key] = await value(functionApi);
-          if (file[key] == null) api.error(fileName, `${key}() returned ${file[key]}`);
+          if (file[key] == null) {
+            api.error({ fileName, message: `${key}() returned ${file[key]}` });
+          }
         } catch (error) {
-          api.error(fileName, error.message);
+          api.error({ fileName, message: error.message });
         }
       }),
   );

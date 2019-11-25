@@ -1,16 +1,20 @@
 import _ from 'lodash';
 import * as ts from 'typescript';
-import { ServiceErrorReporter } from '../service';
+import { ErrorReporter } from '../service';
 
-export const createDiagnosticReporter = (error: ServiceErrorReporter) => (diag: ts.Diagnostic) => {
+export const createDiagnosticReporter = (error: ErrorReporter) => (diag: ts.Diagnostic) => {
   const level = diag.category === ts.DiagnosticCategory.Error ? 'error' : 'warning';
   const message = ts.flattenDiagnosticMessageText(diag.messageText, '\n');
 
   if (diag.file && diag.start != null) {
     const { line, character } = diag.file.getLineAndCharacterOfPosition(diag.start);
-    error(diag.file.fileName, `(${line + 1},${character + 1}) TS${diag.code}: ${message}`, level);
+    error({
+      filePath: diag.file.fileName,
+      level,
+      message: `(${line + 1},${character + 1}) TS${diag.code}: ${message}`,
+    });
   } else {
-    error(null, message, level);
+    error({ level, message });
   }
 };
 

@@ -70,12 +70,13 @@ export default class LocalizationTask extends TransformTask<Options> {
           this.context,
           this.options,
           this.serviceProvider,
-          (fileName, message, level) =>
-            this.error(
-              fileName != null ? this.resolvePath(`src/localization/${fileName}`) : fileName,
-              message,
-              level,
-            ),
+          ({ fileName, ...error }) => {
+            this.error({
+              ...error,
+              filePath:
+                fileName != null ? this.resolvePath(`src/localization/${fileName}`) : fileName,
+            });
+          },
         ),
       );
     });
@@ -109,11 +110,11 @@ export default class LocalizationTask extends TransformTask<Options> {
       if (this.service.canPushBaseLocalizations()) {
         await this.service.pushBaseLocalizations(console.log);
       } else {
-        this.error(
-          null,
-          '--push-localization flag cannot be used with a localization provider without remote features',
-          'warning',
-        );
+        this.error({
+          level: 'warning',
+          message:
+            '--push-localization flag cannot be used with a localization provider without remote features',
+        });
       }
     }
 

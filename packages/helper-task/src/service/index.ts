@@ -23,11 +23,19 @@ export interface ReadonlyServiceMap extends ReadonlyMap<any, any> {
   has(key: ServiceConstructor): boolean;
 }
 
-export type ServiceErrorReporter = (
-  file: string | null | undefined,
-  message: string,
-  level?: 'warning' | 'error',
-) => void;
+export type ServiceErrorReporter = (error: ServiceErrorMessage) => void;
+export interface ServiceErrorMessage {
+  fileName?: string;
+  level?: 'warning' | 'error';
+  message: string;
+}
+
+export type ErrorReporter = (error: ErrorMessage) => void;
+export interface ErrorMessage {
+  filePath?: string;
+  level?: 'warning' | 'error';
+  message: string;
+}
 
 // A hack to make type alias display full name instead of value
 // eslint-disable-next-line @typescript-eslint/no-empty-interface

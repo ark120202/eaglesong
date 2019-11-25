@@ -53,8 +53,8 @@ export default class SoundsTask extends TransformTask<void> {
     const content: SoundEvents = await this.import(filePath);
     const valid = validateSoundEvents(content);
     if (!valid && validateSoundEvents.errors != null) {
-      for (const { message, dataPath } of validateSoundEvents.errors) {
-        this.error(filePath, `${dataPath} ${message}`);
+      for (const { dataPath, message } of validateSoundEvents.errors) {
+        this.error({ filePath, message: `${dataPath} ${message}` });
       }
     }
 
@@ -103,9 +103,12 @@ export default class SoundsTask extends TransformTask<void> {
           );
 
           if (!(await fs.pathExists(absolute))) {
-            this.error(filePath, `Could not find '${fileName}'`);
+            this.error({ filePath, message: `Could not find '${fileName}'` });
           } else if (!SUPPORTED_AUDIO_EXTENSIONS.includes(extension)) {
-            this.error(filePath, `'${fileName}' has an unsupported '${extension}' extension`);
+            this.error({
+              filePath,
+              message: `'${fileName}' has an unsupported '${extension}' extension`,
+            });
           }
 
           absolute = path.changeExt(absolute, '.vsnd');
@@ -114,13 +117,16 @@ export default class SoundsTask extends TransformTask<void> {
 
         if (fileName.startsWith('sounds')) {
           if (extension !== '.vsnd') {
-            this.error(filePath, `'${fileName}' expected to have a .vsnd extension`);
+            this.error({
+              filePath,
+              message: `'${fileName}' is expected to have a .vsnd extension`,
+            });
           }
         } else {
-          this.error(
+          this.error({
             filePath,
-            `'${fileName}' is invalid. Files should start with a './' (from current file), '/' (from root) or 'sounds' (no resolution)`,
-          );
+            message: `'${fileName}' is invalid. Files should start with a './' (from current file), '/' (from root) or 'sounds' (no resolution)`,
+          });
         }
 
         return fileName;

@@ -1,7 +1,7 @@
 import assert from 'assert';
 import path from 'upath';
 import { BuildHelper } from '../helper';
-import { ServiceErrorReporter } from '../service';
+import { ErrorReporter } from '../service';
 
 export enum TaskState {
   Working,
@@ -11,7 +11,7 @@ export enum TaskState {
 }
 
 export interface TaskError {
-  file?: string;
+  filePath?: string;
   message: string;
   level: 'warning' | 'error';
 }
@@ -83,18 +83,14 @@ export abstract class Task<T> {
     this._stateCallback();
   }
 
-  public error: ServiceErrorReporter = (file, message, level = 'error') => {
-    assert(file == null || path.isAbsolute(file), 'file path should be absolute');
+  public error: ErrorReporter = ({ filePath, level = 'error', message }) => {
+    assert(filePath == null || path.isAbsolute(filePath), 'file path should be absolute');
 
     if (this.state !== TaskState.Working) {
       throw new Error('Task shown signs of life in incorrect state');
     }
 
-    this.errors.push({
-      file: file != null ? file : undefined,
-      message,
-      level,
-    });
+    this.errors.push({ filePath, level, message });
   };
 
   public removeErrors() {
@@ -105,7 +101,7 @@ export abstract class Task<T> {
     try {
       return await this._helper.import(filePath);
     } catch (error) {
-      this.error(filePath, error.message);
+      this.error({ filePath, message: error.message });
       return {};
     }
   }

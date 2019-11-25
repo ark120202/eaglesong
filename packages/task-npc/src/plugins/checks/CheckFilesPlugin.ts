@@ -12,25 +12,29 @@ export const CheckFilesPlugin: Plugin = ({ hooks, error, context, collectedSchem
     if (collectedSchemas[group] == null) return;
     const promises: Promise<void>[] = [];
     const checkedFiles = new Set<string>();
-    const ensureResourceExists = (source: string, fileName: string, resourceType?: string) => {
-      if (checkedFiles.has(fileName)) return;
-      checkedFiles.add(fileName);
+    function ensureResourceExists(fileName: string, resourcePath: string, resourceType?: string) {
+      if (checkedFiles.has(resourcePath)) return;
+      checkedFiles.add(resourcePath);
       if (resourceType != null) {
         // eslint-disable-next-line @typescript-eslint/no-require-imports
         const names: string[] = require(`dota-data/files/resources/${resourceType}.json`);
-        if (names.includes(`${fileName}_c`)) return;
+        if (names.includes(`${resourcePath}_c`)) return;
       }
 
       promises.push(
         // TODO: watch for changes
         (async () => {
-          const exists = await fs.pathExists(path.join(context, 'src', fileName));
+          const exists = await fs.pathExists(path.join(context, 'src', resourcePath));
           if (!exists) {
-            error(source, `Resource ${fileName} not exists`, 'warning');
+            error({
+              fileName,
+              level: 'warning',
+              message: `Resource '${resourcePath}' not exists`,
+            });
           }
         })(),
       );
-    };
+    }
 
     _.each(files, (file, fileName) => {
       collectedSchemas[group].validateRoot(file, {

@@ -56,12 +56,12 @@ export default class NpcTask extends TransformTask<Options> {
           this.context,
           this.options,
           this.serviceProvider,
-          (fileName, message, level) =>
-            this.error(
-              fileName != null ? this.resolvePath(`src/npc/${fileName}`) : fileName,
-              message,
-              level,
-            ),
+          ({ fileName, ...error }) => {
+            this.error({
+              ...error,
+              filePath: fileName != null ? this.resolvePath(`src/npc/${fileName}`) : fileName,
+            });
+          },
         ),
       );
     });

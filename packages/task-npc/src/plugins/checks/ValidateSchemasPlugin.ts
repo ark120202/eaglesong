@@ -7,8 +7,10 @@ export const ValidateSchemasPlugin: Plugin = ({ hooks, error, collectedSchemas }
     _.each(files, (file, fileName) => {
       delete file.$schema;
 
-      const errors = collectedSchemas[group].validateRoot(file);
-      errors.forEach(message => error(fileName, message));
+      const schema = collectedSchemas[group];
+      for (const message of schema.validateRoot(file)) {
+        error({ fileName, message });
+      }
     });
   });
 };

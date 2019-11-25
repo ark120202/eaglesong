@@ -16,11 +16,13 @@ export default class ESLintTask extends TransformTask<Options> {
 
   protected afterWatch() {
     const { results } = this.cliEngine.executeOnFiles(['.']);
-    for (const lintResult of results) {
-      for (const { severity, line, column, message } of lintResult.messages) {
+    for (const { filePath, messages } of results) {
+      for (const { severity, line, column, message } of messages) {
         if (severity !== 0) {
           const fullMessage = `(${line},${column}) ${message}`;
-          this.error(lintResult.filePath, fullMessage, severity === 2 ? 'error' : 'warning');
+          const level = severity === 2 ? 'error' : 'warning';
+
+          this.error({ filePath, level, message: fullMessage });
         }
       }
     }

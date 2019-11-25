@@ -111,7 +111,11 @@ export const VariablePlugin: Plugin = ({ hooks, error: addError, context }) => {
           variableValue = dotaLocalization[rawToken];
           if (variableValue == null) {
             if (isFirstKey) {
-              addError(fileName, `${key}: cannot resolve dota variable '${rawToken}'`, 'warning');
+              addError({
+                fileName,
+                level: 'warning',
+                message: `${key}: cannot resolve dota variable '${rawToken}'`,
+              });
             }
 
             return fullMatch;
@@ -120,7 +124,11 @@ export const VariablePlugin: Plugin = ({ hooks, error: addError, context }) => {
           const found = findString(files, variable);
           if (found == null) {
             if (isFirstKey) {
-              addError(fileName, `${key}: cannot resolve variable '${variable}'`, 'warning');
+              addError({
+                fileName,
+                level: 'warning',
+                message: `${key}: cannot resolve variable '${variable}'`,
+              });
             }
 
             return fullMatch;
@@ -130,7 +138,7 @@ export const VariablePlugin: Plugin = ({ hooks, error: addError, context }) => {
           if (VARIABLE_REGEXP.test(variableValue)) {
             if (keyStack.includes(key)) {
               const keyPath = [...keyStack.slice(1), key].join(' > ');
-              addError(fileName, `${firstKey}: recursive variable '${keyPath}'`);
+              addError({ fileName, message: `${firstKey}: recursive variable '${keyPath}'` });
               return fullMatch;
             }
 
@@ -144,7 +152,7 @@ export const VariablePlugin: Plugin = ({ hooks, error: addError, context }) => {
           if (typeof result === 'string') {
             variableValue = result;
           } else if (isFirstKey) {
-            addError(fileName, `${key}: ${result.error}`);
+            addError({ fileName, message: `${key}: ${result.error}` });
           }
         }
 

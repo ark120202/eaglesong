@@ -36,7 +36,7 @@ export default class ImagesTask extends TransformTask<Options> {
 
   protected async transformFile(filePath: string) {
     if (path.extname(filePath) !== '.png') {
-      this.error(filePath, 'File format is not supported. Use PNG.');
+      this.error({ filePath, message: 'File format is not supported, use PNG.' });
       return;
     }
 
@@ -74,17 +74,17 @@ export default class ImagesTask extends TransformTask<Options> {
       // @ts-ignore Is it really nullable?
       realSizes = [width, height];
     } catch (error) {
-      this.error(filePath, error.message);
+      this.error({ filePath, message: error.message });
       return;
     }
 
     for (const rule of rules) {
       if (!rule.sizes.some(x => x[0] === realSizes[0] && x[1] === realSizes[1])) {
-        this.error(
+        this.error({
           filePath,
-          `Image has ${realSizes[0]}x${realSizes[1]} size, which not matches ${rule.name} rule.`,
-          'warning',
-        );
+          level: 'warning',
+          message: `Image has ${realSizes[0]}x${realSizes[1]} size, which not matches ${rule.name} rule.`,
+        });
       }
     }
   }

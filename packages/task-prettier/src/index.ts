@@ -54,7 +54,7 @@ export default class PrettierTask extends TransformTask<void> {
       message = message.replace(/ \(\d+:\d+\)$/, '');
       message = `(${error.loc.start.line}:${error.loc.start.column}) ${message}`;
 
-      this.error(filePath, message);
+      this.error({ filePath, message });
       return;
     }
 
@@ -64,17 +64,20 @@ export default class PrettierTask extends TransformTask<void> {
       const { line, column } = lines.locationForIndex(difference.offset)!;
       const position = `(${line}:${column})`;
 
+      let message: string;
       switch (difference.operation) {
         case 'insert':
-          this.error(filePath, `${position} Insert \`${insertText}\``);
+          message = `${position} Insert \`${insertText}\``;
           break;
         case 'delete':
-          this.error(filePath, `${position} Delete \`${deleteText}\``);
+          message = `${position} Delete \`${deleteText}\``;
           break;
         case 'replace':
-          this.error(filePath, `${position} Replace \`${deleteText}\` with \`${insertText}\``);
+          message = `${position} Replace \`${deleteText}\` with \`${insertText}\``;
           break;
       }
+
+      this.error({ filePath, message });
     }
   }
 }

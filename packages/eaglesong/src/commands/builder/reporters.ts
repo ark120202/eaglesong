@@ -22,10 +22,11 @@ function getTaskStateSymbol(state: TaskState) {
 
 const formatTaskErrors = (context: string, indent: string, task: Task<any>) =>
   task.errors.map(error => {
-    const file = error.file != null ? ` ${path.relative(context, error.file)}` : '';
+    const filePath = error.filePath != null ? ` ${path.relative(context, error.filePath)}` : '';
     const message = error.message.trim().replace(/\n/g, `\n   ${indent}`);
-    const errorLevel = error.level === 'error' ? chalk.bgRed('[E]') : chalk.bgYellow('[W]');
-    return `${indent}${errorLevel}${chalk.cyan(file)} ${message}`;
+    const level = error.level === 'error' ? chalk.bgRed('[E]') : chalk.bgYellow('[W]');
+
+    return `${indent}${level}${chalk.cyan(filePath)} ${message}`;
   });
 
 export type Reporter = (context: string, tasks: Task<any>[]) => void;

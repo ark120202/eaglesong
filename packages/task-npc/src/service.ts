@@ -107,14 +107,14 @@ export class NpcService {
       }),
     );
 
-    Object.entries(keyCache)
-      .filter(([, fileList]) => fileList.length > 1)
-      .forEach(([key, fileList]) =>
-        this.error(
-          null,
-          `Key ${key} is defined in [${fileList.join(', ')}], yet only one definition is allowed.`,
-        ),
-      );
+    for (const [key, fileList] of Object.entries(keyCache)) {
+      if (fileList.length > 1) {
+        const definedIn = fileList.length === 1 ? `'${fileList[0]}'` : `[${fileList.join(', ')}]`;
+        this.error({
+          message: `Key ${key} is defined in ${definedIn}, yet only one definition is allowed.`,
+        });
+      }
+    }
 
     return Object.assign({}, ...Object.values(files));
   }

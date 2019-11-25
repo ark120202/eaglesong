@@ -86,17 +86,17 @@ export default class MapsTask extends Task<void> {
   private validateMetadata(maps: MapsMetadata) {
     const valid = validateMetadata(maps);
     if (!valid && validateMetadata.errors != null) {
-      for (const { message, dataPath } of validateMetadata.errors) {
-        this.error(this.metadataPath, `${dataPath} ${message}`);
+      for (const { dataPath, message } of validateMetadata.errors) {
+        this.error({ filePath: this.metadataPath, message: `${dataPath} ${message}` });
       }
     }
   }
 
   private async validateMaps(maps: MapsMetadata) {
     for (const mapName of Object.keys(maps)) {
-      const mapPath = this.resolvePath(`src/maps/${mapName}.vmap`);
-      if (!(await fs.pathExists(mapPath))) {
-        this.error(mapPath, 'Referenced map file not found');
+      const filePath = this.resolvePath(`src/maps/${mapName}.vmap`);
+      if (!(await fs.pathExists(filePath))) {
+        this.error({ filePath, message: 'Referenced map file not found' });
       }
     }
   }
@@ -118,7 +118,12 @@ export default class MapsTask extends Task<void> {
       compare(this.resolvePath('src/materials/overviews'), ['.tga', '.txt', '.vmat']),
     ]);
 
-    diff.flatMap(x => x.extra).forEach(p => this.error(p, 'Map overview file should not exist'));
-    diff.flatMap(x => x.missing).forEach(p => this.error(p, 'Map overview file not found'));
+    diff
+      .flatMap(x => x.extra)
+      .forEach(filePath => this.error({ filePath, message: 'Map overview file should not exist' }));
+
+    diff
+      .flatMap(x => x.missing)
+      .forEach(filePath => this.error({ filePath, message: 'Map overview file not found' }));
   }
 }

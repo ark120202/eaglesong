@@ -8,7 +8,7 @@ import dedent from 'dedent';
 import _ from 'lodash';
 import pProps from 'p-props';
 import { AsyncSeriesHook, Hook } from 'tapable';
-import { resolveProviderOption, Provider, ProviderOption } from './providers';
+import { Provider, ProviderOption, resolveProviderOption } from './providers';
 import {
   DotaLanguage,
   FlatLocalizationFile,
@@ -174,12 +174,14 @@ export class LocalizationService {
     await this.hooks.preprocess.promise(file, fileName);
 
     _.each(file, (value, key) => {
-      if (typeof value === 'string') return;
-      this.error(
-        fileName,
-        `String "${key}" has incorrect value of type ${typeof value} (expected string). ` +
-          'Change it or apply plugin to transform it.',
-      );
+      if (typeof value !== 'string') {
+        this.error({
+          fileName,
+          message:
+            `String "${key}" has incorrect value of type ${typeof value} (string expected). ` +
+            'Change it or apply plugin to transform it.',
+        });
+      }
     });
 
     return file as FlatLocalizationFile;
@@ -203,10 +205,10 @@ export class LocalizationService {
 
     for (const [key, fileList] of Object.entries(keyCache)) {
       if (fileList.length > 1) {
-        this.error(
-          null,
-          `Key ${key} is defined in [${fileList.join(', ')}], yet only one definition is allowed.`,
-        );
+        const definedIn = fileList.length === 1 ? `'${fileList[0]}'` : `[${fileList.join(', ')}]`;
+        this.error({
+          message: `Key ${key} is defined in ${definedIn}, yet only one definition is allowed.`,
+        });
       }
     }
 

@@ -70,7 +70,9 @@ export default class VScriptsTask extends Task<void> {
       ...transpileDiagnostics,
     ]);
 
-    errors.forEach(x => this.error(x.fileName, x.message));
     diagnostics.forEach(this.reportDiagnostic);
+    for (const { fileName, message } of errors) {
+      this.error({ filePath: fileName, message });
+    }
   }
 }
