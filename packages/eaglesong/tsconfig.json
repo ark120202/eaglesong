@@ -5,9 +5,5 @@
     "rootDir": "src",
     "outDir": "lib"
   },
-  "references": [
-    { "path": "../helper-task" },
-    { "path": "../task-localization" },
-    { "path": "../task-npc" }
-  ]
+  "references": [{ "path": "../helper-task" }, { "path": "../task-localization" }]
 }
