@@ -1,14 +1,14 @@
-import { DotaLanguage } from '@eaglesong/task-localization';
 import { spawn } from 'child_process';
+import { DotaLanguage } from 'dota-data/lib/localization';
 import path from 'upath';
 import { CommandGroup } from '../command';
 
 export interface LaunchOptions {
   launch?: {
-    map?: string | null;
+    map?: string;
     vconsole?: boolean;
+    language?: DotaLanguage;
     args?: string[];
-    language?: DotaLanguage | null;
   };
 }
 
