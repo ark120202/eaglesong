@@ -31,20 +31,16 @@ declare namespace posthtml {
     type: string;
   }
 
-  interface PostHTMLConstructor {
-    parser: Parser;
-    render: Render;
-    new (plugins: Plugin[]): PostHTML;
-  }
-
-  interface PostHTML {
-    constructor: PostHTMLConstructor;
-
+  interface PostHTMLOwn {
     version: string;
     name: string;
     plugins: Plugin[];
     messages: Message[];
+    parser: Parser;
+    render: Render;
+  }
 
+  interface PostHTML extends PostHTMLOwn {
     use(plugin: Plugin): this;
     process<T = htmlparser2.Options>(
       html: string | NodeTree,
@@ -70,12 +66,7 @@ declare namespace posthtml {
     content?: (string | RegExp | NodeMatchExpression)[];
   }
 
-  interface Api extends NodeTree {
-    version: string;
-    name: string;
-    plugins: Plugin[];
-    messages: Message[];
-
+  interface Api extends NodeTree, PostHTMLOwn {
     walk(cb: (node: NodeTreeElement) => NodeTreeElement): void;
     match(expression: string | RegExp, cb: (node: string) => NodeTreeElement): void;
     match(

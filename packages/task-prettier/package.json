@@ -22,8 +22,8 @@
     "tslib": "^1.10.0"
   },
   "devDependencies": {
-    "@types/prettier": "^1.18.3",
-    "prettier": "^1.18.2"
+    "@types/prettier": "^1.19.0",
+    "prettier": "^1.19.1"
   },
   "peerDependencies": {
     "prettier": "^1.18.2"

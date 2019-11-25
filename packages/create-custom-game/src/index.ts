@@ -60,7 +60,10 @@ async function main() {
     fs.outputJson(path.join(internalName, filePath), data, { spaces: 2 });
 
   const templates = new Set(['base']);
-  const variables = new Map([['displayName', displayName], ['getTasks', '']]);
+  const variables = new Map([
+    ['displayName', displayName],
+    ['getTasks', ''],
+  ]);
 
   const packageJson: Record<string, any> = {
     name: internalName,

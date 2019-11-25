@@ -4,7 +4,7 @@ import { promisify } from 'util';
 import vm from 'vm';
 import webpack from 'webpack';
 
-const { parser, render } = posthtml().constructor;
+const { parser, render } = posthtml();
 
 async function loadModule(context: webpack.loader.LoaderContext, request: string) {
   try {

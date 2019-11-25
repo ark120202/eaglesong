@@ -17,7 +17,7 @@
     "@eaglesong/helper-task": "link:../helper-task"
   },
   "devDependencies": {
-    "typescript": "^3.8.0-dev.20191102"
+    "typescript": "^3.7.2"
   },
   "peerDependencies": {
     "typescript": "^3.0.0"

@@ -14,7 +14,7 @@ export interface Provider {
 
 export type ProviderOption =
   | { type: 'fs' }
-  | { type: 'onesky' } & OneSkyProviderOptions
+  | ({ type: 'onesky' } & OneSkyProviderOptions)
   | Provider
   | undefined;
 

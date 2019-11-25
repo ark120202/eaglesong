@@ -13,11 +13,11 @@ export const askForWorkshopMessage = (newVersion: string) =>
     filter: input => input !== '',
   });
 
-export const askForNewVersion = async (oldVersion: string) =>
-  (await inquirer.prompt<{ version: string }>([
+export async function askForNewVersion(oldVersion: string) {
+  const { newVersion } = await inquirer.prompt<{ newVersion: string }>([
     {
       type: 'list',
-      name: 'version',
+      name: 'newVersion',
       message: 'Select semver increment or specify new version',
       choices: [
         ...version.RELEASE_TYPES.map(inc => ({
@@ -31,9 +31,7 @@ export const askForNewVersion = async (oldVersion: string) =>
       pageSize: version.RELEASE_TYPES.length + 2,
     },
     {
-      // FIXME: TS can't choose between InputQuestion and NumberQuestion for validate
-      type: 'input',
-      name: 'version',
+      name: 'newVersion',
       message: 'Version',
       validate(input) {
         if (!version.isValidInput(input)) {
@@ -47,12 +45,15 @@ export const askForNewVersion = async (oldVersion: string) =>
         return true;
       },
       filter: input => (version.isValidInput(input) ? version.bump(oldVersion, input) : input),
-      when: answers => answers.version == null,
+      when: answers => answers.newVersion == null,
     },
     {
       type: 'confirm',
       name: 'confirm',
       message: 'The addon will be published without version change. Continue?',
-      when: answers => version.eq(answers.version, oldVersion),
+      when: answers => version.eq(answers.newVersion, oldVersion),
     },
-  ])).version;
+  ]);
+
+  return newVersion;
+}
