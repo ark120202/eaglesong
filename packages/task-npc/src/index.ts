@@ -79,21 +79,6 @@ export default class NpcTask extends TransformTask<Options> {
       ]);
     });
 
-    this.hooks.changelog.tapPromise(this.constructor.name, async ({ write, oldTaskProvider }) => {
-      const oldBuilder = oldTaskProvider(NpcTask)!;
-      await Promise.all([
-        ...(await this.matchFiles(this.pattern)).map(f => this.transformFile(f)),
-        ...(await oldBuilder.matchFiles(oldBuilder.pattern)).map(f => oldBuilder.transformFile(f)),
-      ]);
-
-      const oldFiles = await oldBuilder.service.emit();
-      const currentFiles = await this.service.emit();
-
-      write(
-        `${oldFiles.npc_abilities_custom.df.MaxLevel} => ${currentFiles.npc_abilities_custom.df.MaxLevel}`,
-      );
-    });
-
     super.apply();
   }
 

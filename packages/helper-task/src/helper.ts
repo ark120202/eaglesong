@@ -40,15 +40,6 @@ const createHooksInternal = () => ({
   build: new AsyncParallelHook<[]>([]),
 
   compile: new AsyncParallelHook<[(patterns: string | string[]) => void]>(['addResource']),
-
-  changelog: new AsyncParallelHook<
-    [
-      {
-        write(message: string): void;
-        oldTaskProvider: TaskProvider;
-      },
-    ]
-  >(['options']),
 });
 
 export class BuildHelper {
