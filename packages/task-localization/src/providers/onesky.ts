@@ -1,12 +1,12 @@
 import { createHash } from 'crypto';
 import { dotaLanguagesData } from 'dota-data/lib/localization';
+import FormData from 'form-data';
+import got from 'got';
 import _ from 'lodash';
-import request from 'request-promise-native';
 import { Provider } from '.';
 import { DotaLanguage, FlatLocalizationFile, FlatLocalizationFiles, Multilingual } from '../types';
 
 const escapeFileName = (fileName: string) => fileName.replace(/\//g, ' -> ');
-const unescapeFileName = (fileName: string) => fileName.replace(/ -> /g, '/');
 
 const languageCodeToDotaLanguage = _.invert({
   ..._.mapValues(dotaLanguagesData, d => d.code),
@@ -25,13 +25,18 @@ interface StringsOutputSuccessResponse {
   md5: string;
 }
 
-type FileListResponse = {
+interface ListFile {
   file_name: string;
   string_count: number;
   last_import: { id: number; status: string };
   uploaded_at: string;
   uploaded_at_timestamp: number;
-}[];
+}
+
+interface ListFilesResponse {
+  meta: any;
+  data: ListFile[];
+}
 
 export interface OneSkyProviderOptions {
   projectId: number;
@@ -53,10 +58,10 @@ export class OneSkyProvider implements Provider {
   }
 
   public async fetchFiles() {
-    const result: StringsOutputResponse = await this.request({
-      uri: 'https://api.oneskyapp.com/2/string/output',
-      qs: { 'platform-id': this.projectId, md5: '0e594afa458e2edefd9956cbf4d44a46' },
-    });
+    const result = await got({
+      url: 'https://api.oneskyapp.com/2/string/output',
+      searchParams: { ...this.getRequestParameters(), 'platform-id': this.projectId },
+    }).json<StringsOutputResponse>();
 
     const map: Multilingual<FlatLocalizationFiles> = {};
 
@@ -76,9 +81,9 @@ export class OneSkyProvider implements Provider {
   }
 
   public async pushFiles(files: FlatLocalizationFiles) {
-    const oldFileNames = (await this.listAllFiles()).map(file => unescapeFileName(file.file_name));
+    const oldFileNames = (await this.listAllFiles()).map(x => x.file_name);
     const newFileNames = Object.keys(files).map(escapeFileName);
-    const removedFileNames = _.pullAll(oldFileNames, newFileNames);
+    const removedFileNames = _.difference(oldFileNames, newFileNames);
 
     await Promise.all(removedFileNames.map(f => this.removeFile(f)));
     await Promise.all(Object.entries(files).map(([path, tokens]) => this.uploadFile(path, tokens)));
@@ -87,82 +92,68 @@ export class OneSkyProvider implements Provider {
   }
 
   private async uploadFile(fileName: string, content: FlatLocalizationFile) {
-    const result = await this.request({
-      uri: `https://platform.api.onesky.io/1/projects/${this.projectId}/files`,
-      method: 'POST',
-      formData: {
-        file: {
-          options: { filename: escapeFileName(fileName) },
-          value: JSON.stringify(content),
-        },
-        file_format: 'HIERARCHICAL_JSON',
-        // is_allow_translation_same_as_original: 'false',
-        is_keeping_all_strings: 'false',
-      },
+    const form = new FormData();
+    form.append('file', JSON.stringify(content), { filename: escapeFileName(fileName) });
+    form.append('file_format', 'HIERARCHICAL_JSON');
+    form.append('is_keeping_all_strings', 'false');
+
+    const { statusCode } = await got.post({
+      url: `https://platform.api.onesky.io/1/projects/${this.projectId}/files`,
+      body: form,
+      searchParams: this.getRequestParameters(),
     });
 
-    if (result.meta.status !== 201) {
-      throw new Error(`Response status is ${result.meta.status}, expected 201`);
+    if (statusCode !== 201) {
+      throw new Error(`Response status is ${statusCode}, expected 201`);
     }
   }
 
-  private async removeFile(fileName: string) {
-    const result = await this.request({
-      uri: `https://platform.api.onesky.io/1/projects/${this.projectId}/files`,
-      method: 'DELETE',
-      qs: { file_name: escapeFileName(fileName) },
+  private async removeFile(escapedFileName: string) {
+    await got.delete({
+      url: `https://platform.api.onesky.io/1/projects/${this.projectId}/files`,
+      searchParams: { ...this.getRequestParameters(), file_name: escapedFileName },
     });
-
-    return result.data;
   }
 
   private async listAllFiles() {
-    let results: FileListResponse = [];
-    let page = 1;
+    const allFiles: ListFile[] = [];
 
+    let page = 1;
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     while (true) {
-      const onPage = await this.listFilesOnPage(page);
-      if (onPage.length === 0) return results;
+      const filesOnPage = await this.listFilesOnPage(page);
+      if (filesOnPage.length === 0) {
+        return allFiles;
+      }
 
-      results = results.concat(onPage);
+      allFiles.push(...filesOnPage);
       page += 1;
     }
   }
 
-  private async listFilesOnPage(page: number): Promise<FileListResponse> {
-    const result = await this.request({
-      uri: `https://platform.api.onesky.io/1/projects/${this.projectId}/files`,
-      qs: { page, per_page: 100 },
-    });
+  private async listFilesOnPage(page: number) {
+    const { data } = await got({
+      url: `https://platform.api.onesky.io/1/projects/${this.projectId}/files`,
+      searchParams: { ...this.getRequestParameters(), page, per_page: 100 },
+    }).json<ListFilesResponse>();
 
-    return result.data;
+    return data;
   }
 
-  private getSecrets() {
-    if (this.secret == null) return {};
-
-    const timestamp = Math.floor(Date.now() / 1000);
-    return {
-      timestamp,
-      dev_hash: createHash('md5')
-        .update(String(timestamp) + this.secret)
-        .digest('hex'),
+  private getRequestParameters() {
+    const parameters: Record<string, any> = {
+      'api-key': this.apiKey,
+      api_key: this.apiKey,
     };
-  }
 
-  private async request(options: request.Options) {
-    return request({
-      ...options,
-      json: true,
-      qs: {
-        // TODO: Remove legacy api usage
-        'api-key': this.apiKey,
+    if (this.secret != null) {
+      const timestamp = Math.floor(Date.now() / 1000);
+      parameters.timestamp = timestamp;
+      parameters.dev_hash = createHash('md5')
+        .update(String(timestamp) + this.secret)
+        .digest('hex');
+    }
 
-        api_key: this.apiKey,
-        ...this.getSecrets(),
-        ...options.qs,
-      },
-    });
+    return parameters;
   }
 }

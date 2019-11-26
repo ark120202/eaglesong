@@ -143,7 +143,7 @@ export class LocalizationService {
       if (removed.length > 0) log(`[Localization] Removed ${removed.length} files`);
       log('[Localization] Push complete');
     } catch (error) {
-      log(`[Localization] Push error:\n${error.toString()}`);
+      log(`[Localization] Push error: ${error.toString()}`);
     }
   }
 
