@@ -23,5 +23,8 @@
     "p-props": "^3.1.0",
     "tslib": "^1.10.0",
     "upath": "^1.2.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

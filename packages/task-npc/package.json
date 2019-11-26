@@ -31,5 +31,8 @@
   },
   "peerDependencies": {
     "@dota-data/scripts": "^0.1.5"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
