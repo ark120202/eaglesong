@@ -1,13 +1,13 @@
 # Providers
 
-Localization providers build language groups from local file structure. Default localization uses
-top-level directory elements to separate languages. For example, the following file structure builds
-to `addon_english.txt` and `addon_russian.txt`:
+Localization providers map local file structure to language groups. By default, it uses top-level
+directory elements to do it. For example, the following file structure generates `addon_english.txt`
+and `addon_russian.txt`:
 
 ```
 localization/
 ├── english/
-│   ├── hero.yml
+│   ├── heroes.yml
 │   └── items.yml
 └── russian.yml
 ```

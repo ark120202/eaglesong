@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import path from 'upath';
 import { Provider } from '.';
 import { FlatLocalizationFiles, isDotaLanguage, Multilingual } from '../types';
 
@@ -8,7 +8,10 @@ export class FileSystemProvider implements Provider {
     const result: Multilingual<FlatLocalizationFiles> = {};
 
     for (const [name, content] of Object.entries(baseFiles)) {
-      const [language] = name.split('/');
+      const segments = name.split('/');
+      const language =
+        segments.length === 1 ? path.basename(segments[0], path.extname(segments[0])) : segments[0];
+
       if (!isDotaLanguage(language)) {
         throw new Error(`Language '${language}' is unsupported`);
       }
