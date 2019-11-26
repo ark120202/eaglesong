@@ -143,8 +143,9 @@ export async function runCompiler(
       // @ts-ignore
       compiler.outputFileSystem = mfs;
       const stats = await promisify(compiler.run).call(compiler);
-      // FIXME:
-      if (stats.hasErrors() || stats.hasWarnings()) console.error(stats.toString()); // throw new Error(stats.toString());
+      if (stats.hasErrors() || stats.hasWarnings()) {
+        throw new Error(stats.toString());
+      }
     }),
   );
 

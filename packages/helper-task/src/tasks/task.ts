@@ -56,18 +56,14 @@ export abstract class Task<T> {
   }
 
   public start() {
-    if (this.state === TaskState.Working) {
-      throw new Error('task.start() called in incorrect state');
-    }
+    assert(this.state !== TaskState.Working, 'incorrect task state');
 
     this.state = TaskState.Working;
     this._stateCallback();
   }
 
   public finish() {
-    if (this.state !== TaskState.Working) {
-      throw new Error('task.finish() called in incorrect state');
-    }
+    assert(this.state === TaskState.Working, 'incorrect task state');
 
     switch (this.errorLevel) {
       case 'error':
@@ -85,10 +81,7 @@ export abstract class Task<T> {
 
   public error: ErrorReporter = ({ filePath, level = 'error', message }) => {
     assert(filePath == null || path.isAbsolute(filePath), 'file path should be absolute');
-
-    if (this.state !== TaskState.Working) {
-      throw new Error('Task shown signs of life in incorrect state');
-    }
+    assert(this.state === TaskState.Working, 'incorrect task state');
 
     this.errors.push({ filePath, level, message });
   };

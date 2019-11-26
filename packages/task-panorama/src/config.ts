@@ -134,7 +134,7 @@ export function createWebpackConfig({
       new HtmlWebpackPlugin({
         filename: 'custom_ui_manifest.xml',
         inject: false,
-        template: path.join(__dirname, '../template.ejs'),
+        template: path.resolve(__dirname, '../template.ejs'),
         xhtml: true,
       }),
       new HtmlWebpackXmlPlugin(),
