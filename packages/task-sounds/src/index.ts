@@ -84,8 +84,8 @@ export default class SoundsTask extends TransformTask<void> {
   }
 
   private resolveResultPath(filePath: string) {
-    const fileName = path.relative(filePath, this.srcPath);
-    return this.resolvePath('content', `soundevents/${path.changeExt(fileName, '.vsndevts')}`);
+    const fileName = path.changeExt(path.relative(this.srcPath, filePath), '.vsndevts');
+    return this.resolvePath('content', `soundevents/${fileName}`);
   }
 
   private async mapFiles(filePath: string, files: string[]) {
