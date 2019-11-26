@@ -1,39 +1,21 @@
-import validate from '@webpack-contrib/schema-utils';
 import { getOptions, interpolateName } from 'loader-utils';
 import path from 'upath';
 import webpack from 'webpack';
 import SingleEntryPlugin from 'webpack/lib/SingleEntryPlugin';
-import schema from './options.schema.json';
 
 export interface EntryLoaderOptions {
   filename?: string;
-  plugins?: boolean | (string | webpack.Plugin)[];
-  ignoredPlugins?: string[];
+  plugins?: (string | webpack.Plugin)[];
 }
 
 export function pitch(this: webpack.loader.LoaderContext, request: string) {
-  // @ts-ignore
-  if (this._compiler.isChild()) return;
-
-  const module: webpack.compilation.Module = this._module;
-  // @ts-ignore
-  // eslint-disable-next-line prefer-destructuring
-  const issuer = module.issuer;
-  if (issuer == null) return;
-  if (!issuer.resource.endsWith('.xml')) return;
-
-  let target = getOptions(this);
-  if (target == null) target = {};
-  validate({ name: 'Entry Loader', schema, target });
-  const options: EntryLoaderOptions & { filename: string } = {
-    filename: 'scripts/[name].js',
-    ...target,
-  };
-
   this.addDependency(request);
 
-  const filename = interpolateName(this, options.filename, {});
-  const compiler = createCompiler(this, filename, options);
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  const target: EntryLoaderOptions = getOptions(this) ?? {};
+
+  const fileName = interpolateName(this, target.filename ?? 'scripts/[name].js', {});
+  const compiler = createCompiler(this, fileName, target.plugins ?? []);
   runCompiler(compiler, this.async()!);
 }
 
@@ -54,26 +36,17 @@ function runCompiler(compiler: webpack.Compiler, callback: webpack.loader.loader
 function createCompiler(
   loader: webpack.loader.LoaderContext,
   filename: string,
-  options: EntryLoaderOptions,
+  pluginsOption: NonNullable<EntryLoaderOptions['plugins']>,
 ) {
   const oldCompilation: webpack.compilation.Compilation = loader._compilation;
   const oldCompiler = loader._compiler;
   const oldOutputOptions = oldCompiler.options.output;
-  let plugins: webpack.Plugin[] = [];
-  if (options.plugins !== false) {
-    if (options.plugins == null || options.plugins === true) {
-      const ignoredPlugins = options.ignoredPlugins ?? [];
-      plugins = oldCompiler.options.plugins!.filter(
-        p => !ignoredPlugins.includes(p.constructor.name),
-      );
-    } else {
-      const allowedPlugins = options.plugins.filter((x): x is string => typeof x === 'string');
-      plugins = [
-        ...oldCompiler.options.plugins!.filter(p => allowedPlugins.includes(p.constructor.name)),
-        ...(options.plugins.filter(x => typeof x !== 'string') as webpack.Plugin[]),
-      ];
-    }
-  }
+
+  const allowedPlugins = pluginsOption.filter((x): x is string => typeof x === 'string');
+  const plugins = [
+    ...oldCompiler.options.plugins!.filter(p => allowedPlugins.includes(p.constructor.name)),
+    ...pluginsOption.filter((x): x is webpack.Plugin => typeof x !== 'string'),
+  ];
 
   // @ts-ignore
   const compilerName = path.relative(oldCompiler.context, loader.resourcePath);

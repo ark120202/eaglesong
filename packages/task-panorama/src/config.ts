@@ -82,14 +82,13 @@ export function createWebpackConfig({
   const entryLoader: webpack.RuleSetLoader = {
     loader: require.resolve('./plugins/entry-loader'),
     options: _.identity<EntryLoaderOptions>({
-      ignoredPlugins: [
-        'CopyWebpackPlugin',
-        'ForkTsCheckerWebpackPlugin',
-        'HtmlWebpackPlugin',
-        'HtmlWebpackXmlPlugin',
-        'PanoramaEntriesPlugin',
-      ],
+      plugins: ['BannerPlugin'],
     }),
+  };
+
+  const tsLoader: webpack.RuleSetLoader = {
+    loader: 'ts-loader',
+    options: { configFile, transpileOnly: true },
   };
 
   const scriptsConfig: webpack.Configuration = {
@@ -99,15 +98,8 @@ export function createWebpackConfig({
     },
     module: {
       rules: [
-        {
-          test: /\.jsx?$/,
-          use: entryLoader,
-        },
-        {
-          test: /\.tsx?$/,
-          exclude: /node_modules/,
-          use: [entryLoader, { loader: 'ts-loader', options: { configFile, transpileOnly: true } }],
-        },
+        { test: /\.[jt]sx?$/, issuer: /\.xml$/, use: entryLoader },
+        { test: /\.tsx?$/, exclude: /node_modules/, use: tsLoader },
       ],
     },
     plugins: [

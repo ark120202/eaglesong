@@ -9,7 +9,6 @@
     "baseUrl": "..",
     "paths": {
       "*": ["types/*"],
-      "@webpack-contrib/schema-utils": ["types/webpack-contrib__schema-utils.d.ts"],
       "@posthtml/esm": ["types/posthtml__esm.d.ts"]
     }
   }
