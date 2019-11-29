@@ -1,22 +1,22 @@
+import assert from 'assert';
 import _ from 'lodash';
 import * as ts from 'typescript';
-import { ErrorReporter } from '../service';
+import { ErrorMessage } from '../service';
 
-export const createDiagnosticReporter = (error: ErrorReporter) => (diag: ts.Diagnostic) => {
-  const level = diag.category === ts.DiagnosticCategory.Error ? 'error' : 'warning';
-  const message = ts.flattenDiagnosticMessageText(diag.messageText, '\n');
+export function convertDiagnosticToError(diagnostic: ts.Diagnostic): ErrorMessage {
+  const level = diagnostic.category === ts.DiagnosticCategory.Error ? 'error' : 'warning';
+  const message = ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n');
 
-  if (diag.file && diag.start != null) {
-    const { line, character } = diag.file.getLineAndCharacterOfPosition(diag.start);
-    error({
-      filePath: diag.file.fileName,
-      level,
-      message: `(${line + 1},${character + 1}) TS${diag.code}: ${message}`,
-    });
-  } else {
-    error({ level, message });
-  }
-};
+  if (!diagnostic.file) return { level, message };
+  assert(diagnostic.start);
+
+  const { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start!);
+  return {
+    filePath: diagnostic.file.fileName,
+    level,
+    message: `(${line + 1},${character + 1}) TS${diagnostic.code}: ${message}`,
+  };
+}
 
 export function createTsAutoWatch(
   currentDirectory: string,
