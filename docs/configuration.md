@@ -17,6 +17,20 @@ export default config;
 All available options can be found by inspecting type annotation or in individual command
 documentation.
 
+Since configuration is just a TypeScript file, you can use any kind of dynamic expressions there.
+For example, you might want to disable a quite performance-heavy
+[`task-prettier`](/commands/build/other-tasks#prettier) locally (if you're sure that everyone has
+correctly configured [editors](/environment#editor-support)), but still want keep it on
+[CI](/environment#devops):
+
+```ts
+const config: Options = {
+  tasks: getTasks({
+    prettier: Boolean(process.env.CI),
+  }),
+};
+```
+
 ## Local configuration
 
 It's possible that someone would like to change some options without changing them for everyone else

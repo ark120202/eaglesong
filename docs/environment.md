@@ -1,12 +1,13 @@
 ## Development Environment
 
-To use Eaglesong you have to get [Node.js](https://nodejs.org/) (>= 12).
+Eaglesong is written in TypeScript, so it requires [Node.js](https://nodejs.org/) platform.
+Eaglesong uses latest JavaScript features, so make sure to get latest available version.
 
 Optionally, you also might want to get [yarn](https://yarnpkg.com/en/docs/install), a recommended
 package manager.
 
-If you want to publish your addon with `eaglesong publish`, you also have to get few
-[additional requirements](/commands/publish#additional-requirements).
+Additionally, `eaglesong publish` command has few
+[extra requirements](/commands/publish#additional-requirements).
 
 ## Editor Support
 
@@ -40,5 +41,5 @@ To validate addon files within Continuous Integration pipeline you can use a
 [`@eaglesong/create-custom-game`](/getting-started) with `git` installed include a
 [GitHub Actions](https://github.com/features/actions) workflow.
 
-[`eaglesong publish`](/commands/publish) should make it possible to be used in a CD pipeline on a
-Windows Server environment, however currently there are no working examples.
+[`eaglesong publish`](/commands/publish) should make it possible to use Eaglesong for continuous
+deployment in a Windows Server environment, however currently there are no working examples.
