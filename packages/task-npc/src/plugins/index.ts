@@ -3,6 +3,7 @@ export * from './checks/ValidateSchemasPlugin';
 export * from './checks/EnsureSchemaExistsPlugin';
 
 export * from './transforms/BetterEnumsPlugin';
+export * from './transforms/BetterBooleansPlugin';
 export * from './checks/CheckFilesPlugin';
 export * from './transforms/AbilityPrecachePlugin';
 export * from './transforms/AbilitySpecialsPlugin';
