@@ -41,7 +41,7 @@ export abstract class CommandGroup {
     const addonName = _.defaultTo(options.addonName, pkgName.toLowerCase().replace(/-/, '_'));
 
     if (addonName === '') throw new Error('Addon name is not specified');
-    if (!/^[a-z][a-z\d_]+$/.test(addonName)) {
+    if (!/^[a-z][\d_a-z]+$/.test(addonName)) {
       throw new Error(
         'Addon name may consist only of lowercase characters, digits, and underscores ' +
           'and should start with a letter',

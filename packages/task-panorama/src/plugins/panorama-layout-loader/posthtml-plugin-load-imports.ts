@@ -47,9 +47,8 @@ export const loadImports = (context: webpack.loader.LoaderContext): posthtml.Plu
   tree: posthtml.Api,
 ) => {
   const compilation: webpack.compilation.Compilation = context._compilation;
-  const publicPath = compilation.getPath(compilation.outputOptions.publicPath || '', {
-    hash: compilation.hash || 'XXXX',
-  });
+  // TODO: Options shouldn't be required
+  const publicPath = compilation.getPath(compilation.outputOptions.publicPath ?? '', {});
 
   let html = render(tree);
 

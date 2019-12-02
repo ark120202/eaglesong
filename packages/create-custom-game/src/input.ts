@@ -14,8 +14,8 @@ export async function ask() {
     input
       .toLowerCase()
       .replace(/ ?& ?/g, '-and-')
-      .replace(/[_ ]/g, '-')
-      .replace(/[^a-z\d-]/g, '');
+      .replace(/[ _]/g, '-')
+      .replace(/[^\d-a-z]/g, '');
 
   // https://github.com/SBoudrias/Inquirer.js/issues/538
   const validateInternalName = (name: string) => {

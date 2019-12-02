@@ -75,7 +75,7 @@ export class NpcService {
   public removeFile(fileName: string) {
     const group = getGroupFromFileName(fileName);
 
-    if (this.groups[group] == null || this.groups[group][fileName] == null) return;
+    if (this.groups[group]?.[fileName] == null) return;
     delete this.groups[group][fileName];
     if (Object.keys(this.groups[group]).length === 0) delete this.groups[group];
   }

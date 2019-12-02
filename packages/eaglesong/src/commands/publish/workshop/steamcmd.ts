@@ -32,7 +32,7 @@ export async function uploadToSteam(metadataPath: string, workshopId: number) {
       message: 'Login:',
       validate: x => x !== '',
     });
-  } else if (login == null || login === '') {
+  } else if (!login) {
     throw new Error('Provide a Steam login with a STEAMCMD_LOGIN environment variable');
   }
 
@@ -49,11 +49,11 @@ export async function uploadToSteam(metadataPath: string, workshopId: number) {
     (async () => {
       childStdout += buf.toString();
 
-      if (childStdout.trimRight().endsWith('password:')) {
+      if (childStdout.trimEnd().endsWith('password:')) {
         child.stdin!.write(`${await getPassword()}\n`);
       }
 
-      if (childStdout.trimRight().endsWith('Steam Guard code:')) {
+      if (childStdout.trimEnd().endsWith('Steam Guard code:')) {
         child.stdin!.write(`${await getGuardCode()}\n`);
       }
     })();

@@ -6,7 +6,7 @@ const xmlCommentRegex = /^<!--(.*?)-->$/s;
 export const banTextNodes = (context: webpack.loader.LoaderContext): posthtml.Plugin => (
   tree: posthtml.Api,
 ) => {
-  tree.match(/^\s*[^\s]/, node => {
+  tree.match(/^\s*\S/, node => {
     const content = node.trim();
     if (xmlCommentRegex.test(content)) return node;
 

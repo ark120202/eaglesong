@@ -73,7 +73,7 @@ export class OneSkyProvider implements Provider {
           throw new Error(`File '${fileName}' has an unknown '${languageCode}' translation`);
         }
 
-        (map[language] || (map[language] = {}))[fileName] = tokens;
+        (map[language] ?? (map[language] = {}))[fileName] = tokens;
       }),
     );
 
@@ -119,7 +119,6 @@ export class OneSkyProvider implements Provider {
     const allFiles: ListFile[] = [];
 
     let page = 1;
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     while (true) {
       const filesOnPage = await this.listFilesOnPage(page);
       if (filesOnPage.length === 0) {

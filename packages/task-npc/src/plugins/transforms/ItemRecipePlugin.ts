@@ -44,7 +44,7 @@ export const ItemRecipePlugin: Plugin = ({ hooks }) => {
           BaseClass: 'item_datadriven',
           Model: 'models/props_gameplay/recipe.mdl',
           AbilityTextureName: 'item_recipe',
-          ItemCost: item.Recipe.cost || 0,
+          ItemCost: item.Recipe.cost ?? 0,
           ItemRecipe: true,
           ItemResult: itemName,
           ItemRequirements: Object.fromEntries(
