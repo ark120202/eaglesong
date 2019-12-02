@@ -29,7 +29,7 @@
     "chalk": "^3.0.0",
     "dateformat": "^3.0.3",
     "del": "^5.1.0",
-    "execa": "^3.3.0",
+    "execa": "^3.4.0",
     "find-steam-app": "^1.0.2",
     "fs-extra": "^8.1.0",
     "globby": "^10.0.1",
@@ -37,7 +37,7 @@
     "is-installed-globally": "^0.3.1",
     "lodash": "^4.17.15",
     "log-symbols": "^3.0.0",
-    "mem": "^6.0.0",
+    "mem": "^6.0.1",
     "open": "^7.0.0",
     "please-upgrade-node": "^3.2.0",
     "read-pkg": "^5.2.0",
@@ -46,7 +46,7 @@
     "temp-write": "^4.0.0",
     "tempfile": "^3.0.0",
     "terminal-link": "^2.0.0",
-    "ts-node": "^8.5.2",
+    "ts-node": "^8.5.4",
     "tslib": "^1.10.0",
     "unique-string": "^2.0.0",
     "upath": "^1.2.0",
@@ -57,7 +57,7 @@
     "yargs": "^15.0.2"
   },
   "devDependencies": {
-    "dota-data": "^0.5.0",
+    "dota-data": "^0.6.0",
     "source-map-support": "^0.5.16",
     "time-require": "^0.1.2"
   },

@@ -16,11 +16,11 @@
     "@types/fs-extra": "^8.0.1",
     "@types/inquirer": "^6.5.0",
     "@types/yargs": "^13.0.3",
-    "execa": "^3.3.0",
+    "execa": "^3.4.0",
     "fs-extra": "^8.1.0",
     "globby": "^10.0.1",
     "inquirer": "^7.0.0",
-    "sort-package-json": "^1.23.1",
+    "sort-package-json": "^1.27.0",
     "yargs": "^15.0.2"
   },
   "engines": {

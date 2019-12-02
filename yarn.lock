@@ -42,13 +42,13 @@
     esutils "^2.0.2"
     js-tokens "^4.0.0"
 
-"@dota-data/scripts@^0.1.5":
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/@dota-data/scripts/-/scripts-0.1.5.tgz#b14aba1027d87587197d5ca11af8285dceb0465b"
-  integrity sha512-fnUtaTawStf00xFXGGNMgVm5O/8+JDbGFTDAt9/wvPOCJ7HYMNMF5JROgNpy5eayJx8om3yifuI6mziLGpj2BA==
+"@dota-data/scripts@^0.1.6":
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/@dota-data/scripts/-/scripts-0.1.6.tgz#7dacf3ca2d8c10353cbb114494a497ebe4ef924a"
+  integrity sha512-Q/ZEmdKIYS0A2hx7jo6YsiV3ADIsQP6sSWz0QR9j6iYrY8fGInARR+xQVo+dg+i8iHGympp1hPfxm9mBtO4nTg==
   dependencies:
     dedent "^0.7.0"
-    dota-data "^0.5.0"
+    dota-data "^0.6.0"
     fs-extra "^8.1.0"
     got "^9.6.0"
     lodash "^4.17.15"
@@ -108,7 +108,7 @@
     dedent "^0.7.0"
     form-data "^3.0.0"
     fs-extra "^8.1.0"
-    got "^10.0.0-beta.2"
+    got "^10.0.1"
     lodash "^4.17.15"
     p-props "^3.1.0"
     tapable "^2.0.0-beta.8"
@@ -162,7 +162,7 @@
     "@types/webpack-merge" "^4.1.5"
     copy-webpack-plugin "^5.0.5"
     file-loader "^4.3.0"
-    fork-ts-checker-webpack-plugin "^3.1.0"
+    fork-ts-checker-webpack-plugin "^3.1.1"
     fs-extra "^8.1.0"
     html-webpack-plugin "^3.2.0"
     json-parse-better-errors "^1.0.2"
@@ -225,9 +225,9 @@
     "@eaglesong/helper-task" "link:packages/helper-task"
     "@types/resolve" "^0.0.8"
     fs-extra "^8.1.0"
-    resolve "^1.12.2"
+    resolve "^1.13.1"
     tslib "^1.10.0"
-    typescript-to-lua "^0.28.1"
+    typescript-to-lua "^0.29.1"
     upath "^1.2.0"
 
 "@evocateur/libnpmaccess@^3.1.2":
@@ -1282,10 +1282,15 @@
   resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-3.0.3.tgz#3dca0e3f33b200fc7d1139c0cd96c1268cadfd9d"
   integrity sha512-tHq6qdbT9U1IRSGf14CL0pUlULksvY9OZ+5eEgl1N7t+OA3tGvNpxJCzuKQlsNgCVwbAs670L1vcVQi8j9HjnA==
 
-"@types/node@*", "@types/node@^12.12.12":
+"@types/node@*":
   version "12.12.12"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-12.12.12.tgz#529bc3e73dbb35dd9e90b0a1c83606a9d3264bdb"
   integrity sha512-MGuvYJrPU0HUwqF7LqvIj50RZUX23Z+m583KBygKYUZLlZ88n6w28XRNJRJgsHukLEnLz6w6SvxZoLgbr5wLqQ==
+
+"@types/node@^12.12.14":
+  version "12.12.14"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.12.14.tgz#1c1d6e3c75dba466e0326948d56e8bd72a1903d2"
+  integrity sha512-u/SJDyXwuihpwjXy7hOOghagLEV1KdAST6syfnOk6QZAMzZuWZqXy5aYYZbh8Jdpd4escVFP0MvftHNDb9pruA==
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.0"
@@ -2439,7 +2444,7 @@ chardet@^0.7.0:
   optionalDependencies:
     fsevents "^2.0.6"
 
-chokidar@^2.0.2, chokidar@^2.0.4:
+chokidar@^2.0.2:
   version "2.1.5"
   resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-2.1.5.tgz#0ae8434d962281a5f56c72869e79cb6d9d86ad4d"
   integrity sha512-i0TprVWp+Kj4WRPtInjexJ8Q+BqTE909VpH8xVhXrJkoc5QC8VO9TryGOqTr+2hljzc1sC62t22h5tZePodM/A==
@@ -3321,17 +3326,17 @@ dot-prop@^4.2.0:
   dependencies:
     is-obj "^1.0.0"
 
-dota-data@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/dota-data/-/dota-data-0.5.0.tgz#6a8a0cb2dcb65b11081b3d76f1608025973420a1"
-  integrity sha512-ZmLysb4KJgpTvXg7ftQQA89ci2sKT5sG5kc1mQTZ14SKoZ8/X22xiwtYgpyrarhHTuq8BqPh3xLfA9meE+70pQ==
+dota-data@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/dota-data/-/dota-data-0.6.0.tgz#061a0597195c67802ab1fb5d01cfc4f60bd84f9f"
+  integrity sha512-JnmEA/ivGv1CYw4v1Q8WUYRJSvK4KceCuaHvCtCj0w3O02GZg7H4Yc8GLkmGGhmWhYIws/YGl4Wc2PmZBqp+Jg==
   dependencies:
     lodash "^4.17.15"
 
-dota-lua-types@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/dota-lua-types/-/dota-lua-types-3.0.1.tgz#aa11b57fb45f2a56829efa161c1aca20ea7e80e3"
-  integrity sha512-CNdQpuN0W6A9YOAGCzp6E5abVO1vouGHMSJ1ZY7H/QHxcLdivvMPmEdswMLD9Mz5y9QFS/izewacNx0sZEJcEA==
+dota-lua-types@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/dota-lua-types/-/dota-lua-types-3.1.0.tgz#854e9fbe527d559b3ff76bf956debae346b087a5"
+  integrity sha512-DX3Y0XuQ+fQuv0UcuF3HOkQpo8yLc3vRzvq7/1eH/8wYfhkvo0WbgfqD9q9uj9MhY8hQheHZLopCsEcovZCiRQ==
   dependencies:
     lua-types "^2.6.2"
     tslib "^1.10.0"
@@ -3667,10 +3672,10 @@ eslint-visitor-keys@^1.1.0:
   resolved "https://registry.yarnpkg.com/eslint-visitor-keys/-/eslint-visitor-keys-1.1.0.tgz#e2a82cea84ff246ad6fb57f9bde5b46621459ec2"
   integrity sha512-8y9YjtM1JBJU/A9Kc+SbaOV4y29sSWckBwMHa+FGtVj5gN/sbnKDf6xJUl+8g7FAij9LVaP8C24DUiH/f/2Z9A==
 
-eslint@^6.7.1:
-  version "6.7.1"
-  resolved "https://registry.yarnpkg.com/eslint/-/eslint-6.7.1.tgz#269ccccec3ef60ab32358a44d147ac209154b919"
-  integrity sha512-UWzBS79pNcsDSxgxbdjkmzn/B6BhsXMfUaOHnNwyE8nD+Q6pyT96ow2MccVayUTV4yMid4qLhMiQaywctRkBLA==
+eslint@^6.7.2:
+  version "6.7.2"
+  resolved "https://registry.yarnpkg.com/eslint/-/eslint-6.7.2.tgz#c17707ca4ad7b2d8af986a33feba71e18a9fecd1"
+  integrity sha512-qMlSWJaCSxDFr8fBPvJM9kJwbazrhNcBU3+DszDW1OlEwKBBRWsJc7NJFelvwQpanHCR14cOLD41x8Eqvo3Nng==
   dependencies:
     "@babel/code-frame" "^7.0.0"
     ajv "^6.10.0"
@@ -3802,10 +3807,10 @@ execa@^1.0.0:
     signal-exit "^3.0.0"
     strip-eof "^1.0.0"
 
-execa@^3.3.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/execa/-/execa-3.3.0.tgz#7e348eef129a1937f21ecbbd53390942653522c1"
-  integrity sha512-j5Vit5WZR/cbHlqU97+qcnw9WHRCIL4V1SVe75VcHcD1JRBdt8fv0zw89b7CQHQdUHTt2VjuhcF5ibAgVOxqpg==
+execa@^3.4.0:
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/execa/-/execa-3.4.0.tgz#c08ed4550ef65d858fac269ffc8572446f37eb89"
+  integrity sha512-r9vdGQk4bmCuK1yKQu1KTwcT2zwfWdbdaXfCtAh+5nU/4fSX+JAb7vZGvI5naJrQlvONrEB20jeruESI69530g==
   dependencies:
     cross-spawn "^7.0.0"
     get-stream "^5.0.0"
@@ -4067,14 +4072,14 @@ forever-agent@~0.6.1:
   resolved "https://registry.yarnpkg.com/forever-agent/-/forever-agent-0.6.1.tgz#fbc71f0c41adeb37f96c577ad1ed42d8fdacca91"
   integrity sha1-+8cfDEGt6zf5bFd60e1C2P2sypE=
 
-fork-ts-checker-webpack-plugin@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/fork-ts-checker-webpack-plugin/-/fork-ts-checker-webpack-plugin-3.1.0.tgz#fb411a4b2c3697e1cd7f83436d4feeacbcc70c7b"
-  integrity sha512-6OkRfjuNMNqb14f01xokcWcKV5Ekknc2FvziNpcTYru+kxIYFA2MtuuBI19MHThZnjSBhoi35Dcq+I0oUkFjmQ==
+fork-ts-checker-webpack-plugin@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/fork-ts-checker-webpack-plugin/-/fork-ts-checker-webpack-plugin-3.1.1.tgz#a1642c0d3e65f50c2cc1742e9c0a80f441f86b19"
+  integrity sha512-DuVkPNrM12jR41KM2e+N+styka0EgLkTnXmNcXdgOM37vtGeY+oCBK/Jx0hzSeEU6memFCtWb4htrHPMDfwwUQ==
   dependencies:
     babel-code-frame "^6.22.0"
     chalk "^2.4.1"
-    chokidar "^2.0.4"
+    chokidar "^3.3.0"
     micromatch "^3.1.10"
     minimatch "^3.0.4"
     semver "^5.6.0"
@@ -4413,10 +4418,10 @@ globby@^9.2.0:
     pify "^4.0.1"
     slash "^2.0.0"
 
-got@^10.0.0-beta.2:
-  version "10.0.0-beta.2"
-  resolved "https://registry.yarnpkg.com/got/-/got-10.0.0-beta.2.tgz#7b7cacc04d59f801731846e66cc6e9ea0ec33f93"
-  integrity sha512-WLEanbnLqRLxO2tN9NoPZ/ywnlRDMZ8R5aOz4ojnpr4eDFXTcLrzqOtZdJBa+I8RygOfKhbik5rmRwr6QiV45g==
+got@^10.0.1:
+  version "10.0.1"
+  resolved "https://registry.yarnpkg.com/got/-/got-10.0.1.tgz#0c9eb81a7e5e3baca2dddd611a4bd7c054e31fdd"
+  integrity sha512-lXOWDVJczIX4uOZG5CRSlIzNAGqft40Kj7/rLSccH8y9GKs1a86rO/+23CC4kF8OdHFazapX3mI6gZPqDrIAfA==
   dependencies:
     "@sindresorhus/is" "^1.0.0"
     "@szmarczak/http-timer" "^3.1.0"
@@ -5674,10 +5679,10 @@ md5.js@^1.3.4:
     inherits "^2.0.1"
     safe-buffer "^5.1.2"
 
-mem@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/mem/-/mem-6.0.0.tgz#f79bb110b90b688a2d1468566e66a911794abee5"
-  integrity sha512-1zHBKMg0Xd4yw3EQju6cjJiNtPomak7aNkuJx19QihMco09icTTsLZtVvxfxBxQH/NNvjtA1skR9lDlvkdW46g==
+mem@^6.0.1:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/mem/-/mem-6.0.1.tgz#3f8ad1b0f8c4e00daf07f104e95b9d78131d7908"
+  integrity sha512-uIRYASflIsXqvKe+7aXbLrydaRzz4qiK6amqZDQI++eRtW3UoKtnDcGeCAOREgll7YMxO5E4VB9+3B0LFmy96g==
   dependencies:
     map-age-cleaner "^0.1.3"
     mimic-fn "^3.0.0"
@@ -7391,10 +7396,17 @@ resolve-url@^0.2.1:
   resolved "https://registry.yarnpkg.com/resolve-url/-/resolve-url-0.2.1.tgz#2c637fe77c893afd2a663fe21aa9080068e2052a"
   integrity sha1-LGN/53yJOv0qZj/iGqkIAGjiBSo=
 
-resolve@^1.10.0, resolve@^1.10.1, resolve@^1.11.0, resolve@^1.12.2, resolve@^1.5.0:
+resolve@^1.10.0, resolve@^1.10.1, resolve@^1.11.0, resolve@^1.5.0:
   version "1.12.2"
   resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.12.2.tgz#08b12496d9aa8659c75f534a8f05f0d892fff594"
   integrity sha512-cAVTI2VLHWYsGOirfeYVVQ7ZDejtQ9fp4YhYckWDEkFfqbVjaT11iM8k6xSAfGFMM+gDpZjMnFssPu8we+mqFw==
+  dependencies:
+    path-parse "^1.0.6"
+
+resolve@^1.13.1:
+  version "1.13.1"
+  resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.13.1.tgz#be0aa4c06acd53083505abb35f4d66932ab35d16"
+  integrity sha512-CxqObCX8K8YtAhOBRg+lrcdn+LK+WYOS8tSjqSFbjtrI5PnS63QPhZl4+yKfrU9tdsbMu9Anr/amegT87M9Z6w==
   dependencies:
     path-parse "^1.0.6"
 
@@ -7803,10 +7815,10 @@ sort-object-keys@^1.1.2:
   resolved "https://registry.yarnpkg.com/sort-object-keys/-/sort-object-keys-1.1.2.tgz#d3a6c48dc2ac97e6bc94367696e03f6d09d37952"
   integrity sha1-06bEjcKsl+a8lDZ2luA/bQnTeVI=
 
-sort-package-json@^1.23.1:
-  version "1.23.1"
-  resolved "https://registry.yarnpkg.com/sort-package-json/-/sort-package-json-1.23.1.tgz#7882349ad885ee6d82ff57af4184f9d6e9159e1d"
-  integrity sha512-dg6XChDHL+V1gPBLW4fDWsip5T94wpDVlowm8gxXsxQMxX2271zw8JM1RRbJSIrN80/UlwlRdBVkk2SuiuZ2cw==
+sort-package-json@^1.27.0:
+  version "1.27.0"
+  resolved "https://registry.yarnpkg.com/sort-package-json/-/sort-package-json-1.27.0.tgz#0f0038b6635458ffe60ad9f15976de38049b009e"
+  integrity sha512-wNQIH1/MVHE41XQb+yWv7iDwYhtRsLAVgJ0Zova5osALuHQz7zOLDn4UI/Gs55nHeXsS559HTlbuaWzHsCfQHg==
   dependencies:
     detect-indent "^6.0.0"
     glob "^7.1.6"
@@ -8458,10 +8470,10 @@ ts-loader@^6.2.1:
     micromatch "^4.0.0"
     semver "^6.0.0"
 
-ts-node@^8.5.2:
-  version "8.5.2"
-  resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-8.5.2.tgz#434f6c893bafe501a30b32ac94ee36809ba2adce"
-  integrity sha512-W1DK/a6BGoV/D4x/SXXm6TSQx6q3blECUzd5TN+j56YEMX3yPVMpHsICLedUw3DvGF3aTQ8hfdR9AKMaHjIi+A==
+ts-node@^8.5.4:
+  version "8.5.4"
+  resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-8.5.4.tgz#a152add11fa19c221d0b48962c210cf467262ab2"
+  integrity sha512-izbVCRV68EasEPQ8MSIGBNK9dc/4sYJJKYA+IarMQct1RtEot6Xp0bXuClsbUSnKpg50ho+aOAx8en5c+y4OFw==
   dependencies:
     arg "^4.1.0"
     diff "^4.0.1"
@@ -8562,10 +8574,10 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript-to-lua@^0.28.1:
-  version "0.28.1"
-  resolved "https://registry.yarnpkg.com/typescript-to-lua/-/typescript-to-lua-0.28.1.tgz#d8e58a17c7b7a2169afbb0ea10644ee5f4789273"
-  integrity sha512-RTH4QthGfTxElcr9aPSJ4eIIN+u6cL++/FGf8/rif1YQjpdA9gnHPVQyCnC5SbF8UW2OfyeEhDCgoqLWcq4ILQ==
+typescript-to-lua@^0.29.1:
+  version "0.29.1"
+  resolved "https://registry.yarnpkg.com/typescript-to-lua/-/typescript-to-lua-0.29.1.tgz#236d5e99b0dc200faac1a78f1b2d9b851bda865b"
+  integrity sha512-vT8ATxbw8KoMnAqgxOykWwQ5ecWjAWfleTPuxGu7bdIhnU37yqKkc0kvLJ2eqKxJvgc+7iK3TSdggEKjuGN4vA==
   dependencies:
     resolve "^1.11.0"
     source-map "^0.7.3"
