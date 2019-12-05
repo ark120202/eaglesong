@@ -37,6 +37,11 @@
   "peerDependencies": {
     "typescript": "^3.0.0"
   },
+  "peerDependenciesMeta": {
+    "typescript": {
+      "optional": true
+    }
+  },
   "publishConfig": {
     "access": "public"
   }

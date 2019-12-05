@@ -3288,6 +3288,14 @@ dota-data@^0.7.0:
     tslib "^1.10.0"
     vdf-extra "^2.2.2"
 
+dota-lua-types@^3.0.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/dota-lua-types/-/dota-lua-types-3.2.0.tgz#da0dcc5e60b692bd4f05ebeac423721384adeddb"
+  integrity sha512-e9wHq4lRG+QK8e6zSFhvb+GGVdqMw+GFZZ/0E5C591JGu4OuC/O2uQabgSUj8/JqO3O7RpNeiOp1a5NmA7lxrQ==
+  dependencies:
+    lua-types "^2.6.2"
+    tslib "^1.10.0"
+
 dota-lua-types@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/dota-lua-types/-/dota-lua-types-3.1.0.tgz#854e9fbe527d559b3ff76bf956debae346b087a5"
@@ -8493,6 +8501,11 @@ typescript-to-lua@^0.29.1:
     resolve "^1.11.0"
     source-map "^0.7.3"
     typescript "^3.6.2"
+
+typescript@^3.0.0:
+  version "3.7.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.7.3.tgz#b36840668a16458a7025b9eabfad11b66ab85c69"
+  integrity sha512-Mcr/Qk7hXqFBXMN7p7Lusj1ktCBydylfQM/FZCk5glCNQJrCUKPkMHdo9R0MTFWsC/4kPFvDS0fDPvukfCkFsw==
 
 typescript@^3.6.2, typescript@^3.7.2:
   version "3.7.2"

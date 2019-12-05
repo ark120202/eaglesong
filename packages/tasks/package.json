@@ -29,6 +29,27 @@
     "@eaglesong/task-vscripts": "link:../task-vscripts",
     "tslib": "^1.10.0"
   },
+  "devDependencies": {
+    "dota-data": "^0.7.0",
+    "dota-lua-types": "^3.0.0",
+    "typescript": "^3.0.0"
+  },
+  "peerDependencies": {
+    "dota-data": "^0.7.0",
+    "dota-lua-types": "^3.0.0",
+    "typescript": "^3.0.0"
+  },
+  "peerDependenciesMeta": {
+    "dota-data": {
+      "optional": true
+    },
+    "dota-lua-types": {
+      "optional": true
+    },
+    "typescript": {
+      "optional": true
+    }
+  },
   "publishConfig": {
     "access": "public"
   }
