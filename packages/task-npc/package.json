@@ -27,10 +27,10 @@
     "vdf-extra": "^2.2.2"
   },
   "devDependencies": {
-    "@dota-data/scripts": "^0.1.6"
+    "dota-data": "^0.7.0"
   },
   "peerDependencies": {
-    "@dota-data/scripts": "^0.1.5"
+    "dota-data": "^0.7.0"
   },
   "publishConfig": {
     "access": "public"

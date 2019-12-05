@@ -1,4 +1,4 @@
-import * as s from '@dota-data/scripts/lib/schema';
+import * as s from 'dota-data/lib/schema';
 import _ from 'lodash';
 import { Plugin } from '../../service';
 

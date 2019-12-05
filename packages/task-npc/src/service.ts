@@ -1,11 +1,11 @@
-import { schemas as standardSchemas } from '@dota-data/scripts';
-import { RootSchema } from '@dota-data/scripts/lib/schema';
 import {
   NamedType,
   ServiceErrorReporter,
   ServicePluginApi,
   TaskProvider,
 } from '@eaglesong/helper-task';
+import * as s from 'dota-data/lib/schema';
+import { schemas as standardSchemas } from 'dota-data/lib/schemas';
 import _ from 'lodash';
 import pProps from 'p-props';
 import { AsyncSeriesHook } from 'tapable';
@@ -13,7 +13,7 @@ import path from 'upath';
 
 export type Plugin = (api: PluginApi) => void;
 export type PluginApi = ServicePluginApi & { hooks: Hooks; collectedSchemas: Schemas };
-export type Schemas = Record<string, RootSchema>;
+export type Schemas = Record<string, s.RootSchema>;
 
 export type File = Record<string, any> & NamedType;
 export type Files = Record<string, File> & NamedType;
@@ -109,9 +109,9 @@ export class NpcService {
 
     for (const [key, fileList] of Object.entries(keyCache)) {
       if (fileList.length > 1) {
-        const definedIn = fileList.length === 1 ? `'${fileList[0]}'` : `[${fileList.join(', ')}]`;
+        const definedIn = `[${fileList.join(', ')}]`;
         this.error({
-          message: `Key ${key} is defined in ${definedIn}, yet only one definition is allowed.`,
+          message: `Key '${key}' is defined in ${definedIn}, only one definition is allowed.`,
         });
       }
     }

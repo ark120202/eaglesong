@@ -1,5 +1,5 @@
-import * as s from '@dota-data/scripts/lib/schema';
-import { precacheTypes } from '@dota-data/scripts/lib/schemas/resources';
+import * as s from 'dota-data/lib/schema';
+import { precacheTypes } from 'dota-data/lib/schemas';
 import _ from 'lodash';
 import vdf from 'vdf-extra';
 import { Plugin } from '../../service';

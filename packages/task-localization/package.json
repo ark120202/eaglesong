@@ -29,10 +29,10 @@
     "upath": "^1.2.0"
   },
   "devDependencies": {
-    "dota-data": "^0.6.0"
+    "dota-data": "^0.7.0"
   },
   "peerDependencies": {
-    "dota-data": "^0.5.0"
+    "dota-data": "^0.7.0"
   },
   "publishConfig": {
     "access": "public"

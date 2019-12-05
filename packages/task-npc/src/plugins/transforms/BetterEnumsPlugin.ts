@@ -1,15 +1,15 @@
-import { EnumsSchema, TsContext, ValidationContext } from '@dota-data/scripts/lib/schema';
+import * as s from 'dota-data/lib/schema';
 import _ from 'lodash';
 import { Plugin } from '../../service';
 
-class CustomEnumsSchema extends EnumsSchema {
-  public static from(schema: EnumsSchema) {
+class CustomEnumsSchema extends s.EnumsSchema {
+  public static from(schema: s.EnumsSchema) {
     const newSchema = new CustomEnumsSchema(schema._name);
     newSchema._flags = schema._flags;
     return newSchema;
   }
 
-  public toTypeScript(context: TsContext) {
+  public toTypeScript(context: s.TsContext) {
     // TODO: Get rid of side effects
     (global as any)[this._name] = Object.fromEntries(
       this.getDefinition().members.map(({ name, originalName }) => [name, originalName]),
@@ -36,7 +36,7 @@ class CustomEnumsSchema extends EnumsSchema {
     };
   }
 
-  public validate(value: unknown, context: ValidationContext) {
+  public validate(value: unknown, context: s.ValidationContext) {
     if (typeof value !== 'string' && !(this._flags && Array.isArray(value))) {
       context.addErrorThere(`should be a string${this._flags ? ' or an array of strings' : ''}`);
       return;
@@ -70,7 +70,7 @@ export const BetterEnumsPlugin: Plugin = ({ hooks, collectedSchemas }) => {
   hooks.schemas.tap('BetterEnumsPlugin', schemas =>
     Object.values(schemas).forEach(schema =>
       schema
-        .getChildrenDeepLike(EnumsSchema)
+        .getChildrenDeepLike(s.EnumsSchema)
         .forEach(x => x.replaceWith(CustomEnumsSchema.from(x))),
     ),
   );

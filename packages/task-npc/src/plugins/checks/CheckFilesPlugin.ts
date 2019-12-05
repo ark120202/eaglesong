@@ -1,5 +1,5 @@
-import { StringSchema } from '@dota-data/scripts/lib/schema';
-import { resourcePatterns } from '@dota-data/scripts/lib/schemas/resources';
+import { StringSchema } from 'dota-data/lib/schema';
+import { resourcePatterns } from 'dota-data/lib/schemas';
 import fs from 'fs-extra';
 import _ from 'lodash';
 import path from 'path';

@@ -205,9 +205,9 @@ export class LocalizationService {
 
     for (const [key, fileList] of Object.entries(keyCache)) {
       if (fileList.length > 1) {
-        const definedIn = fileList.length === 1 ? `'${fileList[0]}'` : `[${fileList.join(', ')}]`;
+        const definedIn = `[${fileList.join(', ')}]`;
         this.error({
-          message: `Key ${key} is defined in ${definedIn}, yet only one definition is allowed.`,
+          message: `Key '${key}' is defined in ${definedIn}, one definition is allowed.`,
         });
       }
     }
