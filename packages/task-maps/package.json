@@ -1,7 +1,7 @@
 {
   "name": "@eaglesong/task-maps",
   "version": "0.0.0",
-  "description": "Dota 2 VScripts Maps Builder",
+  "description": "Eaglesong task for maps",
   "keywords": [
     "dota 2",
     "eaglesong"

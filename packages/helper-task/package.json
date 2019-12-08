@@ -1,7 +1,7 @@
 {
   "name": "@eaglesong/helper-task",
   "version": "0.0.0",
-  "description": "Task core for Eaglesong",
+  "description": "Utilities for creating tasks for Eaglesong",
   "keywords": [
     "dota 2",
     "eaglesong"

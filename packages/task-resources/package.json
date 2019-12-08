@@ -1,7 +1,7 @@
 {
   "name": "@eaglesong/task-resources",
   "version": "0.0.0",
-  "description": "Dota 2 Resources Builder",
+  "description": "Eaglesong task that links addon resource directories",
   "keywords": [
     "dota 2",
     "eaglesong"

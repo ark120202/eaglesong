@@ -1,7 +1,7 @@
 {
   "name": "@eaglesong/task-localization",
   "version": "0.0.0",
-  "description": "Dota 2 VScripts Localization Builder",
+  "description": "Eaglesong task for localization",
   "keywords": [
     "dota 2",
     "eaglesong"

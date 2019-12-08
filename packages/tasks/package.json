@@ -1,7 +1,7 @@
 {
   "name": "@eaglesong/tasks",
   "version": "0.0.0",
-  "description": "Standard build tasks for Eaglesong",
+  "description": "Standard task collection for Eaglesong",
   "keywords": [
     "dota 2",
     "eaglesong"

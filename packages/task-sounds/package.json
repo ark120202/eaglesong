@@ -1,7 +1,7 @@
 {
   "name": "@eaglesong/task-sounds",
   "version": "0.0.0",
-  "description": "Dota 2 Sounds Builder",
+  "description": "Eaglesong task for sounds and soundevents",
   "keywords": [
     "dota 2",
     "eaglesong"
