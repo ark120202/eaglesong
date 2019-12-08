@@ -3,7 +3,6 @@
     "ark120202.vscode-typescript-to-lua",
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
-    "redhat.vscode-yaml",
-    "shinnn.stylelint"
+    "redhat.vscode-yaml"
   ]
 }
