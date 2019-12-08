@@ -11,4 +11,6 @@ This task includes schema definitions for all common scripts, that is continuous
 standard game files. Schema is used to generate TypeScript type declarations and JSON/Yaml Schemas,
 improving development experience (in [supported editors](/environment#editor-support)).
 
-[Plugins](/commands/build/npc/plugins) can read and modify schema as well.
+[](yaml-schema.webm ':include :type=video width=100% autoplay')
+
+[Plugins](/commands/build/npc/plugins) can use hooks to read and modify schema.
