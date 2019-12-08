@@ -127,7 +127,6 @@ export class Compilation {
         modulePath = this.resolveDependency(filePath, request);
       } catch (error) {
         this.errors.push({ fileName: filePath, message: error.message });
-        // eslint-disable-next-line @typescript-eslint/return-await
         return error;
       }
 

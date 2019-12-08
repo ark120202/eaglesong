@@ -25,8 +25,8 @@
     "upath": "^1.2.0"
   },
   "devDependencies": {
-    "dota-lua-types": "^3.1.0",
-    "typescript": "^3.7.2"
+    "dota-lua-types": "^3.2.0",
+    "typescript": "^3.7.3"
   },
   "peerDependencies": {
     "dota-lua-types": "^3.0.0",
