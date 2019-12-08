@@ -34,9 +34,10 @@ export default class ESLintTask extends TransformTask<Options> {
     );
 
     for (const { filePath, messages } of results) {
-      for (const { severity, line, column, message } of messages) {
+      for (const { severity, line, column, message, ruleId } of messages) {
         if (severity !== 0) {
-          const fullMessage = `(${line},${column}) ${message}`;
+          const ruleName = ruleId != null ? `  ${ruleId}` : '';
+          const fullMessage = `(${line},${column}) ${message}${ruleName}`;
           const level = severity === 2 ? 'error' : 'warning';
 
           this.error({ filePath, level, message: fullMessage });
