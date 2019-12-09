@@ -75,12 +75,10 @@ declare namespace posthtml {
     ): void;
   }
 
-  type Plugin =
-    | ((tree: Api) => NodeTree | Promise<NodeTree>)
-    | ((
-        tree: Api,
-        cb: ((err: Error) => void) | ((err: null | undefined, tree: NodeTree) => void),
-      ) => void);
+  type Plugin = (
+    tree: Api,
+    callback: (error: Error, tree: NodeTree) => void,
+  ) => void | NodeTree | Promise<NodeTree>;
 }
 
 export = posthtml;

@@ -43,9 +43,9 @@ function evaluateModule(publicPath: string, filename: string, source: string) {
 const isImportMessage = (message: posthtml.Message): message is ImportMessage =>
   message.type === 'import';
 
-export const loadImports = (context: webpack.loader.LoaderContext): posthtml.Plugin => async (
-  tree: posthtml.Api,
-) => {
+export const loadImports = (
+  context: webpack.loader.LoaderContext,
+): posthtml.Plugin => async tree => {
   const compilation: webpack.compilation.Compilation = context._compilation;
   // TODO: Options shouldn't be required
   const publicPath = compilation.getPath(compilation.outputOptions.publicPath ?? '', {});

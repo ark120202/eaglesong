@@ -20,7 +20,7 @@ export const preserveIncludesBefore: posthtml.Plugin = (tree: posthtml.Api) => {
     });
 };
 
-export const preserveIncludesAfter: posthtml.Plugin = (tree: posthtml.Api) => {
+export const preserveIncludesAfter: posthtml.Plugin = tree => {
   getIncludeRoots(tree)
     .flatMap(x => x.content)
     .filter(createNodeFilter(['panorama-include']))
@@ -29,9 +29,9 @@ export const preserveIncludesAfter: posthtml.Plugin = (tree: posthtml.Api) => {
     });
 };
 
-export const validateIncludes = (context: webpack.loader.LoaderContext): posthtml.Plugin => (
-  tree: posthtml.Api,
-) => {
+export const validateIncludes = (
+  context: webpack.loader.LoaderContext,
+): posthtml.Plugin => tree => {
   for (const scope of getIncludeRoots(tree)) {
     for (const node of scope.content) {
       if (typeof node !== 'object') continue;
@@ -61,7 +61,7 @@ export const validateIncludes = (context: webpack.loader.LoaderContext): posthtm
   }
 };
 
-export const addCommonIncludes = (commons: string[]): posthtml.Plugin => (tree: posthtml.Api) => {
+export const addCommonIncludes = (commons: string[]): posthtml.Plugin => tree => {
   if (commons.length === 0) return;
 
   const root = getRoot(tree);
