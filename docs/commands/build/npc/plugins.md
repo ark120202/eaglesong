@@ -48,19 +48,29 @@ Specials:
 
 ### Spell damage amplification
 
-To advocate for , Dota has a heuristic that based on special's name. It caused many false-positives,
-so with `AbilitySpecialsPlugin` if you're storing damage-related variables in specials you have to
-add a `$damage: true` property.
+To advocate for spell damage amplification logic, UI has a heuristic that is based on special's
+name. It's very easy to get false-positives with it, so `AbilitySpecialsPlugin` requires you to
+explicitly specify what properties should be considered amplifiable:
 
 ```yaml
-Specials:
-  # Gets `"CalculateSpellDamageTooltip" "1"`.
-  - foo: 100
-    $damage: true
+# Note that you can't make any specials amplifiable without specifying damage type
+AbilityUnitDamageType: DAMAGE_TYPE_MAGICAL
 
-  # Gets `"CalculateSpellDamageTooltip" "0"`, since dota infers it as amplifiable,
-  # but it's not specified explicitly.
-  - my_damage: 100
+Specials:
+  # Adds `"CalculateSpellDamageTooltip" "0"`
+  - damage_1: 100
+    $amplifiable: false
+
+  # Doesn't add `"CalculateSpellDamageTooltip"`, because dota infers it correctly
+  - damage_2: 100
+    $amplifiable: true
+
+  # Adds `"CalculateSpellDamageTooltip" "1"`.
+  - foo: 100
+    $amplifiable: true
+
+  # An error, you should specify if it's amplifiable explicitly
+  - bonus_damage: 100
 ```
 
 ### Extra validation

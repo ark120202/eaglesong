@@ -5,7 +5,7 @@ import { Plugin } from '../../service';
 const reservedFields = {
   var_type: "it's inferred from value",
   levelkey: "it's usage is not known",
-  CalculateSpellDamageTooltip: '', // TODO: 'see https://eaglesong.ark120202.moe/docs/modding/abilities/damage#Spell_Amplification'
+  CalculateSpellDamageTooltip: 'use $amplifiable instead',
   LinkedSpecialBonus: 'use $talent.name instead',
   LinkedSpecialBonusField: 'use $talent.field instead',
   LinkedSpecialBonusOperation: 'use $talent.operation instead',
@@ -32,7 +32,7 @@ export const AbilitySpecialsPlugin: Plugin = ({ hooks, error }) => {
             s
               .obj('Special')
               .rest(s.oneOf([s.num(), s.arrayLike()]), /^[^$]/)
-              .field('$damage', s.bool())
+              .field('$amplifiable', s.bool())
               .field(
                 '$talent',
                 s
@@ -48,6 +48,96 @@ export const AbilitySpecialsPlugin: Plugin = ({ hooks, error }) => {
     ),
   );
 
+  function parseSpecialMetaInfo(
+    special: any,
+  ): { error: string } | { mainName: string; mainValue: any; mainIndex: number } {
+    const fields = Object.keys(special);
+    const mainCandidates = fields.filter(x => !(x in reservedFields) && !x.startsWith('$'));
+
+    if (mainCandidates.length === 0) {
+      return { error: 'not contains special name' };
+    }
+
+    if (mainCandidates.length > 1) {
+      const conflictingSpecials = mainCandidates.join(', ');
+      return {
+        error: `has conflicting specials: ${conflictingSpecials}. If you meant to add own metadata start it with $.`,
+      };
+    }
+
+    const mainName = mainCandidates[0];
+    const mainValue = special[mainName];
+    const mainIndex = fields.findIndex(x => x === mainName);
+    return { mainName, mainValue, mainIndex };
+  }
+
+  function applySpecialTalent(special: any) {
+    const specialTalent = special.$talent;
+    special.$talent = undefined;
+
+    if (specialTalent == null || !_.isPlainObject(specialTalent)) {
+      return {};
+    }
+
+    return {
+      LinkedSpecialBonus: String(specialTalent.name),
+      LinkedSpecialBonusField: String(specialTalent.field),
+      LinkedSpecialBonusOperation:
+        specialTalent.operation === '*'
+          ? 'SPECIAL_BONUS_MULTIPLY'
+          : specialTalent.operation === '-'
+          ? 'SPECIAL_BONUS_SUBTRACT'
+          : undefined,
+    };
+  }
+
+  function applySpecialAmplifiable(
+    special: any,
+    specialPath: string,
+    mainName: string,
+    fileName: string,
+    damageType: any,
+  ) {
+    const isAmplifiable: boolean | undefined = special.$amplifiable;
+    special.$amplifiable = undefined;
+
+    if (!damageType) {
+      if (isAmplifiable !== undefined) {
+        error({
+          fileName,
+          message: `${specialPath}.$amplifiable cannot be specified without 'AbilityUnitDamageType'.`,
+        });
+      }
+
+      return {};
+    }
+
+    const isDotaInferredDamage = mainName.toLowerCase().includes('damage');
+
+    if (isAmplifiable === undefined) {
+      if (isDotaInferredDamage) {
+        error({
+          fileName,
+          message: `${specialPath}.$amplifiable is required for specials with 'damage' in the name.`,
+        });
+      }
+
+      return {};
+    }
+
+    if (isAmplifiable === false && !isDotaInferredDamage) {
+      error({
+        fileName,
+        level: 'warning',
+        message: `${specialPath}.$amplifiable: false is unnecessary.`,
+      });
+    }
+
+    return isDotaInferredDamage !== isAmplifiable
+      ? { CalculateSpellDamageTooltip: isAmplifiable ? 1 : 0 }
+      : {};
+  }
+
   hooks.transform.tap('AbilitySpecialsPlugin', (files, group) => {
     if (!fileFilter.has(group)) return;
 
@@ -62,34 +152,21 @@ export const AbilitySpecialsPlugin: Plugin = ({ hooks, error }) => {
               if (name in special) {
                 error({
                   fileName,
-                  message: `${abilityName}.Specials(${name}) may not be specified, ${recommendation}.`,
+                  message: `${abilityName}.Specials(${name}) cannot be specified, ${recommendation}.`,
                 });
               }
             }
 
-            const fields = Object.keys(special);
-            const mainCandidates = fields.filter(x => !(x in reservedFields) && !x.startsWith('$'));
-
-            if (mainCandidates.length === 0) {
+            const specialInfo = parseSpecialMetaInfo(special);
+            if ('error' in specialInfo) {
               error({
                 fileName,
-                message: `${abilityName}.Specials[${index}] not contains special name`,
+                message: `${abilityName}.Specials[${index}] ${specialInfo.error}`,
               });
               return [fullIndex, special];
             }
 
-            if (mainCandidates.length > 1) {
-              const conflictingSpecials = mainCandidates.join(', ');
-              error({
-                fileName,
-                message: `${abilityName}.Specials[${index}] has conflicting specials: ${conflictingSpecials}. If you meant to add metadata prepend it with $.`,
-              });
-              return [fullIndex, special];
-            }
-
-            const mainName = mainCandidates[0];
-            const mainValue = special[mainName];
-            const mainIndex = fields.findIndex(x => x === mainName);
+            const { mainName, mainValue, mainIndex } = specialInfo;
             if (mainIndex !== 0) {
               error({
                 fileName,
@@ -100,27 +177,19 @@ export const AbilitySpecialsPlugin: Plugin = ({ hooks, error }) => {
 
             const newSpecial: Record<string, any> = {
               var_type: inferVarType(mainValue),
+
               // Main field should be after `var_type`
               [mainName]: mainValue,
+
+              ...applySpecialTalent(special),
+              ...applySpecialAmplifiable(
+                special,
+                `${abilityName}.Specials(${mainName})`,
+                mainName,
+                fileName,
+                ability.AbilityUnitDamageType,
+              ),
             };
-
-            if (special.$talent != null && _.isPlainObject(special.$talent)) {
-              newSpecial.LinkedSpecialBonus = String(special.$talent.name);
-              newSpecial.LinkedSpecialBonusField = String(special.$talent.field);
-              newSpecial.LinkedSpecialBonusOperation =
-                special.$talent.operation === '*'
-                  ? 'SPECIAL_BONUS_MULTIPLY'
-                  : special.$talent.operation === '-'
-                  ? 'SPECIAL_BONUS_SUBTRACT'
-                  : undefined;
-            }
-
-            // TODO: Check how dota does it
-            const isDotaInferredDamage = mainName.includes('damage');
-            const isActuallyDamage = special.$damage === true;
-            if (isDotaInferredDamage !== isActuallyDamage) {
-              newSpecial.CalculateSpellDamageTooltip = isActuallyDamage ? 1 : 0;
-            }
 
             return [fullIndex, newSpecial];
           }),
