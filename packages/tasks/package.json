@@ -11,6 +11,9 @@
   "repository": "https://github.com/ark120202/eaglesong/tree/master/packages/tasks",
   "license": "Apache-2.0",
   "author": "ark120202",
+  "files": [
+    "lib/**/*.{js,ts}"
+  ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "dependencies": {
@@ -39,6 +42,9 @@
     "dota-lua-types": "^3.0.0",
     "typescript": "^3.0.0"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "peerDependenciesMeta": {
     "dota-data": {
       "optional": true
@@ -49,8 +55,5 @@
     "typescript": {
       "optional": true
     }
-  },
-  "publishConfig": {
-    "access": "public"
   }
 }

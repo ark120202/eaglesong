@@ -11,6 +11,10 @@
   "repository": "https://github.com/ark120202/eaglesong/tree/master/packages/create-custom-game",
   "license": "Apache-2.0",
   "author": "ark120202",
+  "files": [
+    "lib/**/*.{js,ts}",
+    "templates"
+  ],
   "bin": "lib/index.js",
   "dependencies": {
     "@types/fs-extra": "^8.0.1",

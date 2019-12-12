@@ -11,6 +11,10 @@
   "repository": "https://github.com/ark120202/eaglesong/tree/master/packages/task-panorama",
   "license": "Apache-2.0",
   "author": "ark120202",
+  "files": [
+    "lib/**/*.{js,ts}",
+    "template.ejs"
+  ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "dependencies": {

@@ -27,6 +27,9 @@
         "tsconfig.json",
         "packages/*/tsconfig.json"
       ]
+    },
+    "rules": {
+      "node/no-unpublished-bin": "off"
     }
   },
   "devDependencies": {
