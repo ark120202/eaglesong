@@ -125,7 +125,7 @@ export default class BuilderCommand extends CommandGroup {
   }
 
   private isSuccess() {
-    return [...this.tasks.values()].every(t => t.errorLevel == null);
+    return [...this.tasks.values()].every(t => t.getErrorLevel() == null);
   }
 
   private report() {

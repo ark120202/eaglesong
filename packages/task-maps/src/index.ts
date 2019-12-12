@@ -57,15 +57,13 @@ export default class MapsTask extends Task<void> {
   private async reloadMetadata() {
     const maps = await this.import(this.metadataPath);
     // Parsing error
-    if (this.errorLevel != null) {
+    if (this.getErrorLevel() != null) {
       this.finish();
       return;
     }
 
     this.validateMetadata(maps);
-    // TODO: Make it a function
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    if (this.errorLevel != null) {
+    if (this.getErrorLevel() != null) {
       this.finish();
       return;
     }
@@ -73,8 +71,7 @@ export default class MapsTask extends Task<void> {
     await this.validateMaps(maps);
     await this.validateOverviews(maps);
 
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    if (this.errorLevel == null) {
+    if (this.getErrorLevel() == null) {
       this.addonInfoTask.setMaps({ ...maps, maps: Object.keys(maps).join(' ') });
     } else {
       this.addonInfoTask.setMaps({});

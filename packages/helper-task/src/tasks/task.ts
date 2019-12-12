@@ -48,7 +48,7 @@ export abstract class Task<T> {
 
   public errors: TaskError[] = [];
   public state: TaskState = TaskState.Working;
-  public get errorLevel() {
+  public getErrorLevel() {
     return this.errors.reduce<'error' | 'warning' | undefined>(
       (highestLevel, error) => (highestLevel === 'error' ? 'error' : error.level),
       undefined,
@@ -65,7 +65,7 @@ export abstract class Task<T> {
   public finish() {
     assert(this.state === TaskState.Working, 'incorrect task state');
 
-    switch (this.errorLevel) {
+    switch (this.getErrorLevel()) {
       case 'error':
         this.state = TaskState.HasErrors;
         break;

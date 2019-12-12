@@ -92,7 +92,7 @@ export default class NpcTask extends TransformTask<Options> {
   }
 
   protected async afterWatch() {
-    if (this.errorLevel) return;
+    if (this.getErrorLevel() != null) return;
 
     const artifacts = await this.service.emit();
     if (this.dotaPath == null) return;
