@@ -63,11 +63,7 @@ export function createWebpackConfig({
   const resourcesConfig: webpack.Configuration = {
     module: {
       rules: [
-        {
-          test: /\.(png|je?pg)$/,
-          loader: 'file-loader',
-          options: { limit: 8192, name: 'images/[name].[hash:8].[ext]' },
-        },
+        { test: /\.(png|je?pg)$/, loader: 'file-loader', options: { name: '[path][name].[ext]' } },
       ],
     },
     plugins: [
@@ -139,7 +135,7 @@ export function createWebpackConfig({
           test: /\.(c|sa|sc)ss$/,
           issuer: /\.xml$/,
           loader: 'file-loader',
-          options: { name: 'styles/[name].css' },
+          options: { name: '[path][name].css' },
         },
         {
           test: /\.s(a|c)ss$/,

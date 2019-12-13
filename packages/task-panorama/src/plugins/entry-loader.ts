@@ -14,8 +14,12 @@ export function pitch(this: webpack.loader.LoaderContext, request: string) {
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   const target: EntryLoaderOptions = getOptions(this) ?? {};
 
-  const fileName = interpolateName(this, target.filename ?? 'scripts/[name].js', {});
-  const compiler = createCompiler(this, fileName, target.plugins ?? []);
+  const compiler = createCompiler(
+    this,
+    interpolateName(this, target.filename ?? '[path][name].js', { context: this.rootContext }),
+    target.plugins ?? [],
+  );
+
   runCompiler(compiler, this.async()!);
 }
 
