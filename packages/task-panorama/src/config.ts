@@ -79,18 +79,6 @@ export function createWebpackConfig({
   const panoramaPath = path.join(context, 'src', 'panorama');
   const configFile = path.join(panoramaPath, 'tsconfig.json');
 
-  const entryLoader: webpack.RuleSetLoader = {
-    loader: require.resolve('./plugins/entry-loader'),
-    options: _.identity<EntryLoaderOptions>({
-      plugins: ['BannerPlugin'],
-    }),
-  };
-
-  const tsLoader: webpack.RuleSetLoader = {
-    loader: 'ts-loader',
-    options: { configFile, transpileOnly: true },
-  };
-
   const scriptsConfig: webpack.Configuration = {
     resolve: {
       extensions: ['.js', '.jsx', '.ts', '.tsx'],
@@ -98,8 +86,18 @@ export function createWebpackConfig({
     },
     module: {
       rules: [
-        { test: /\.[jt]sx?$/, issuer: /\.xml$/, use: entryLoader },
-        { test: /\.tsx?$/, exclude: /node_modules/, use: tsLoader },
+        {
+          test: /\.[jt]sx?$/,
+          issuer: /\.xml$/,
+          loader: require.resolve('./plugins/entry-loader'),
+          options: _.identity<EntryLoaderOptions>({ plugins: ['BannerPlugin'] }),
+        },
+        {
+          test: /\.tsx?$/,
+          exclude: /node_modules/,
+          loader: 'ts-loader',
+          options: { configFile, transpileOnly: true },
+        },
       ],
     },
     plugins: [
@@ -138,16 +136,15 @@ export function createWebpackConfig({
     module: {
       rules: [
         {
-          test: /\.s(a|c)ss$/,
-          use: [
-            { loader: 'file-loader', options: { name: 'styles/[name].css' } },
-            { loader: 'sass-loader', options: { implementation: sass } },
-          ],
-        },
-        {
-          test: /\.css$/,
+          test: /\.(c|sa|sc)ss$/,
+          issuer: /\.xml$/,
           loader: 'file-loader',
           options: { name: 'styles/[name].css' },
+        },
+        {
+          test: /\.s(a|c)ss$/,
+          loader: 'sass-loader',
+          options: { implementation: sass },
         },
       ],
     },
