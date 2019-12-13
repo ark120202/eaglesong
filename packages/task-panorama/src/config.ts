@@ -78,7 +78,7 @@ export function createWebpackConfig({
   const scriptsConfig: webpack.Configuration = {
     resolve: {
       extensions: ['.js', '.jsx', '.ts', '.tsx'],
-      plugins: [new TsconfigPathsPlugin()],
+      plugins: [new TsconfigPathsPlugin({ configFile })],
     },
     module: {
       rules: [
