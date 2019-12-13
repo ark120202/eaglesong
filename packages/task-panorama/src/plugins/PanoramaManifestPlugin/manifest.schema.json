@@ -1,0 +1,26 @@
+{
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["name", "source"],
+    "properties": {
+      "name": { "type": "string" },
+      "source": { "type": "string" },
+      "type": {
+        "type": "string",
+        "examples": [
+          "GameInfo",
+          "HeroSelection",
+          "HUD",
+          "HudTopBar",
+          "FlyoutScoreboard",
+          "EndScreen"
+        ]
+      }
+    },
+    "dependencies": {
+      "type": { "properties": { "name": { "type": "string", "pattern": "\\.xml$" } } }
+    }
+  }
+}

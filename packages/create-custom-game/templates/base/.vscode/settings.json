@@ -32,6 +32,7 @@
   ],
   "yaml.schemas": {
     "./.eaglesong/schemas/maps-metadata.json": "src/maps/metadata.yml",
+    "./.eaglesong/schemas/panorama-manifest.json": "src/panorama/manifest.yml",
     "./.eaglesong/schemas/soundevents.json": "src/sounds/*.yml",
     "./.eaglesong/schemas/npc/npc_abilities_custom.json": [
       "src/npc/npc_abilities_custom.yml",

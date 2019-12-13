@@ -10,7 +10,7 @@ import webpack from 'webpack';
 import webpackMerge from 'webpack-merge';
 import { EntryLoaderOptions } from './plugins/entry-loader';
 import { HtmlWebpackXmlPlugin } from './plugins/HtmlWebpackXmlPlugin';
-import { PanoramaEntriesPlugin } from './plugins/PanoramaEntriesPlugin';
+import { PanoramaManifestPlugin } from './plugins/PanoramaManifestPlugin';
 
 interface CreateWebpackConfigOptions {
   context: string;
@@ -122,7 +122,7 @@ export function createWebpackConfig({
       ],
     },
     plugins: [
-      new PanoramaEntriesPlugin(path.join(context, 'src', 'panorama', 'manifest.json')),
+      new PanoramaManifestPlugin(path.join(context, 'src', 'panorama', 'manifest.yml')),
       new HtmlWebpackPlugin({
         filename: 'custom_ui_manifest.xml',
         inject: false,

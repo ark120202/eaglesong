@@ -1,10 +1,11 @@
-import parseJson from 'json-parse-better-errors';
+import yaml from 'js-yaml';
 import { promisify } from 'util';
 import webpack from 'webpack';
 import ModuleDependency from 'webpack/lib/dependencies/ModuleDependency';
 import { makePathsRelative } from 'webpack/lib/util/identifier';
 import WebpackError from 'webpack/lib/WebpackError';
-import { XmlChunk } from './HtmlWebpackXmlPlugin';
+import { XmlChunk } from '../HtmlWebpackXmlPlugin';
+import { Entry, validateManifest } from './manifest';
 
 class PanoramaManifestError extends WebpackError {
   public name = 'PanoramaManifestError';
@@ -18,14 +19,8 @@ class PanoramaEntryDependency extends ModuleDependency {
   public readonly type = 'panorama entry';
 }
 
-export interface Entry {
-  name: string;
-  source: string;
-  type: string | null;
-}
-
-export class PanoramaEntriesPlugin {
-  constructor(private readonly manifest: string) {}
+export class PanoramaManifestPlugin {
+  constructor(private readonly manifestPath: string) {}
 
   public apply(compiler: webpack.Compiler) {
     // FIXME:
@@ -34,6 +29,10 @@ export class PanoramaEntriesPlugin {
     // @ts-ignore
     // eslint-disable-next-line prefer-destructuring
     const context: string = compiler.context;
+
+    // @ts-ignore
+    const manifestPath = makePathsRelative(compiler.options.context, this.manifestPath);
+
     // @ts-ignore
     const readFile: (path: string) => Promise<Buffer> = promisify(
       compiler.inputFileSystem.readFile.bind(compiler.inputFileSystem),
@@ -49,15 +48,25 @@ export class PanoramaEntriesPlugin {
 
     compiler.hooks.make.tapPromise(this.constructor.name, async compilation => {
       // @ts-ignore
-      compilation.compilationDependencies.add(this.manifest);
-      const result = await readFile(this.manifest);
+      compilation.compilationDependencies.add(this.manifestPath);
+      const rawManifest = await readFile(this.manifestPath);
+
       let entries: Entry[];
       try {
-        entries = parseJson(result.toString('utf8'));
+        entries = yaml.safeLoad(rawManifest.toString('utf8'));
       } catch (error) {
-        // @ts-ignore
-        const manifestPath = makePathsRelative(compiler.options.context, this.manifest);
         compilation.errors.push(new PanoramaManifestError(manifestPath, error.message));
+        return;
+      }
+
+      const valid = validateManifest(entries);
+      if (!valid && validateManifest.errors != null) {
+        for (const { dataPath, message } of validateManifest.errors) {
+          compilation.errors.push(
+            new PanoramaManifestError(manifestPath, `${dataPath} ${message}`),
+          );
+        }
+
         return;
       }
 

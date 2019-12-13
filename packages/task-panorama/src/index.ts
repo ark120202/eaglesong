@@ -6,6 +6,7 @@ import path from 'path';
 import webpack from 'webpack';
 import { Cache, Common, getDirtyCommons, loadCache, makeConfigs, runCompiler } from './cache';
 import { createWebpackConfig } from './config';
+import { manifestSchema } from './plugins/PanoramaManifestPlugin/manifest';
 import { UseCommonsPlugin } from './plugins/UseCommonsPlugin';
 
 interface RealWebpackStats extends webpack.Stats {
@@ -53,6 +54,12 @@ export default class PanoramaTask extends Task<Options> {
 
   public apply() {
     this.hooks.build.tapPromise(this.constructor.name, () => this.build());
+
+    this.hooks.preBuild.tapPromise(this.constructor.name, async () => {
+      const schemaPath = this.resolvePath('.eaglesong/schemas/panorama-manifest.json');
+      await fs.outputJson(schemaPath, manifestSchema, { spaces: 2 });
+    });
+
     this.hooks.compile.tap(this.constructor.name, addResource =>
       addResource('panorama/**/*.{xml,js,css}'),
     );

@@ -22,16 +22,16 @@ export class HtmlWebpackXmlPlugin implements webpack.Plugin {
 
         // eslint-disable-next-line prefer-destructuring
         const chunks: XmlChunk[] = compilation.chunks;
-        chunks.forEach(chunk => {
-          chunk.files.forEach((file: string) => {
-            if (!file.endsWith('.xml')) return;
-            if (chunk.__type == null) throw new Error('All .xml entries are expected to have type');
+        for (const chunk of chunks) {
+          for (const file of chunk.files as string[]) {
+            if (!file.endsWith('.xml') || chunk.__type == null) continue;
+
             xmlAssets.push({
               file: args.assets.publicPath + file,
               type: chunk.__type,
             });
-          });
-        });
+          }
+        }
 
         (args.assets as any).xml = xmlAssets;
 
