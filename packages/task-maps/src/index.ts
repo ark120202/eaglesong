@@ -12,10 +12,6 @@ export default class MapsTask extends Task<void> {
   private metadataPath!: string;
   private addonInfoTask!: AddonInfoTask;
 
-  constructor() {
-    super(undefined);
-  }
-
   public apply() {
     const addonInfoTask = this.taskProvider(AddonInfoTask);
     if (addonInfoTask == null) throw new Error('MapsTask requires AddonInfoTask');

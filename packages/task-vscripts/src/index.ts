@@ -10,10 +10,6 @@ const copyLuaLib = (to: string) =>
   fs.copy(path.join(tstlPath, 'dist/lualib/lualib_bundle.lua'), path.join(to, 'lualib_bundle.lua'));
 
 export default class VScriptsTask extends Task<void> {
-  constructor() {
-    super(undefined);
-  }
-
   public apply() {
     this.hooks.build.tapPromise(this.constructor.name, async () => {
       let outDir: string | undefined;

@@ -25,10 +25,6 @@ const prettierPatterns = languages.flatMap(language => [
 export default class PrettierTask extends TransformTask<void> {
   protected pattern = [...prettierPatterns, '!node_modules'];
 
-  constructor() {
-    super(undefined);
-  }
-
   protected async transformFile(filePath: string) {
     const fileInfo = await prettier.getFileInfo(filePath, { ignorePath: '.prettierignore' });
     if (fileInfo.ignored) return;

@@ -5,10 +5,6 @@ import { Worker } from 'worker_threads';
 import { Message, WorkerData } from './worker';
 
 export default class RootScriptsTask extends Task<void> {
-  constructor() {
-    super(undefined);
-  }
-
   public apply() {
     this.hooks.build.tap(this.constructor.name, () => {
       const workerData: WorkerData = {

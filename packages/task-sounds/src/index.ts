@@ -20,10 +20,6 @@ export default class SoundsTask extends TransformTask<void> {
   protected pattern = 'src/sounds/**/*.yml';
   private srcPath!: string;
 
-  constructor() {
-    super(undefined);
-  }
-
   public apply() {
     this.srcPath = this.resolvePath('src/sounds');
 
