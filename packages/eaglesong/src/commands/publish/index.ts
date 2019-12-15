@@ -32,7 +32,7 @@ export interface PublishStrategy {
     clean?: boolean;
   };
 
-  /** @default true */
+  /** @default false */
   bump?:
     | boolean
     | {
@@ -133,12 +133,7 @@ export default class PublishCommand extends CommandGroup {
     await this.commitVersionChanges();
     await this.uploadToWorkshop();
 
-    if (
-      this.strategy.bump !== false &&
-      (this.strategy.bump == null ||
-        this.strategy.bump === true ||
-        this.strategy.bump.push !== false)
-    ) {
+    if (this.strategy.bump && (this.strategy.bump === true || this.strategy.bump.push !== false)) {
       await this.git.push(undefined, undefined, ['--tags']);
     }
 
@@ -180,7 +175,7 @@ export default class PublishCommand extends CommandGroup {
 
     const versionOption = this.args.newVersion;
     let newVersion: string;
-    if (this.strategy.bump !== false) {
+    if (this.strategy.bump) {
       if (versionOption == null) {
         newVersion = await askForNewVersion(oldVersion);
       } else {
@@ -212,7 +207,7 @@ export default class PublishCommand extends CommandGroup {
 
   private async bumpVersion() {
     if (this.oldVersion == null || this.newVersion == null) throw new Error('Incorrect state');
-    if (version.neq(this.oldVersion, this.newVersion)) {
+    if (this.strategy.bump) {
       await updateFiles(this.context, this.newVersion);
     }
   }
@@ -222,10 +217,10 @@ export default class PublishCommand extends CommandGroup {
       throw new Error('Incorrect state');
     }
 
-    const bump =
-      this.strategy.bump != null && this.strategy.bump !== true ? this.strategy.bump : {};
-    if (bump === false) throw new Error('Incorrect state');
+    if (!this.strategy.bump) return;
     if (!(await this.git.checkIsRepo())) return;
+
+    const bump = this.strategy.bump !== true ? this.strategy.bump : {};
 
     const commitMessage =
       typeof bump.commit === 'function'
