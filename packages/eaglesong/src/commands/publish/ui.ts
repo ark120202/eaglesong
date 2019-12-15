@@ -6,7 +6,8 @@ export const prompt = async (question: inquirer.DistinctQuestion) =>
 
 export const askForWorkshopMessage = (newVersion: string) =>
   prompt({
-    type: 'editor',
+    // https://github.com/SBoudrias/Inquirer.js/issues/874
+    type: 'input',
     message: 'Workshop Message',
     default: `v${newVersion}`,
     validate: input => (input === '' ? 'Empty message is not allowed' : true),
