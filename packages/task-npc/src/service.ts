@@ -21,9 +21,19 @@ export type FileGroups = Record<string, Files> & NamedType;
 
 export type Hooks = NpcService['hooks'] & NamedType;
 
-function getGroupFromFileName(fileName: string): string {
+const scriptDirectories = ['items', 'npc', 'shops'];
+function getScriptGroup(fileName: string) {
   const segments = fileName.split('/');
-  return segments.length === 1 ? path.parse(fileName).name : segments[0];
+  let groupName =
+    segments.length > 1 && scriptDirectories.includes(segments[0])
+      ? `${segments[0]}/${segments[1]}`
+      : segments[0];
+
+  if (groupName === fileName) {
+    groupName = path.trimExt(groupName);
+  }
+
+  return groupName;
 }
 
 export class NpcService {
@@ -45,7 +55,10 @@ export class NpcService {
     private readonly error: ServiceErrorReporter,
   ) {
     this.hooks.schemas.tap({ name: 'NpcService', stage: -1000 }, schemas => {
-      Object.assign(schemas, _.cloneDeep(standardSchemas));
+      Object.assign(
+        schemas,
+        _.mapKeys(_.cloneDeep(standardSchemas), (_value, key) => `npc/${key}`),
+      );
     });
 
     const collectedSchemas: Schemas = {};
@@ -66,14 +79,14 @@ export class NpcService {
 
   private groups: FileGroups = {};
   public addFile(fileName: string, fileContent: File) {
-    const group = getGroupFromFileName(fileName);
+    const group = getScriptGroup(fileName);
 
     if (this.groups[group] == null) this.groups[group] = {};
     this.groups[group][fileName] = fileContent;
   }
 
   public removeFile(fileName: string) {
-    const group = getGroupFromFileName(fileName);
+    const group = getScriptGroup(fileName);
 
     if (this.groups[group]?.[fileName] == null) return;
     delete this.groups[group][fileName];

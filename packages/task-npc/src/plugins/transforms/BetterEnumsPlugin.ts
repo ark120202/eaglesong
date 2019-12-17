@@ -67,13 +67,13 @@ class CustomEnumsSchema extends s.EnumsSchema {
 }
 
 export const BetterEnumsPlugin: Plugin = ({ hooks, collectedSchemas }) => {
-  hooks.schemas.tap('BetterEnumsPlugin', schemas =>
-    Object.values(schemas).forEach(schema =>
+  hooks.schemas.tap('BetterEnumsPlugin', schemas => {
+    for (const schema of Object.values(schemas)) {
       schema
         .getChildrenDeepLike(s.EnumsSchema)
-        .forEach(x => x.replaceWith(CustomEnumsSchema.from(x))),
-    ),
-  );
+        .forEach(x => x.replaceWith(CustomEnumsSchema.from(x)));
+    }
+  });
 
   hooks.transform.tap('BetterEnumsPlugin', (files, group) => {
     if (collectedSchemas[group] == null) return;

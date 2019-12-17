@@ -8,20 +8,21 @@ export interface Recipe {
 }
 
 export const ItemRecipePlugin: Plugin = ({ hooks }) => {
-  hooks.schemas.tap('ItemRecipePlugin', schemas =>
-    schemas.npc_items_custom.getRestRootsLike(s.ObjectSchema).forEach(element =>
+  hooks.schemas.tap('ItemRecipePlugin', schemas => {
+    const schema = schemas['npc/npc_items_custom'];
+    for (const element of schema.getRestRootsLike(s.ObjectSchema)) {
       element.field(
         'Recipe',
         s
           .obj('ItemRecipe')
           .field('cost', s.int().min(0))
           .field('requirements', s.oneOf([s.array(s.str()), s.array(s.array(s.str()))])),
-      ),
-    ),
-  );
+      );
+    }
+  });
 
   hooks.transform.tap('ItemRecipePlugin', (files, group) => {
-    if (group !== 'npc_items_custom') return;
+    if (group !== 'npc/npc_items_custom') return;
 
     const recipeItems: Record<string, any> = {};
     _.each(files, file =>
@@ -58,6 +59,7 @@ export const ItemRecipePlugin: Plugin = ({ hooks }) => {
         delete item.Recipe;
       }),
     );
+
     files.$recipeItems = recipeItems;
   });
 };

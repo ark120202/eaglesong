@@ -4,27 +4,25 @@ import _ from 'lodash';
 import vdf from 'vdf-extra';
 import { Plugin } from '../../service';
 
-const fileFilter = new Set(['npc_items_custom', 'npc_abilities_custom']);
+const fileFilter = new Set(['npc/npc_items_custom', 'npc/npc_abilities_custom']);
 export const AbilityPrecachePlugin: Plugin = ({ hooks }) => {
-  hooks.schemas.tap('AbilityPrecachePlugin', schemas =>
-    [schemas.npc_items_custom, schemas.npc_abilities_custom].forEach(schema =>
-      schema
-        .getRestRootsLike(s.ObjectSchema)
-        .forEach(element =>
-          element.field(
-            'precache',
-            s
-              .obj('Precache')
-              .fields(
-                Object.entries(precacheTypes).map(([n, pattern]) => [
-                  n,
-                  s.array(s.str().pattern(pattern)),
-                ]),
-              ),
-          ),
-        ),
-    ),
-  );
+  hooks.schemas.tap('AbilityPrecachePlugin', schemas => {
+    for (const schemaName of fileFilter) {
+      for (const element of schemas[schemaName].getRestRootsLike(s.ObjectSchema)) {
+        element.field(
+          'precache',
+          s
+            .obj('Precache')
+            .fields(
+              Object.entries(precacheTypes).map(([n, pattern]) => [
+                n,
+                s.array(s.str().pattern(pattern)),
+              ]),
+            ),
+        );
+      }
+    }
+  });
 
   hooks.transform.tap('AbilityPrecachePlugin', (files, group) => {
     if (!fileFilter.has(group)) return;

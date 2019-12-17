@@ -9,14 +9,14 @@ const isBinaryBoolean = (schema: s.Schema): schema is s.OneOfSchema =>
     .every(x => x instanceof s.LiteralSchema && (x._value === 0 || x._value === 1));
 
 export const BetterBooleansPlugin: Plugin = ({ hooks, collectedSchemas }) => {
-  hooks.schemas.tap('BetterBooleansPlugin', schemas =>
-    Object.values(schemas).forEach(schema =>
+  hooks.schemas.tap('BetterBooleansPlugin', schemas => {
+    for (const schema of Object.values(schemas)) {
       schema
         .getChildrenDeep()
         .filter(isBinaryBoolean)
-        .forEach(x => x.replaceWith(s.bool())),
-    ),
-  );
+        .forEach(x => x.replaceWith(s.bool()));
+    }
+  });
 
   hooks.transform.tap('BetterBooleansPlugin', (files, group) => {
     if (collectedSchemas[group] == null) return;

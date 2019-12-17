@@ -21,11 +21,11 @@ const inferVarType = (value: unknown) => {
   return isFloat ? 'FIELD_FLOAT' : 'FIELD_INTEGER';
 };
 
-const fileFilter = new Set(['npc_items_custom', 'npc_abilities_custom']);
+const fileFilter = new Set(['npc/npc_items_custom', 'npc/npc_abilities_custom']);
 export const AbilitySpecialsPlugin: Plugin = ({ hooks, error }) => {
-  hooks.schemas.tap('AbilitySpecialsPlugin', schemas =>
-    [schemas.npc_items_custom, schemas.npc_abilities_custom].forEach(schema =>
-      schema.getRestRootsLike(s.ObjectSchema).forEach(element =>
+  hooks.schemas.tap('AbilitySpecialsPlugin', schemas => {
+    for (const schemaName of fileFilter) {
+      for (const element of schemas[schemaName].getRestRootsLike(s.ObjectSchema)) {
         element.delete('AbilitySpecials').field(
           'Specials',
           s.array(
@@ -43,10 +43,10 @@ export const AbilitySpecialsPlugin: Plugin = ({ hooks, error }) => {
                   .field('operation', s.oneOfLiterals(['-', '*'])),
               ),
           ),
-        ),
-      ),
-    ),
-  );
+        );
+      }
+    }
+  });
 
   function parseSpecialMetaInfo(
     special: any,

@@ -99,7 +99,7 @@ export default class NpcTask extends TransformTask<Options> {
 
     await Promise.all(
       Object.entries(artifacts).map(([group, kv]) =>
-        this.outputKV1(this.resolvePath('game', `scripts/npc/${group}.txt`), { '': kv }),
+        this.outputKV1(this.resolvePath('game', `scripts/${group}.txt`), { '': kv }),
       ),
     );
   }
