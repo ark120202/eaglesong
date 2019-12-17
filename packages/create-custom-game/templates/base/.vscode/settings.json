@@ -10,28 +10,34 @@
       "fileMatch": ["src/npc/custom_net_tables.json", "src/npc/custom_net_tables/*.json"]
     },
     {
-      "url": "./.eaglesong/schemas/npc/npc_abilities_custom.json",
-      "fileMatch": ["src/npc/npc_abilities_custom.json", "src/npc/npc_abilities_custom/*.json"]
+      "url": "./.eaglesong/schemas/npc/npc/npc_abilities_custom.json",
+      "fileMatch": [
+        "src/npc/npc/npc_abilities_custom.json",
+        "src/npc/npc/npc_abilities_custom/*.json"
+      ]
     },
     {
-      "url": "./.eaglesong/schemas/npc/npc_abilities_override.json",
-      "fileMatch": ["src/npc/npc_abilities_override.json", "src/npc/npc_abilities_override/*.json"]
+      "url": "./.eaglesong/schemas/npc/npc/npc_abilities_override.json",
+      "fileMatch": [
+        "src/npc/npc/npc_abilities_override.json",
+        "src/npc/npc/npc_abilities_override/*.json"
+      ]
     },
     {
-      "url": "./.eaglesong/schemas/npc/npc_heroes_custom.json",
-      "fileMatch": ["src/npc/npc_heroes_custom.json", "src/npc/npc_heroes_custom/*.json"]
+      "url": "./.eaglesong/schemas/npc/npc/npc_heroes_custom.json",
+      "fileMatch": ["src/npc/npc/npc_heroes_custom.json", "src/npc/npc/npc_heroes_custom/*.json"]
     },
     {
-      "url": "./.eaglesong/schemas/npc/npc_items_custom.json",
-      "fileMatch": ["src/npc/npc_items_custom.json", "src/npc/npc_items_custom/*.json"]
+      "url": "./.eaglesong/schemas/npc/npc/npc_items_custom.json",
+      "fileMatch": ["src/npc/npc/npc_items_custom.json", "src/npc/npc/npc_items_custom/*.json"]
     },
     {
-      "url": "./.eaglesong/schemas/npc/npc_units_custom.json",
-      "fileMatch": ["src/npc/npc_units_custom.json", "src/npc/npc_units_custom/*.json"]
+      "url": "./.eaglesong/schemas/npc/npc/npc_units_custom.json",
+      "fileMatch": ["src/npc/npc/npc_units_custom.json", "src/npc/npc/npc_units_custom/*.json"]
     },
     {
-      "url": "./.eaglesong/schemas/npc/portraits.json",
-      "fileMatch": ["src/npc/portraits.json", "src/npc/portraits/*.json"]
+      "url": "./.eaglesong/schemas/npc/npc/portraits.json",
+      "fileMatch": ["src/npc/npc/portraits.json", "src/npc/npc/portraits/*.json"]
     }
   ],
   "yaml.schemas": {
@@ -42,26 +48,29 @@
       "src/npc/custom_net_tables.yml",
       "src/npc/custom_net_tables/*.yml"
     ],
-    "./.eaglesong/schemas/npc/npc_abilities_custom.json": [
-      "src/npc/npc_abilities_custom.yml",
-      "src/npc/npc_abilities_custom/*.yml"
+    "./.eaglesong/schemas/npc/npc/npc_abilities_custom.json": [
+      "src/npc/npc/npc_abilities_custom.yml",
+      "src/npc/npc/npc_abilities_custom/*.yml"
     ],
-    "./.eaglesong/schemas/npc/npc_abilities_override.json": [
-      "src/npc/npc_abilities_override.yml",
-      "src/npc/npc_abilities_override/*.yml"
+    "./.eaglesong/schemas/npc/npc/npc_abilities_override.json": [
+      "src/npc/npc/npc_abilities_override.yml",
+      "src/npc/npc/npc_abilities_override/*.yml"
     ],
-    "./.eaglesong/schemas/npc/npc_heroes_custom.json": [
-      "src/npc/npc_heroes_custom.yml",
-      "src/npc/npc_heroes_custom/*.yml"
+    "./.eaglesong/schemas/npc/npc/npc_heroes_custom.json": [
+      "src/npc/npc/npc_heroes_custom.yml",
+      "src/npc/npc/npc_heroes_custom/*.yml"
     ],
-    "./.eaglesong/schemas/npc/npc_items_custom.json": [
-      "src/npc/npc_items_custom.yml",
-      "src/npc/npc_items_custom/*.yml"
+    "./.eaglesong/schemas/npc/npc/npc_items_custom.json": [
+      "src/npc/npc/npc_items_custom.yml",
+      "src/npc/npc/npc_items_custom/*.yml"
     ],
-    "./.eaglesong/schemas/npc/npc_units_custom.json": [
-      "src/npc/npc_units_custom.yml",
-      "src/npc/npc_units_custom/*.yml"
+    "./.eaglesong/schemas/npc/npc/npc_units_custom.json": [
+      "src/npc/npc/npc_units_custom.yml",
+      "src/npc/npc/npc_units_custom/*.yml"
     ],
-    "./.eaglesong/schemas/npc/portraits.json": ["src/npc/portraits.yml", "src/npc/portraits/*.yml"]
+    "./.eaglesong/schemas/npc/npc/portraits.json": [
+      "src/npc/npc/portraits.yml",
+      "src/npc/npc/portraits/*.yml"
+    ]
   }
 }
