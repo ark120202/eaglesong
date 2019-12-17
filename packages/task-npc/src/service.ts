@@ -36,6 +36,16 @@ function getScriptGroup(fileName: string) {
   return groupName;
 }
 
+function getDefaultSchemas(): Record<string, s.RootSchema> {
+  const schemas = _.mapKeys(_.cloneDeep(standardSchemas), (_value, key) => `npc/${key}`);
+
+  schemas.custom_net_tables = s
+    .root()
+    .field('custom_net_tables', s.array(s.str()), { require: true });
+
+  return schemas;
+}
+
 export class NpcService {
   public hooks = {
     schemas: new AsyncSeriesHook<[Schemas]>(['schemas']),
@@ -55,10 +65,7 @@ export class NpcService {
     private readonly error: ServiceErrorReporter,
   ) {
     this.hooks.schemas.tap({ name: 'NpcService', stage: -1000 }, schemas => {
-      Object.assign(
-        schemas,
-        _.mapKeys(_.cloneDeep(standardSchemas), (_value, key) => `npc/${key}`),
-      );
+      Object.assign(schemas, getDefaultSchemas());
     });
 
     const collectedSchemas: Schemas = {};

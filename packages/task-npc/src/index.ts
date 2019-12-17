@@ -98,9 +98,19 @@ export default class NpcTask extends TransformTask<Options> {
     if (this.dotaPath == null) return;
 
     await Promise.all(
-      Object.entries(artifacts).map(([group, kv]) =>
-        this.outputKV1(this.resolvePath('game', `scripts/${group}.txt`), { '': kv }),
-      ),
+      Object.entries(artifacts).map(async ([group, kv]) => {
+        const filePath = this.resolvePath('game', `scripts/${group}.txt`);
+
+        if (group === 'custom_net_tables') {
+          const content = `<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
+{ custom_net_tables = ${JSON.stringify(kv.custom_net_tables)} }
+`;
+
+          await fs.outputFile(filePath, content);
+        } else {
+          await this.outputKV1(filePath, { '': kv });
+        }
+      }),
     );
   }
 }

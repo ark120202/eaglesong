@@ -6,6 +6,10 @@
   },
   "json.schemas": [
     {
+      "url": "./.eaglesong/schemas/npc/custom_net_tables.json",
+      "fileMatch": ["src/npc/custom_net_tables.json", "src/npc/custom_net_tables/*.json"]
+    },
+    {
       "url": "./.eaglesong/schemas/npc/npc_abilities_custom.json",
       "fileMatch": ["src/npc/npc_abilities_custom.json", "src/npc/npc_abilities_custom/*.json"]
     },
@@ -34,6 +38,10 @@
     "./.eaglesong/schemas/maps-metadata.json": "src/maps/metadata.yml",
     "./.eaglesong/schemas/panorama-manifest.json": "src/panorama/manifest.yml",
     "./.eaglesong/schemas/soundevents.json": "src/sounds/*.yml",
+    "./.eaglesong/schemas/npc/custom_net_tables.json": [
+      "src/npc/custom_net_tables.yml",
+      "src/npc/custom_net_tables/*.yml"
+    ],
     "./.eaglesong/schemas/npc/npc_abilities_custom.json": [
       "src/npc/npc_abilities_custom.yml",
       "src/npc/npc_abilities_custom/*.yml"
