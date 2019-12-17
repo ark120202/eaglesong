@@ -19,7 +19,7 @@ export type File = Record<string, any> & NamedType;
 export type Files = Record<string, File> & NamedType;
 export type FileGroups = Record<string, Files> & NamedType;
 
-export type Hooks = NpcService['hooks'] & NamedType;
+export type Hooks = ScriptsService['hooks'] & NamedType;
 
 const scriptDirectories = ['items', 'npc', 'shops'];
 function getScriptGroup(fileName: string) {
@@ -46,7 +46,7 @@ function getDefaultSchemas(): Record<string, s.RootSchema> {
   return schemas;
 }
 
-export class NpcService {
+export class ScriptsService {
   public hooks = {
     schemas: new AsyncSeriesHook<[Schemas]>(['schemas']),
 
@@ -64,12 +64,12 @@ export class NpcService {
     taskProvider: TaskProvider,
     private readonly error: ServiceErrorReporter,
   ) {
-    this.hooks.schemas.tap({ name: 'NpcService', stage: -1000 }, schemas => {
+    this.hooks.schemas.tap({ name: 'ScriptsService', stage: -1000 }, schemas => {
       Object.assign(schemas, getDefaultSchemas());
     });
 
     const collectedSchemas: Schemas = {};
-    this.hooks.schemas.tap({ name: 'NpcService', stage: 1000 }, schemas => {
+    this.hooks.schemas.tap({ name: 'ScriptsService', stage: 1000 }, schemas => {
       Object.assign(collectedSchemas, schemas);
     });
 

@@ -1,14 +1,14 @@
 {
-  "name": "@eaglesong/task-npc",
+  "name": "@eaglesong/task-scripts",
   "version": "0.0.0",
-  "description": "Eaglesong task for NPC scripts",
+  "description": "Eaglesong task for KeyValues scripts",
   "keywords": [
     "dota 2",
     "eaglesong"
   ],
   "homepage": "https://github.com/ark120202/eaglesong#readme",
   "bugs": "https://github.com/ark120202/eaglesong/issues",
-  "repository": "https://github.com/ark120202/eaglesong/tree/master/packages/task-npc",
+  "repository": "https://github.com/ark120202/eaglesong/tree/master/packages/task-scripts",
   "license": "Apache-2.0",
   "author": "ark120202",
   "files": [

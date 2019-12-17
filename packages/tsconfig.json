@@ -9,11 +9,11 @@
     { "path": "task-images" },
     { "path": "task-localization" },
     { "path": "task-maps" },
-    { "path": "task-npc" },
     { "path": "task-panorama" },
     { "path": "task-prettier" },
     { "path": "task-resources" },
     { "path": "task-root-scripts" },
+    { "path": "task-scripts" },
     { "path": "task-sounds" },
     { "path": "task-vscripts" },
     { "path": "tasks" }

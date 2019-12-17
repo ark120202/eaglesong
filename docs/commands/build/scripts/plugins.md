@@ -5,7 +5,7 @@ can disable them with a `defaultPlugins` option.
 
 ```ts
 getTasks({
-  npc: {
+  scripts: {
     defaultPlugins: {
       EnsureSchemaExistsPlugin: false,
     },

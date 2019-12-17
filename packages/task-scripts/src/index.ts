@@ -3,7 +3,7 @@ import fs from 'fs-extra';
 import _ from 'lodash';
 import path from 'upath';
 import * as defaultPlugins from './plugins';
-import { NpcService, Plugin, Schemas } from './service';
+import { Plugin, Schemas, ScriptsService } from './service';
 
 export * from './service';
 
@@ -12,7 +12,7 @@ export interface Options {
   customPlugins?: Plugin[];
 }
 
-export function createNpcService(
+export function createScriptsService(
   context: string,
   options: Options,
   taskProvider: TaskProvider,
@@ -32,26 +32,26 @@ export function createNpcService(
     plugins.push(...options.customPlugins);
   }
 
-  return new NpcService(context, plugins, taskProvider, error);
+  return new ScriptsService(context, plugins, taskProvider, error);
 }
 
-export default class NpcTask extends TransformTask<Options> {
-  protected pattern = ['src/npc/**/*', '!**/_*'];
+export default class ScriptsTask extends TransformTask<Options> {
+  protected pattern = ['src/scripts/**/*', '!**/_*'];
 
   constructor(options: Options = {}) {
     super(options);
   }
 
-  private service!: NpcService;
+  private service!: ScriptsService;
   public apply() {
-    this.service = createNpcService(
+    this.service = createScriptsService(
       this.context,
       this.options,
       this.taskProvider,
       ({ fileName, ...error }) => {
         this.error({
           ...error,
-          filePath: fileName != null ? this.resolvePath(`src/npc/${fileName}`) : fileName,
+          filePath: fileName != null ? this.resolvePath(`src/scripts/${fileName}`) : fileName,
         });
       },
     );
@@ -71,10 +71,10 @@ export default class NpcTask extends TransformTask<Options> {
 
       const getPath = (fileName: string) => this.resolvePath(`.eaglesong/${fileName}`);
       await Promise.all([
-        fs.outputFile(getPath('types/npc-globals.d.ts'), globals),
+        fs.outputFile(getPath('types/scripts/globals.d.ts'), globals),
         ...compiledSchemas.flatMap(({ name, content, schema }) => [
-          fs.outputFile(getPath(`types/${name}.d.ts`), content),
-          fs.outputJson(getPath(`schemas/npc/${name}.json`), schema.toSchema(), { spaces: 2 }),
+          fs.outputFile(getPath(`types/scripts/${name}.d.ts`), content),
+          fs.outputJson(getPath(`schemas/scripts/${name}.json`), schema.toSchema(), { spaces: 2 }),
         ]),
       ]);
     });
@@ -84,11 +84,11 @@ export default class NpcTask extends TransformTask<Options> {
 
   protected async transformFile(filePath: string) {
     const content = await this.import(filePath);
-    this.service.addFile(path.relative(this.resolvePath('src/npc'), filePath), content);
+    this.service.addFile(path.relative(this.resolvePath('src/scripts'), filePath), content);
   }
 
   protected removeFile(filePath: string) {
-    this.service.removeFile(path.relative(this.resolvePath('src/npc'), filePath));
+    this.service.removeFile(path.relative(this.resolvePath('src/scripts'), filePath));
   }
 
   protected async afterWatch() {

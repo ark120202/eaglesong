@@ -116,21 +116,6 @@
     tslib "^1.10.0"
     upath "^1.2.0"
 
-"@eaglesong/task-npc@link:packages/task-npc":
-  version "0.0.0"
-  dependencies:
-    "@eaglesong/helper-task" "link:packages/helper-task"
-    "@types/fs-extra" "^8.0.1"
-    "@types/lodash" "^4.14.149"
-    ajv "^6.10.2"
-    fs-extra "^8.1.0"
-    lodash "^4.17.15"
-    p-props "^3.1.0"
-    tapable "^2.0.0-beta.8"
-    tslib "^1.10.0"
-    upath "^1.2.0"
-    vdf-extra "^2.2.2"
-
 "@eaglesong/task-panorama@link:packages/task-panorama":
   version "0.0.0"
   dependencies:
@@ -193,6 +178,9 @@
   version "0.0.0"
   dependencies:
     "@eaglesong/helper-task" "link:packages/helper-task"
+
+"@eaglesong/task-scripts@link:packages/task-scripts":
+  version "0.0.0"
 
 "@eaglesong/task-sounds@link:packages/task-sounds":
   version "0.0.0"

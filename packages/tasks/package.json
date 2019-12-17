@@ -23,11 +23,11 @@
     "@eaglesong/task-images": "link:../task-images",
     "@eaglesong/task-localization": "link:../task-localization",
     "@eaglesong/task-maps": "link:../task-maps",
-    "@eaglesong/task-npc": "link:../task-npc",
     "@eaglesong/task-panorama": "link:../task-panorama",
     "@eaglesong/task-prettier": "link:../task-prettier",
     "@eaglesong/task-resources": "link:../task-resources",
     "@eaglesong/task-root-scripts": "link:../task-root-scripts",
+    "@eaglesong/task-scripts": "link:../task-scripts",
     "@eaglesong/task-sounds": "link:../task-sounds",
     "@eaglesong/task-vscripts": "link:../task-vscripts",
     "tslib": "^1.10.0"
