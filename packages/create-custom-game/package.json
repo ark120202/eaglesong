@@ -12,7 +12,7 @@
   "license": "Apache-2.0",
   "author": "ark120202",
   "files": [
-    "lib/**/*.{js,ts}",
+    "lib/**/*.{js,ts,json}",
     "templates"
   ],
   "bin": "lib/index.js",
