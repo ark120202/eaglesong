@@ -1,6 +1,6 @@
 {
   "name": "@eaglesong/task-vscripts",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Eaglesong task for making VScripts with TypeScript",
   "keywords": [
     "dota 2",
