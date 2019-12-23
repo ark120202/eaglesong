@@ -2,7 +2,7 @@ import * as s from 'dota-data/lib/schema';
 import { precacheTypes } from 'dota-data/lib/schemas';
 import _ from 'lodash';
 import vdf from 'vdf-extra';
-import { Plugin } from '../../service';
+import { Plugin } from '../../plugin';
 
 const fileFilter = new Set(['npc/npc_items_custom', 'npc/npc_abilities_custom']);
 export const AbilityPrecachePlugin: Plugin = ({ hooks }) => {

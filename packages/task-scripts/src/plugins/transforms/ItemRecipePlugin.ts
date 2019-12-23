@@ -1,6 +1,6 @@
 import * as s from 'dota-data/lib/schema';
 import _ from 'lodash';
-import { Plugin } from '../../service';
+import { Plugin } from '../../plugin';
 
 export interface Recipe {
   cost?: number;

@@ -2,9 +2,11 @@ import { ServiceErrorReporter, TaskProvider, TransformTask } from '@eaglesong/he
 import fs from 'fs-extra';
 import _ from 'lodash';
 import path from 'upath';
+import { Plugin } from './plugin';
 import * as defaultPlugins from './plugins';
-import { Plugin, Schemas, ScriptsService } from './service';
+import { Schemas, ScriptsService } from './service';
 
+export * from './plugin';
 export * from './service';
 
 export interface Options {

@@ -3,13 +3,15 @@ import { resourcePatterns } from 'dota-data/lib/schemas';
 import fs from 'fs-extra';
 import _ from 'lodash';
 import path from 'path';
-import { Plugin } from '../../service';
+import { getGroupSchema, Plugin } from '../../plugin';
 
 const stringResourcePatterns = _.mapValues(resourcePatterns, String);
 
 export const CheckFilesPlugin: Plugin = ({ hooks, error, context, collectedSchemas }) => {
   hooks.transform.tapPromise('CheckFilesPlugin', async (files, group) => {
-    if (collectedSchemas[group] == null) return;
+    const schema = getGroupSchema(collectedSchemas, group);
+    if (schema == null) return;
+
     const promises: Promise<void>[] = [];
     const checkedFiles = new Set<string>();
     function ensureResourceExists(fileName: string, resourcePath: string, resourceType?: string) {
@@ -37,15 +39,15 @@ export const CheckFilesPlugin: Plugin = ({ hooks, error, context, collectedSchem
     }
 
     _.each(files, (file, fileName) => {
-      collectedSchemas[group].validateRoot(file, {
-        beforeVisit(schema, value) {
-          if (!(schema instanceof StringSchema)) return;
+      schema.validateRoot(file, {
+        beforeVisit(element, value) {
+          if (!(element instanceof StringSchema)) return;
           if (typeof value !== 'string') return;
 
-          if (!schema._pattern) return;
-          if (!schema._pattern.test(value)) return;
+          if (!element._pattern) return;
+          if (!element._pattern.test(value)) return;
 
-          switch (String(schema._pattern)) {
+          switch (String(element._pattern)) {
             case stringResourcePatterns.particles:
               ensureResourceExists(fileName, value, 'particles');
               break;

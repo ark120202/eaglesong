@@ -1,6 +1,6 @@
 import * as s from 'dota-data/lib/schema';
 import _ from 'lodash';
-import { Plugin } from '../../service';
+import { getGroupSchema, Plugin } from '../../plugin';
 
 class CustomEnumsSchema extends s.EnumsSchema {
   public static from(schema: s.EnumsSchema) {
@@ -76,12 +76,14 @@ export const BetterEnumsPlugin: Plugin = ({ hooks, collectedSchemas }) => {
   });
 
   hooks.transform.tap('BetterEnumsPlugin', (files, group) => {
-    if (collectedSchemas[group] == null) return;
+    const schema = getGroupSchema(collectedSchemas, group);
+    if (schema == null) return;
+
     _.each(files, file => {
-      collectedSchemas[group].validateRoot(file, {
-        afterVisit(schema, value, context) {
-          if (schema instanceof CustomEnumsSchema) {
-            _.set(file, context.path, schema.mapValue(value));
+      schema.validateRoot(file, {
+        afterVisit(element, value, context) {
+          if (element instanceof CustomEnumsSchema) {
+            _.set(file, context.path, element.mapValue(value));
           }
         },
       });

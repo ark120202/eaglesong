@@ -1,18 +1,13 @@
-import {
-  NamedType,
-  ServiceErrorReporter,
-  ServicePluginApi,
-  TaskProvider,
-} from '@eaglesong/helper-task';
+import { NamedType, ServiceErrorReporter, TaskProvider } from '@eaglesong/helper-task';
 import * as s from 'dota-data/lib/schema';
 import { schemas as standardSchemas } from 'dota-data/lib/schemas';
+import { resourcePatterns } from 'dota-data/lib/schemas/resources';
 import _ from 'lodash';
 import pProps from 'p-props';
 import { AsyncSeriesHook } from 'tapable';
 import path from 'upath';
+import { Plugin, PluginApi } from './plugin';
 
-export type Plugin = (api: PluginApi) => void;
-export type PluginApi = ServicePluginApi & { hooks: Hooks; collectedSchemas: Schemas };
 export type Schemas = Record<string, s.RootSchema>;
 
 export type File = Record<string, any> & NamedType;
@@ -42,6 +37,10 @@ function getDefaultSchemas(): Record<string, s.RootSchema> {
   schemas.custom_net_tables = s
     .root()
     .field('custom_net_tables', s.array(s.str()), { require: true });
+
+  schemas.shops = s
+    .root()
+    .rest(s.obj('Shop').field('item', s.str().pattern(resourcePatterns.item)));
 
   return schemas;
 }

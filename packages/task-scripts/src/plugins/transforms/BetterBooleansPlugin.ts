@@ -1,6 +1,6 @@
 import * as s from 'dota-data/lib/schema';
 import _ from 'lodash';
-import { Plugin } from '../../service';
+import { getGroupSchema, Plugin } from '../../plugin';
 
 const isBinaryBoolean = (schema: s.Schema): schema is s.OneOfSchema =>
   schema instanceof s.OneOfSchema &&
@@ -19,11 +19,13 @@ export const BetterBooleansPlugin: Plugin = ({ hooks, collectedSchemas }) => {
   });
 
   hooks.transform.tap('BetterBooleansPlugin', (files, group) => {
-    if (collectedSchemas[group] == null) return;
+    const schema = getGroupSchema(collectedSchemas, group);
+    if (schema == null) return;
+
     _.each(files, file => {
-      collectedSchemas[group].validateRoot(file, {
-        afterVisit(schema, value, context) {
-          if (isBinaryBoolean(schema)) {
+      schema.validateRoot(file, {
+        afterVisit(element, value, context) {
+          if (isBinaryBoolean(element)) {
             _.set(file, context.path, value ? 1 : 0);
           }
         },

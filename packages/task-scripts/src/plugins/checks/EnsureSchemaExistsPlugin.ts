@@ -1,8 +1,8 @@
-import { Plugin } from '../../service';
+import { getGroupSchema, Plugin } from '../../plugin';
 
 export const EnsureSchemaExistsPlugin: Plugin = ({ hooks, error, collectedSchemas }) => {
   hooks.transform.tap({ name: 'ValidateSchemasPlugin', stage: -10 }, (files, group) => {
-    if (collectedSchemas[group] != null) return;
+    if (getGroupSchema(collectedSchemas, group) != null) return;
 
     for (const fileName of Object.keys(files)) {
       error({

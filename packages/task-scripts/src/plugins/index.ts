@@ -8,5 +8,6 @@ export * from './checks/CheckFilesPlugin';
 export * from './transforms/AbilityPrecachePlugin';
 export * from './transforms/AbilitySpecialsPlugin';
 export * from './transforms/ItemRecipePlugin';
+export * from './transforms/ShopsPlugin';
 
 export * from './ExtendPortraitsPlugin';

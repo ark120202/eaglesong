@@ -1,6 +1,6 @@
-import path from 'path';
 import { getPortraits } from 'dota-data/lib/scripts';
-import { Plugin } from '../service';
+import path from 'path';
+import { Plugin } from '../plugin';
 
 export const ExtendPortraitsPlugin: Plugin = ({ hooks, context }) => {
   hooks.transform.tapPromise('ExtendPortraitsPlugin', async (files, group) => {

@@ -10,6 +10,10 @@
       "fileMatch": ["src/scripts/custom_net_tables.json", "src/scripts/custom_net_tables/*.json"]
     },
     {
+      "url": "./.eaglesong/schemas/scripts/shops.json",
+      "fileMatch": ["src/scripts/shops.json", "src/scripts/shops/*.json"]
+    },
+    {
       "url": "./.eaglesong/schemas/scripts/npc/npc_abilities_custom.json",
       "fileMatch": [
         "src/scripts/npc/npc_abilities_custom.json",
@@ -57,6 +61,7 @@
       "src/scripts/custom_net_tables.yml",
       "src/scripts/custom_net_tables/*.yml"
     ],
+    "./.eaglesong/schemas/scripts/shops.json": ["src/scripts/shops.yml", "src/scripts/shops/*.yml"],
     "./.eaglesong/schemas/scripts/npc/npc_abilities_custom.json": [
       "src/scripts/npc/npc_abilities_custom.yml",
       "src/scripts/npc/npc_abilities_custom/*.yml"

@@ -1,6 +1,6 @@
 import { evaluateServiceScript } from '@eaglesong/helper-task';
 import path from 'path';
-import { Plugin } from '../service';
+import { Plugin } from '../plugin';
 
 const EXTENSIONS: ReadonlySet<string> = new Set(['.ts', '.tsx', '.js', '.jsx']);
 
