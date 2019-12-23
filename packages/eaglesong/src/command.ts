@@ -38,7 +38,7 @@ export abstract class CommandGroup {
   protected async getAddonName() {
     const pkgName = (await this.getPkg()).name;
     const options = await this.getOptions();
-    const addonName = _.defaultTo(options.addonName, pkgName.toLowerCase().replace(/-/, '_'));
+    const addonName = _.defaultTo(options.addonName, pkgName.toLowerCase().replace(/-/g, '_'));
 
     if (addonName === '') throw new Error('Addon name is not specified');
     if (!/^[a-z][\d_a-z]+$/.test(addonName)) {
