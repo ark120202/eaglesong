@@ -88,9 +88,10 @@ async function main(): Promise<number> {
 
   const devDependencies = [
     '@ark120202/typescript-config',
-    'typescript',
     '@eaglesong/tasks',
+    'dota-data',
     'eaglesong',
+    'typescript',
   ];
 
   if (useGit) {
