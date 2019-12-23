@@ -20,12 +20,12 @@
     "@types/fs-extra": "^8.0.1",
     "@types/inquirer": "^6.5.0",
     "@types/yargs": "^13.0.3",
-    "execa": "^3.4.0",
+    "execa": "^4.0.0",
     "fs-extra": "^8.1.0",
     "globby": "^10.0.1",
-    "inquirer": "^7.0.0",
+    "inquirer": "^7.0.1",
     "is-binary-path": "^2.1.0",
-    "sort-package-json": "^1.30.0",
+    "sort-package-json": "^1.31.0",
     "yargs": "^15.0.2"
   },
   "engines": {

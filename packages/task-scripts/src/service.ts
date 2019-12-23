@@ -94,6 +94,7 @@ export class ScriptsService {
   public removeFile(fileName: string) {
     const group = getScriptGroup(fileName);
 
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (this.groups[group]?.[fileName] == null) return;
     delete this.groups[group][fileName];
     if (Object.keys(this.groups[group]).length === 0) delete this.groups[group];

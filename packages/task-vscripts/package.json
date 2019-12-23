@@ -22,14 +22,14 @@
     "@eaglesong/helper-task": "link:../helper-task",
     "@types/resolve": "^0.0.8",
     "fs-extra": "^8.1.0",
-    "resolve": "^1.13.1",
+    "resolve": "^1.14.1",
     "tslib": "^1.10.0",
     "typescript-to-lua": "^0.29.1",
     "upath": "^1.2.0"
   },
   "devDependencies": {
     "dota-lua-types": "^3.2.0",
-    "typescript": "^3.7.3"
+    "typescript": "^3.7.4"
   },
   "peerDependencies": {
     "dota-lua-types": "^3.0.0",
