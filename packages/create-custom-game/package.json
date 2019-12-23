@@ -24,6 +24,7 @@
     "fs-extra": "^8.1.0",
     "globby": "^10.0.1",
     "inquirer": "^7.0.0",
+    "is-binary-path": "^2.1.0",
     "sort-package-json": "^1.30.0",
     "yargs": "^15.0.2"
   },

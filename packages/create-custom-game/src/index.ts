@@ -2,6 +2,7 @@
 import execa from 'execa';
 import fs from 'fs-extra';
 import globby from 'globby';
+import isBinaryPath from 'is-binary-path';
 import path from 'path';
 import sortPackageJson from 'sort-package-json';
 import yargs from 'yargs';
@@ -52,12 +53,14 @@ async function main(): Promise<number> {
     conventionalCommits,
   } = await ask();
 
+  const rootPath = path.resolve(internalName);
+
   const runPackageManager = (args: string[]) =>
-    execa(packageManager, args, { stdio: 'inherit', cwd: internalName });
+    execa(packageManager, args, { stdio: 'inherit', cwd: rootPath });
   const outputFile = (filePath: string, content: string) =>
-    fs.outputFile(path.join(internalName, filePath), content);
+    fs.outputFile(path.join(rootPath, filePath), content);
   const outputJson = (filePath: string, data: any) =>
-    fs.outputJson(path.join(internalName, filePath), data, { spaces: 2 });
+    fs.outputJson(path.join(rootPath, filePath), data, { spaces: 2 });
 
   const templates = new Set(['base']);
   const variables = new Map([
@@ -144,17 +147,22 @@ async function main(): Promise<number> {
   dependencies.sort((a, b) => a.localeCompare(b));
   devDependencies.sort((a, b) => a.localeCompare(b));
 
-  await fs.mkdir(internalName);
+  await fs.mkdir(rootPath);
   if (useGit) {
-    await execa('git', ['init'], { cwd: internalName });
+    await execa('git', ['init'], { cwd: rootPath });
   }
 
   for (const template of templates) {
-    const rootPath = path.join(__dirname, '..', 'templates', template);
-    const files = await globby('**/*', { cwd: rootPath, dot: true });
+    const templateRootPath = path.join(__dirname, '..', 'templates', template);
+    const files = await globby('**/*', { cwd: templateRootPath, dot: true });
     await Promise.all(
       files.map(async fileName => {
-        let fileContent = await fs.readFile(path.join(rootPath, fileName), 'utf8');
+        if (isBinaryPath(fileName)) {
+          await fs.copy(path.join(templateRootPath, fileName), path.join(rootPath, fileName));
+          return;
+        }
+
+        let fileContent = await fs.readFile(path.join(templateRootPath, fileName), 'utf8');
         fileContent = fileContent
           .replace(/(\s*)\/\/ if (.+?): (.+)/g, (_, spaces, condition, expression) =>
             templates.has(condition) ? `${spaces}${expression}` : '',
