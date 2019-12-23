@@ -53,7 +53,7 @@ export class PanoramaManifestPlugin {
 
       let entries: Entry[];
       try {
-        entries = yaml.safeLoad(rawManifest.toString('utf8'));
+        entries = yaml.safeLoad(rawManifest.toString('utf8')) ?? [];
       } catch (error) {
         compilation.errors.push(new PanoramaManifestError(manifestPath, error.message));
         return;
