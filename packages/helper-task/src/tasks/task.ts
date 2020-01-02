@@ -94,7 +94,7 @@ export abstract class Task<T> {
     try {
       return await this._helper.import(filePath);
     } catch (error) {
-      this.error({ filePath, message: error.message });
+      this.error({ filePath, message: error.toString() });
       return {};
     }
   }

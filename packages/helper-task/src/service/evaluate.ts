@@ -20,7 +20,7 @@ export async function evaluateServiceScript(
             api.error({ fileName, message: `${key}() returned ${file[key]}` });
           }
         } catch (error) {
-          api.error({ fileName, message: error.message });
+          api.error({ fileName, message: error.stack });
         }
       }),
   );

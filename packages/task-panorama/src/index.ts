@@ -161,7 +161,7 @@ export default class PanoramaTask extends Task<Options> {
         return;
       }
 
-      this.error({ level, message: typeof error === 'string' ? error : error.message });
+      this.error({ level, message: typeof error === 'string' ? error : error.toString() });
     }
   }
 }

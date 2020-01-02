@@ -74,7 +74,7 @@ export default class ImagesTask extends TransformTask<Options> {
       // @ts-ignore Is it really nullable?
       realSizes = [width, height];
     } catch (error) {
-      this.error({ filePath, message: error.message });
+      this.error({ filePath, message: error.toString() });
       return;
     }
 
