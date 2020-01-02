@@ -8,7 +8,7 @@ export function convertDiagnosticToError(diagnostic: ts.Diagnostic): ErrorMessag
   const message = ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n');
 
   if (!diagnostic.file) return { level, message };
-  assert(diagnostic.start);
+  assert(diagnostic.start != null);
 
   const { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start!);
   return {
