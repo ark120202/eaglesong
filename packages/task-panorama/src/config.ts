@@ -63,7 +63,11 @@ export function createWebpackConfig({
   const resourcesConfig: webpack.Configuration = {
     module: {
       rules: [
-        { test: /\.(png|je?pg)$/, loader: 'file-loader', options: { name: '[path][name].[ext]' } },
+        {
+          test: /\.(png|je?pg)$/,
+          loader: require.resolve('file-loader'),
+          options: { name: '[path][name].[ext]' },
+        },
       ],
     },
     plugins: [
@@ -91,7 +95,7 @@ export function createWebpackConfig({
         {
           test: /\.tsx?$/,
           exclude: /node_modules/,
-          loader: 'ts-loader',
+          loader: require.resolve('ts-loader'),
           options: { configFile, transpileOnly: true },
         },
       ],
@@ -134,12 +138,12 @@ export function createWebpackConfig({
         {
           test: /\.(c|sa|sc)ss$/,
           issuer: /\.xml$/,
-          loader: 'file-loader',
+          loader: require.resolve('file-loader'),
           options: { name: '[path][name].css' },
         },
         {
           test: /\.s(a|c)ss$/,
-          loader: 'sass-loader',
+          loader: require.resolve('sass-loader'),
           options: { implementation: sass },
         },
       ],
