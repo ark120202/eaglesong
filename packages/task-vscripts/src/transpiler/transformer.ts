@@ -5,7 +5,13 @@ export class LuaTransformer extends tstl.LuaTransformer {
   protected createModuleRequire(moduleSpecifier: ts.StringLiteral, resolveModule = true) {
     const modulePath = tstl.createStringLiteral(moduleSpecifier.text);
     const requireSpecifier = resolveModule
-      ? tstl.createCallExpression(tstl.createIdentifier('__TS__Resolve'), [modulePath])
+      ? tstl.createCallExpression(
+          tstl.createTableIndexExpression(
+            tstl.createIdentifier('require'),
+            tstl.createStringLiteral('resolve'),
+          ),
+          [modulePath],
+        )
       : modulePath;
 
     return tstl.createCallExpression(

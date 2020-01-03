@@ -4,7 +4,7 @@ import ts from 'typescript';
 import tstl from 'typescript-to-lua';
 import path from 'upath';
 
-const RESOLVE_REGEXP = /__TS__Resolve\("(.*?)"\)/g;
+const RESOLVE_REGEXP = /require.resolve\("(.*?)"\)/g;
 export const replaceResolve = (code: string, replacer: (module: string) => string | Error) =>
   code.replace(RESOLVE_REGEXP, (source, match) => {
     const replacement = replacer(match);
