@@ -1,4 +1,4 @@
-import { spawn } from 'child_process';
+import { spawn, SpawnOptions } from 'child_process';
 import { DotaLanguage } from 'dota-data/lib/localization';
 import path from 'upath';
 import { CommandGroup } from '../command';
@@ -24,13 +24,14 @@ export default class LaunchCommand extends CommandGroup {
   private async run() {
     const win64 = path.join(await this.getDotaPath(), 'game', 'bin', 'win64');
     const args = ['-tools', '-addon', await this.getAddonName()];
+    const spawnOptions: SpawnOptions = { cwd: win64, detached: true, stdio: 'ignore' };
 
     let launchOptions = (await this.getOptions()).launch;
     if (launchOptions == null) launchOptions = {};
 
     if (launchOptions.vconsole !== false) {
       args.push('-vconsole');
-      spawn(path.join(win64, 'vconsole2.exe'), [], { cwd: win64 });
+      spawn(path.join(win64, 'vconsole2.exe'), [], spawnOptions).unref();
     }
 
     if (launchOptions.language != null) args.push('-language', launchOptions.language);
@@ -39,6 +40,6 @@ export default class LaunchCommand extends CommandGroup {
       args.push(`+dota_launch_custom_game ${await this.getAddonName()} ${launchOptions.map}`);
     }
 
-    spawn(path.join(win64, 'dota2.exe'), args, { cwd: win64 });
+    spawn(path.join(win64, 'dota2.exe'), args, spawnOptions).unref();
   }
 }
