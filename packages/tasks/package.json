@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "dota-data": "^0.7.0",
-    "dota-lua-types": "^3.0.0",
+    "dota-lua-types": "^3.3.0",
     "typescript": "^3.7.4"
   },
   "peerDependencies": {

@@ -66,7 +66,7 @@ export function createWebpackConfig({
         {
           test: /\.(png|je?pg)$/,
           loader: require.resolve('file-loader'),
-          options: { name: '[path][name].[ext]' },
+          options: { name: '[path][name].[ext]', esModule: false },
         },
       ],
     },
@@ -139,7 +139,7 @@ export function createWebpackConfig({
           test: /\.(c|sa|sc)ss$/,
           issuer: /\.xml$/,
           loader: require.resolve('file-loader'),
-          options: { name: '[path][name].css' },
+          options: { name: '[path][name].css', esModule: false },
         },
         {
           test: /\.s(a|c)ss$/,
