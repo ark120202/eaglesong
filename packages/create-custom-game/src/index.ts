@@ -4,7 +4,6 @@ import fs from 'fs-extra';
 import globby from 'globby';
 import isBinaryPath from 'is-binary-path';
 import path from 'path';
-import sortPackageJson from 'sort-package-json';
 import yargs from 'yargs';
 import { ask } from './input';
 
@@ -68,7 +67,8 @@ async function main(): Promise<number> {
     ['getTasks', ''],
   ]);
 
-  const packageJson: Record<string, any> = {
+  const lateDefinedField = undefined as any;
+  const packageJson = {
     name: internalName,
     version: '0.0.0',
     private: true,
@@ -77,6 +77,10 @@ async function main(): Promise<number> {
       launch: 'eaglesong launch',
       release: 'eaglesong publish release',
     },
+    husky: lateDefinedField,
+    commitlint: lateDefinedField,
+    prettier: lateDefinedField,
+    eslintConfig: lateDefinedField,
     dependencies: {},
     devDependencies: {},
   };
@@ -187,7 +191,7 @@ async function main(): Promise<number> {
     );
   }
 
-  await outputJson('package.json', sortPackageJson(packageJson));
+  await outputJson('package.json', packageJson);
 
   let installedDevDependencies = false;
   try {

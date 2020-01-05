@@ -25,7 +25,6 @@
     "globby": "^10.0.1",
     "inquirer": "^7.0.1",
     "is-binary-path": "^2.1.0",
-    "sort-package-json": "^1.36.0",
     "yargs": "^15.1.0"
   },
   "engines": {
