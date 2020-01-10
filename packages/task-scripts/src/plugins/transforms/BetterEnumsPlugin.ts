@@ -55,14 +55,7 @@ class CustomEnumsSchema extends s.EnumsSchema {
   }
 
   public mapValue(value: unknown) {
-    const getOriginalName = (shortName: unknown) => {
-      const member = this.getDefinition().members.find(x => x.shortName === shortName);
-      return member ? member.name : shortName;
-    };
-
-    if (typeof value === 'string') return getOriginalName(value);
-    if (!this._flags || !Array.isArray(value)) return value;
-    return value.map(getOriginalName).join(' | ');
+    return this._flags && Array.isArray(value) ? value.join(' | ') : value;
   }
 }
 
