@@ -12,13 +12,13 @@ class CustomEnumsSchema extends s.EnumsSchema {
   public toTypeScript(context: s.TsContext) {
     // TODO: Get rid of side effects
     (global as any)[this._name] = Object.fromEntries(
-      this.getDefinition().members.map(({ name, originalName }) => [name, originalName]),
+      this.getDefinition().members.map(({ name, shortName }) => [shortName, name]),
     );
 
     const memberDeclarations = this.getDefinition()
-      .members.map(({ name, originalName }) => {
-        const escapedName = /^\d/.test(name) ? JSON.stringify(name) : name;
-        return `    ${escapedName} = ${JSON.stringify(originalName)},`;
+      .members.map(({ name, shortName }) => {
+        const escapedName = /^\d/.test(shortName) ? JSON.stringify(shortName) : shortName;
+        return `    ${escapedName} = ${JSON.stringify(name)},`;
       })
       .join('\n');
 
@@ -55,9 +55,9 @@ class CustomEnumsSchema extends s.EnumsSchema {
   }
 
   public mapValue(value: unknown) {
-    const getOriginalName = (name: unknown) => {
-      const member = this.getDefinition().members.find(x => x.name === name);
-      return member ? member.originalName : name;
+    const getOriginalName = (shortName: unknown) => {
+      const member = this.getDefinition().members.find(x => x.shortName === shortName);
+      return member ? member.name : shortName;
     };
 
     if (typeof value === 'string') return getOriginalName(value);

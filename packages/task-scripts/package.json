@@ -30,7 +30,7 @@
     "vdf-extra": "^2.2.2"
   },
   "devDependencies": {
-    "dota-data": "^0.7.0"
+    "dota-data": "^0.9.0"
   },
   "peerDependencies": {
     "dota-data": "^0.7.0"

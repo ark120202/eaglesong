@@ -26,7 +26,7 @@
     "@types/lodash": "^4.14.149",
     "@types/semver": "^6.2.0",
     "@types/source-map-support": "^0.5.0",
-    "@types/yargs": "^13.0.4",
+    "@types/yargs": "^15.0.0",
     "ajv": "^6.10.2",
     "bytes": "^3.1.0",
     "chalk": "^3.0.0",
@@ -35,8 +35,8 @@
     "execa": "^4.0.0",
     "find-steam-app": "^1.0.2",
     "fs-extra": "^8.1.0",
-    "globby": "^10.0.1",
-    "inquirer": "^7.0.1",
+    "globby": "^11.0.0",
+    "inquirer": "^7.0.3",
     "is-installed-globally": "^0.3.1",
     "lodash": "^4.17.15",
     "log-symbols": "^3.0.0",
@@ -49,7 +49,7 @@
     "temp-write": "^4.0.0",
     "tempfile": "^3.0.0",
     "terminal-link": "^2.1.1",
-    "ts-node": "^8.5.4",
+    "ts-node": "^8.6.0",
     "tslib": "^1.10.0",
     "unique-string": "^2.0.0",
     "upath": "^1.2.0",
@@ -60,7 +60,7 @@
     "yargs": "^15.1.0"
   },
   "devDependencies": {
-    "dota-data": "^0.7.0",
+    "dota-data": "^0.9.0",
     "source-map-support": "^0.5.16",
     "time-require": "^0.1.2"
   },
