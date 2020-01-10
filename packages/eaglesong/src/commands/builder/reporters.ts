@@ -31,11 +31,8 @@ const formatTaskErrors = (context: string, indent: string, task: Task<any>) =>
 
 export type Reporter = (context: string, tasks: Task<any>[]) => void;
 
-const spinnerFrames = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
 class ReportList {
   private tasks: Task<any>[] = [];
-  private frame = 0;
-  private timer?: NodeJS.Timer;
   constructor(private readonly context: string) {}
 
   public setTasks(tasks: Task<any>[]) {
@@ -45,13 +42,8 @@ class ReportList {
   public update() {
     let text = `${chalk.green('Eaglesong')} v${version}\n\n`;
 
-    if (this.timer == null && this.tasks.some(x => x.state === TaskState.Working)) {
-      this.timer = setInterval(() => this.autoUpdate(), 80);
-    }
-
-    this.tasks.forEach(task => {
-      const symbol = getTaskStateSymbol(task.state);
-      text += symbol === '?' ? spinnerFrames[this.frame] : symbol;
+    for (const task of this.tasks) {
+      text += getTaskStateSymbol(task.state);
 
       text += ' ';
       text += task.name;
@@ -62,12 +54,6 @@ class ReportList {
       }
 
       text += '\n';
-    });
-
-    if (this.timer != null && this.tasks.every(x => x.state !== TaskState.Working)) {
-      this.frame = 0;
-      clearInterval(this.timer);
-      this.timer = undefined;
     }
 
     if (!process.env.EAGLESONG_NO_CLEAR) {
@@ -75,11 +61,6 @@ class ReportList {
     }
 
     console.log(text.trim());
-  }
-
-  private autoUpdate() {
-    this.frame = (this.frame + 1) % spinnerFrames.length;
-    this.update();
   }
 }
 
