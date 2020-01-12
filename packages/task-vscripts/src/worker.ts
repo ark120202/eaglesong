@@ -17,9 +17,7 @@ export interface WorkerData {
   configPath: string;
   outDir?: string;
   isWatching: boolean;
-
   hasDota: boolean;
-  commonRoot: string;
 }
 
 const updateConfigFile = createConfigFileUpdater({
@@ -40,7 +38,7 @@ function emit(program: ts.Program) {
     transformer: new LuaTransformer(program),
   });
 
-  const compilation = new CustomCompilation(program, undefined, workerData.commonRoot);
+  const compilation = new CustomCompilation(program);
   const { errors } = compilation.emit(transpiledFiles);
 
   const diagnostics = ts.sortAndDeduplicateDiagnostics([

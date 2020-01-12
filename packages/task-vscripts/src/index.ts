@@ -23,9 +23,7 @@ export default class VScriptsTask extends Task<void> {
         configPath: this.resolvePath('src/vscripts/tsconfig.json'),
         isWatching: this.isWatching,
         outDir,
-
         hasDota: this.dotaPath != null,
-        commonRoot: this.resolvePath('src/common'),
       };
 
       const worker = new Worker(path.join(__dirname, 'worker.js'), { workerData });

@@ -3,20 +3,25 @@ import path from 'upath';
 import { Compilation, CompilationHost } from './transpiler/compilation';
 
 export class CustomCompilation extends Compilation {
-  constructor(
-    program: ts.Program,
-    host: CompilationHost | undefined,
-    private readonly commonRoot?: string,
-  ) {
+  private readonly realRootDir: string;
+  private readonly commonDir: string;
+  constructor(program: ts.Program, host?: CompilationHost) {
     super(program, host);
+    this.realRootDir = program.getCurrentDirectory();
+    this.commonDir = path.resolve(this.realRootDir, '../common');
   }
 
   protected toOutputStructure(filePath: string) {
-    if (this.commonRoot) {
-      const commonRelativePath = path.relative(this.commonRoot, filePath);
-      if (!commonRelativePath.startsWith('..') && !path.isAbsolute(commonRelativePath)) {
-        return super.toOutputStructure(path.join(this.rootDir, `__common__/${commonRelativePath}`));
-      }
+    // TODO: Use project references instead?
+
+    const rootDirRelative = path.relative(this.realRootDir, filePath);
+    if (!rootDirRelative.startsWith('..') && !path.isAbsolute(rootDirRelative)) {
+      return super.toOutputStructure(path.join(this.rootDir, rootDirRelative));
+    }
+
+    const commonRelative = path.relative(this.commonDir, filePath);
+    if (!commonRelative.startsWith('..') && !path.isAbsolute(commonRelative)) {
+      return super.toOutputStructure(path.join(this.rootDir, '__common__', commonRelative));
     }
 
     return super.toOutputStructure(filePath);
