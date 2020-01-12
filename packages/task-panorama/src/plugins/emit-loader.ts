@@ -1,7 +1,7 @@
 import webpack from 'webpack';
 
 export default function emitLoader(this: webpack.loader.LoaderContext, content: string) {
-  this.cacheable();
+  this.cacheable(false);
 
   const compilation: webpack.compilation.Compilation = this._compilation;
   const module: webpack.Module = this._module;
