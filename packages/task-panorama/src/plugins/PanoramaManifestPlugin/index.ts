@@ -33,10 +33,7 @@ export class PanoramaManifestPlugin {
     // @ts-ignore
     const manifestPath = makePathsRelative(compiler.options.context, this.manifestPath);
 
-    // @ts-ignore
-    const readFile: (path: string) => Promise<Buffer> = promisify(
-      compiler.inputFileSystem.readFile.bind(compiler.inputFileSystem),
-    );
+    const readFile = promisify(compiler.inputFileSystem.readFile.bind(compiler.inputFileSystem));
 
     compiler.hooks.compilation.tap(
       this.constructor.name,

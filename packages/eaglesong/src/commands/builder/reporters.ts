@@ -4,7 +4,6 @@ import logSymbols from 'log-symbols';
 import readPkg from 'read-pkg';
 import path from 'upath';
 
-// @ts-ignore
 const { version } = readPkg.sync({ cwd: path.join(__dirname, '../../..') });
 
 function getTaskStateSymbol(state: TaskState) {

@@ -43,8 +43,10 @@ export const resolveVersions = async (context: string, modules: string[]) =>
       modules.map(
         async (moduleName): Promise<[string, string]> => {
           const resolved = resolveFrom(context, `${moduleName}/package.json`);
-          if (resolved === null) return [moduleName, 'exotic'];
-          // @ts-ignore
+          if (resolved === null) {
+            return [moduleName, 'exotic'];
+          }
+
           const pkg = await readPkg({ cwd: path.dirname(resolved) });
           return [moduleName, pkg.version];
         },
@@ -140,7 +142,6 @@ export async function runCompiler(
       }
 
       const compiler = webpack(config);
-      // @ts-ignore
       compiler.outputFileSystem = mfs;
       const stats = await promisify(compiler.run).call(compiler);
       if (stats.hasErrors() || stats.hasWarnings()) {
