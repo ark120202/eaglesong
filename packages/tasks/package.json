@@ -35,11 +35,13 @@
   "devDependencies": {
     "dota-data": "^0.9.0",
     "dota-lua-types": "^3.3.0",
+    "panorama-types": "^1.2.0",
     "typescript": "^3.7.4"
   },
   "peerDependencies": {
     "dota-data": "^0.7.0",
     "dota-lua-types": "^3.0.0",
+    "panorama-types": "^1.2.0",
     "typescript": "^3.0.0"
   },
   "publishConfig": {

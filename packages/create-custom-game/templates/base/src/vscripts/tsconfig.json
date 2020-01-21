@@ -1,7 +1,11 @@
 {
-  "extends": "@ark120202/typescript-config/dota/lua.json",
+  "extends": "@ark120202/typescript-config/base.json",
   "include": ["**/*", "../common/**/*"],
   "compilerOptions": {
+    "module": "esnext",
+    "target": "esnext",
+    "lib": ["esnext"],
+    "types": ["dota-lua-types/normalized"],
     "baseUrl": ".",
     "paths": {
       "@common/*": ["../common/*"]

@@ -6647,6 +6647,11 @@ pako@~1.0.5:
   resolved "https://registry.yarnpkg.com/pako/-/pako-1.0.10.tgz#4328badb5086a426aa90f541977d4955da5c9732"
   integrity sha512-0DTvPVU3ed8+HNXOu5Bs+o//Mbdj9VNQMUOe9oKCwh8l0GNwpTDMKCWbRjgtD291AWnkAgkqA/LOnQS8AmS1tw==
 
+panorama-types@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/panorama-types/-/panorama-types-1.2.0.tgz#b8b58e0cd489f70e7187315cafcb4cdde5cc9c40"
+  integrity sha512-NTku+49qwC4WPWKaR0QNhhl9SuIugJJwaAzKKJOIODz5UfyfCxorqUk7YDHt2yDWOFnXD0MG3HzgZ33MSNOFZA==
+
 parallel-transform@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/parallel-transform/-/parallel-transform-1.1.0.tgz#d410f065b05da23081fcd10f28854c29bda33b06"

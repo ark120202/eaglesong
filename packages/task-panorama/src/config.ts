@@ -3,8 +3,10 @@ import CopyWebpackPlugin from 'copy-webpack-plugin';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import _ from 'lodash';
+import createDotaTransformer from 'panorama-types/transformer';
 import path from 'path';
 import sass from 'sass';
+import { Options as TsLoaderOptions } from 'ts-loader';
 import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin';
 import webpack from 'webpack';
 import webpackMerge from 'webpack-merge';
@@ -96,7 +98,11 @@ export function createWebpackConfig({
           test: /\.tsx?$/,
           exclude: /node_modules/,
           loader: require.resolve('ts-loader'),
-          options: { configFile, transpileOnly: true },
+          options: _.identity<Partial<TsLoaderOptions>>({
+            configFile,
+            transpileOnly: true,
+            getCustomTransformers: () => ({ before: [createDotaTransformer()] }),
+          }),
         },
       ],
     },
