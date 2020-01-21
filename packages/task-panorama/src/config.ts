@@ -7,7 +7,6 @@ import createDotaTransformer from 'panorama-types/transformer';
 import path from 'path';
 import sass from 'sass';
 import { Options as TsLoaderOptions } from 'ts-loader';
-import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin';
 import webpack from 'webpack';
 import webpackMerge from 'webpack-merge';
 import { EntryLoaderOptions } from './plugins/entry-loader';
@@ -82,10 +81,7 @@ export function createWebpackConfig({
   const configFile = path.join(panoramaPath, 'tsconfig.json');
 
   const scriptsConfig: webpack.Configuration = {
-    resolve: {
-      extensions: ['.js', '.jsx', '.ts', '.tsx'],
-      plugins: [new TsconfigPathsPlugin({ configFile })],
-    },
+    resolve: { extensions: ['.js', '.jsx', '.ts', '.tsx'] },
     module: {
       rules: [
         {

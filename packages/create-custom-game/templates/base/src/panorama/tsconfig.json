@@ -2,14 +2,9 @@
   "extends": "@ark120202/typescript-config/base.json",
   "include": ["**/*", "../common/**/*"],
   "compilerOptions": {
-    "target": "es5",
-    "lib": ["esnext"],
+    "lib": ["es2017"],
+    "target": "es2017",
     "module": "esnext",
-
-    "types": ["panorama-types", "webpack-env"],
-    "baseUrl": ".",
-    "paths": {
-      "@common/*": ["../common/*"]
-    }
+    "types": ["panorama-types/normalized", "webpack-env"]
   }
 }
