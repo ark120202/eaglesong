@@ -153,12 +153,9 @@ export default class PanoramaTask extends Task<Options> {
     for (const error of errors) {
       if (isForkTsCheckerError(error)) {
         const { line, character } = error.location;
-        this.error({
-          filePath: error.file,
-          level,
-          message: error.rawMessage.replace(/^ERROR/, `(${line},${character})`),
-        });
-        return;
+        const message = error.rawMessage.replace(/^ERROR/, `(${line},${character})`);
+        this.error({ filePath: error.file, level, message });
+        continue;
       }
 
       this.error({ level, message: typeof error === 'string' ? error : error.toString() });
