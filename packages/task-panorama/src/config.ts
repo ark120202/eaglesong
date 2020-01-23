@@ -26,14 +26,18 @@ export function createWebpackConfig({
   addonName,
   outputOptions,
 }: CreateWebpackConfigOptions) {
-  const resolveContent = (...sub: string[]) =>
-    dotaPath == null ? '/' : path.join(dotaPath, 'content', 'dota_addons', addonName, ...sub);
+  const panoramaPath = path.join(context, 'src', 'panorama');
+  const tsconfigPath = path.join(panoramaPath, 'tsconfig.json');
+
+  const contentBasePath =
+    dotaPath == null ? '/' : path.join(dotaPath, 'content', 'dota_addons', addonName);
+  const resolveContent = (...segments: string[]) => path.join(contentBasePath, ...segments);
 
   const mainConfig: webpack.Configuration = {
     target: 'webworker',
     // TODO: Make a runtime consumer for nosources-source-map
     devtool: false,
-    context: path.join(context, 'src', 'panorama'),
+    context: panoramaPath,
     output: {
       path: resolveContent('panorama', 'layout', 'custom_game'),
       publicPath: 'file://{resources}/layout/custom_game/',
@@ -77,9 +81,6 @@ export function createWebpackConfig({
     ],
   };
 
-  const panoramaPath = path.join(context, 'src', 'panorama');
-  const configFile = path.join(panoramaPath, 'tsconfig.json');
-
   const scriptsConfig: webpack.Configuration = {
     resolve: { extensions: ['.js', '.jsx', '.ts', '.tsx'] },
     module: {
@@ -95,7 +96,7 @@ export function createWebpackConfig({
           exclude: /node_modules/,
           loader: require.resolve('ts-loader'),
           options: _.identity<Partial<TsLoaderOptions>>({
-            configFile,
+            configFile: tsconfigPath,
             transpileOnly: true,
             getCustomTransformers: () => ({ before: [createDotaTransformer()] }),
           }),
@@ -103,7 +104,7 @@ export function createWebpackConfig({
       ],
     },
     plugins: [
-      new ForkTsCheckerWebpackPlugin({ tsconfig: configFile, async: false, silent: true }),
+      new ForkTsCheckerWebpackPlugin({ tsconfig: tsconfigPath, async: false, silent: true }),
       new webpack.BannerPlugin({ banner: 'var globalThis = this;', raw: true, test: /\.js$/ }),
     ],
   };
