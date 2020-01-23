@@ -147,7 +147,13 @@ export function createWebpackConfig({
         {
           test: /\.s(a|c)ss$/,
           loader: require.resolve('sass-loader'),
-          options: { implementation: sass },
+          options: {
+            implementation: sass,
+            sassOptions: {
+              // VCSS doesn't allow omitting last semicolon in a rule
+              outputStyle: 'expanded',
+            },
+          },
         },
       ],
     },
