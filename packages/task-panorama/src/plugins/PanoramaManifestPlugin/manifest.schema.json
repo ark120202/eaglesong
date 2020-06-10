@@ -8,14 +8,14 @@
       "name": { "type": "string" },
       "source": { "type": "string" },
       "type": {
-        "type": "string",
-        "examples": [
-          "GameInfo",
-          "HeroSelection",
-          "HUD",
-          "HudTopBar",
-          "FlyoutScoreboard",
-          "EndScreen"
+        "oneOf": [
+          { "const": "GameSetup" },
+          { "const": "HeroSelection" },
+          { "const": "Hud" },
+          { "const": "HudTopBar" },
+          { "const": "FlyoutScoreboard" },
+          { "const": "GameInfo" },
+          { "const": "EndScreen" }
         ]
       }
     },
