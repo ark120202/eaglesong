@@ -1,4 +1,3 @@
-import { getOutputHeader, OutputOptions } from '@eaglesong/helper-task';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
@@ -11,6 +10,7 @@ import webpack from 'webpack';
 import webpackMerge from 'webpack-merge';
 import { EntryLoaderOptions } from './plugins/entry-loader';
 import { HtmlWebpackXmlPlugin } from './plugins/HtmlWebpackXmlPlugin';
+import { OutputHeaderWebpackPlugin, OutputOptions } from './plugins/OutputHeaderWebpackPlugin';
 import { PanoramaManifestPlugin } from './plugins/PanoramaManifestPlugin';
 
 interface CreateWebpackConfigOptions {
@@ -51,19 +51,8 @@ export function createWebpackConfig({
     // https://github.com/webpack/webpack/pull/6447
     optimization: { splitChunks: { cacheGroups: { vendor: false, default: false } } },
     mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
-    plugins: [],
+    plugins: [new OutputHeaderWebpackPlugin(outputOptions)],
   };
-
-  // TODO: Use custom plugin to pass actual path
-  const header = getOutputHeader(outputOptions, 'main.js');
-  if (header != null) {
-    mainConfig.plugins!.push(
-      new webpack.BannerPlugin({
-        test: /\.js$/,
-        banner: header,
-      }),
-    );
-  }
 
   const resourcesConfig: webpack.Configuration = {
     module: {
@@ -131,7 +120,6 @@ export function createWebpackConfig({
         xhtml: true,
       }),
       new HtmlWebpackXmlPlugin(),
-      // TODO: Add banner plugin
     ],
   };
 
@@ -157,7 +145,6 @@ export function createWebpackConfig({
         },
       ],
     },
-    // TODO: Add banner plugin
   };
 
   return webpackMerge(mainConfig, resourcesConfig, scriptsConfig, layoutConfig, stylesConfig);
