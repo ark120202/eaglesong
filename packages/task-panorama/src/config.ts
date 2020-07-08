@@ -7,7 +7,7 @@ import path from 'path';
 import sass from 'sass';
 import { Options as TsLoaderOptions } from 'ts-loader';
 import webpack from 'webpack';
-import webpackMerge from 'webpack-merge';
+import { merge } from 'webpack-merge';
 import { EntryLoaderOptions } from './plugins/entry-loader';
 import { HtmlWebpackXmlPlugin } from './plugins/HtmlWebpackXmlPlugin';
 import { OutputHeaderWebpackPlugin, OutputOptions } from './plugins/OutputHeaderWebpackPlugin';
@@ -66,7 +66,9 @@ export function createWebpackConfig({
     },
     plugins: [
       // Should be applied before `HtmlWebpackPlugin`, since both tap to `emit` hook
-      new CopyWebpackPlugin([{ from: 'images', to: resolveContent('panorama', 'images') }]),
+      new CopyWebpackPlugin({
+        patterns: [{ from: 'images', to: resolveContent('panorama', 'images') }],
+      }),
     ],
   };
 
@@ -93,7 +95,11 @@ export function createWebpackConfig({
       ],
     },
     plugins: [
-      new ForkTsCheckerWebpackPlugin({ tsconfig: tsconfigPath, async: false, silent: true }),
+      new ForkTsCheckerWebpackPlugin({
+        async: false,
+        logger: { issues: 'silent' },
+        typescript: { configFile: tsconfigPath },
+      }),
       new webpack.BannerPlugin({ banner: 'var globalThis = this;', raw: true, test: /\.js$/ }),
     ],
   };
@@ -147,5 +153,5 @@ export function createWebpackConfig({
     },
   };
 
-  return webpackMerge(mainConfig, resourcesConfig, scriptsConfig, layoutConfig, stylesConfig);
+  return merge(mainConfig, resourcesConfig, scriptsConfig, layoutConfig, stylesConfig);
 }

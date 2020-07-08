@@ -1,4 +1,4 @@
-import { Hooks } from 'html-webpack-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 import path from 'path';
 import { URL } from 'url';
 import webpack from 'webpack';
@@ -15,9 +15,10 @@ interface XmlAsset {
 export class HtmlWebpackXmlPlugin implements webpack.Plugin {
   public apply(compiler: webpack.Compiler) {
     compiler.hooks.compilation.tap(this.constructor.name, compilation => {
-      const hooks = compilation.hooks as Hooks;
+      const hooks = HtmlWebpackPlugin.getHooks(compilation);
+      const { publicPath } = compilation.outputOptions;
 
-      hooks.htmlWebpackPluginBeforeHtmlGeneration.tap(this.constructor.name, args => {
+      hooks.beforeAssetTagGeneration.tap(this.constructor.name, args => {
         const xmlAssets: XmlAsset[] = [];
 
         // eslint-disable-next-line prefer-destructuring
@@ -38,8 +39,7 @@ export class HtmlWebpackXmlPlugin implements webpack.Plugin {
         return args;
       });
 
-      hooks.htmlWebpackPluginAfterHtmlProcessing.tap(this.constructor.name, args => {
-        const { publicPath } = args.assets;
+      hooks.beforeEmit.tap(this.constructor.name, args => {
         const images = Object.keys(compilation.assets)
           .filter(assetName => /\.(png|je?pg)$/.test(assetName))
           .map(assetName => {

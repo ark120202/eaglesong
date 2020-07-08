@@ -1,4 +1,5 @@
 import { Task } from '@eaglesong/helper-task';
+import { IssueWebpackError } from 'fork-ts-checker-webpack-plugin/lib/issue/IssueWebpackError';
 import fs from 'fs-extra';
 import _ from 'lodash';
 import MemoryFS from 'memory-fs';
@@ -23,20 +24,6 @@ function extractErrorsFromStats(stats: RealWebpackStats, type: 'errors' | 'warni
 
   return _.unionBy(errors, error => (typeof error === 'string' ? error : error.message));
 }
-
-interface ForkTsCheckerError extends Error {
-  file: string;
-  location: { line: number; character: number };
-  message: string;
-  rawMessage: string;
-}
-
-const isForkTsCheckerError = (error: any): error is ForkTsCheckerError =>
-  typeof error === 'object' &&
-  'file' in error &&
-  'location' in error &&
-  'message' in error &&
-  'rawMessage' in error;
 
 export interface Options {
   config?(w: webpack.Configuration): webpack.Configuration;
@@ -105,10 +92,10 @@ export default class PanoramaTask extends Task<Options> {
 
   private displayErrors(errors: WebpackError[], level: 'error' | 'warning') {
     for (const error of errors) {
-      if (isForkTsCheckerError(error)) {
-        const { line, character } = error.location;
-        const message = error.rawMessage.replace(/^ERROR/, `(${line},${character})`);
-        this.error({ filePath: error.file, level, message });
+      if (error instanceof IssueWebpackError) {
+        const { line, column } = error.issue.location?.start ?? {};
+        const message = `(${line},${column}) ${error.issue.code}: ${error.issue.message}`;
+        this.error({ filePath: error.issue.file, level, message });
         continue;
       }
 
