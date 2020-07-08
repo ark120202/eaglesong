@@ -60,25 +60,3 @@ export const validateIncludes = (
     }
   }
 };
-
-export const addCommonIncludes = (commons: string[]): posthtml.Plugin => tree => {
-  if (commons.length === 0) return;
-
-  const root = getRoot(tree);
-  if (!root) return;
-
-  let scriptsTag = root.content.find(createNodeFilter(['scripts']));
-  if (!scriptsTag) {
-    scriptsTag = {
-      tag: 'scripts',
-      attrs: {},
-      content: ['\n'],
-    };
-
-    root.content = ['\n', scriptsTag, ...root.content];
-  }
-
-  scriptsTag.content.push(
-    ...commons.flatMap(src => [{ tag: 'include', attrs: { src }, content: [] }, '\n']),
-  );
-};

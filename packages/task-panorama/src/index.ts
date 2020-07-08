@@ -2,12 +2,9 @@ import { Task } from '@eaglesong/helper-task';
 import fs from 'fs-extra';
 import _ from 'lodash';
 import MemoryFS from 'memory-fs';
-import path from 'path';
 import webpack from 'webpack';
-import { Cache, Common, getDirtyCommons, loadCache, makeConfigs, runCompiler } from './cache';
 import { createWebpackConfig } from './config';
 import { manifestSchema } from './plugins/PanoramaManifestPlugin/manifest';
-import { UseCommonsPlugin } from './plugins/UseCommonsPlugin';
 
 interface RealWebpackStats extends webpack.Stats {
   compilation: webpack.compilation.Compilation;
@@ -42,9 +39,7 @@ const isForkTsCheckerError = (error: any): error is ForkTsCheckerError =>
   'rawMessage' in error;
 
 export interface Options {
-  common?: Record<string, Common>;
-  commonConfig?(config: webpack.Configuration): webpack.Configuration;
-  mainConfig?(config: webpack.Configuration): webpack.Configuration;
+  config?(w: webpack.Configuration): webpack.Configuration;
 }
 
 export default class PanoramaTask extends Task<Options> {
@@ -65,51 +60,10 @@ export default class PanoramaTask extends Task<Options> {
     );
   }
 
-  private async buildCommons() {
-    const cacheFilePath = this.resolvePath(
-      'project',
-      'node_modules/.cache/eaglesong-task-panorama.json',
-    );
-
-    let newCache: Record<string, Cache> = {};
-
-    if (this.options.common) {
-      const outputPath =
-        this.dotaPath == null
-          ? undefined
-          : this.resolvePath('content', 'panorama/layout/custom_game');
-      // Webpack not allows slash to ba a path separator on Windows
-      const webpackContext = path.normalize(this.resolvePath('src/panorama'));
-
-      const configs = makeConfigs(webpackContext, this.isWatching);
-      if (this.options.commonConfig) configs.forEach(this.options.commonConfig);
-
-      const cache = await loadCache(cacheFilePath, Object.keys(this.options.common));
-      const dirtyNames = await getDirtyCommons(
-        this.isWatching,
-        this.context,
-        this.options.common,
-        cache,
-      );
-      const dirtyCommons = _.pick(this.options.common, dirtyNames);
-
-      newCache = {
-        ...(await runCompiler(this.isWatching, this.context, outputPath, dirtyCommons, configs)),
-        ..._.omit(cache, dirtyNames),
-      };
-    }
-
-    if (this.dotaPath != null) await fs.outputJson(cacheFilePath, newCache);
-    return _.mapValues(this.options.common, (v, k) => ({ ...v, manifest: newCache[k].manifest }));
-  }
-
   private async build() {
-    const commons = await this.buildCommons();
-
     let webpackConfig = createWebpackConfig(this);
-    if (this.options.mainConfig) webpackConfig = this.options.mainConfig(webpackConfig);
+    if (this.options.config) webpackConfig = this.options.config(webpackConfig);
     if (!webpackConfig.plugins) webpackConfig.plugins = [];
-    webpackConfig.plugins.push(new UseCommonsPlugin(commons));
 
     const compiler = webpack(webpackConfig);
     if (this.dotaPath == null) {
