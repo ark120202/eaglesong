@@ -3420,10 +3420,10 @@ dota-data@^0.9.0:
     tslib "^1.10.0"
     vdf-extra "^2.2.2"
 
-dota-lua-types@^3.3.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/dota-lua-types/-/dota-lua-types-3.3.0.tgz#23e62913373df9327e44c808de9634dcc1d5ba72"
-  integrity sha512-BzgjUUN7MraONyGiraEqXURXZZu1rh9hiqPuo3AP2x5aJw2GwHgCyYJeRxDsRPfKihzTXH0f+9J+Oxi9HxtHHw==
+dota-lua-types@^4.4.0:
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/dota-lua-types/-/dota-lua-types-4.4.0.tgz#18d9023f3182fba9d307b534fe75e912a862e769"
+  integrity sha512-QTdLCibSIj3vddafW3tWPJycwLkWmLC7cqcpcQLyt+kcHq2z8xy/EzFi+wyIytV6lnOi/STwQKSX3aGrDShnow==
   dependencies:
     lua-types "^2.6.2"
     tslib "^1.10.0"
@@ -6857,10 +6857,12 @@ pako@~1.0.5:
   resolved "https://registry.yarnpkg.com/pako/-/pako-1.0.10.tgz#4328badb5086a426aa90f541977d4955da5c9732"
   integrity sha512-0DTvPVU3ed8+HNXOu5Bs+o//Mbdj9VNQMUOe9oKCwh8l0GNwpTDMKCWbRjgtD291AWnkAgkqA/LOnQS8AmS1tw==
 
-panorama-types@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/panorama-types/-/panorama-types-1.2.0.tgz#b8b58e0cd489f70e7187315cafcb4cdde5cc9c40"
-  integrity sha512-NTku+49qwC4WPWKaR0QNhhl9SuIugJJwaAzKKJOIODz5UfyfCxorqUk7YDHt2yDWOFnXD0MG3HzgZ33MSNOFZA==
+panorama-types@^1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/panorama-types/-/panorama-types-1.5.1.tgz#76c5c02482e84451c768e6c3c1220a99a101ca82"
+  integrity sha512-R89t0paR3RBNaOjL4DMt/3ihvpNKV4lPATE8tSbb/bEJrZ6o3XTf81BHO47jaJPRH8J6+su8uOEH07WUoOQU9w==
+  dependencies:
+    tslib "^1.10.0"
 
 parallel-transform@^1.1.0:
   version "1.1.0"

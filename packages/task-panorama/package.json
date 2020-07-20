@@ -54,11 +54,11 @@
     "webpack-merge": "^5.0.8"
   },
   "devDependencies": {
-    "panorama-types": "^1.2.0",
+    "panorama-types": "^1.5.1",
     "typescript": "^3.7.4"
   },
   "peerDependencies": {
-    "panorama-types": "^1.2.0",
+    "panorama-types": "^1.5.1",
     "typescript": "^3.0.0"
   },
   "publishConfig": {
