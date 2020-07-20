@@ -1,6 +1,6 @@
 {
   "name": "@eaglesong/task-root-scripts",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Eaglesong task for checking root TypeScript project",
   "keywords": [
     "dota 2",
