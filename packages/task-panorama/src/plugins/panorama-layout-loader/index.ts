@@ -15,7 +15,7 @@ export interface PostHTMLLoaderMeta {
 }
 
 export default async function panoramaLayoutLoader(
-  this: webpack.loader.LoaderContext,
+  this: webpack.LoaderContext,
   source: string,
   _map: never,
   meta?: PostHTMLLoaderMeta,

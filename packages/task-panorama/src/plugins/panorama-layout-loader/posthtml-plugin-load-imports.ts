@@ -6,7 +6,7 @@ import webpack from 'webpack';
 
 const { parser, render } = posthtml();
 
-async function loadModule(context: webpack.loader.LoaderContext, request: string) {
+async function loadModule(context: webpack.LoaderContext, request: string) {
   try {
     return await promisify(context.loadModule)(request);
   } catch {
@@ -43,12 +43,10 @@ function evaluateModule(publicPath: string, filename: string, source: string) {
 const isImportMessage = (message: posthtml.Message): message is ImportMessage =>
   message.type === 'import';
 
-export const loadImports = (
-  context: webpack.loader.LoaderContext,
-): posthtml.Plugin => async tree => {
-  const compilation: webpack.compilation.Compilation = context._compilation;
-  // TODO: Options shouldn't be required
-  const publicPath = compilation.getPath(compilation.outputOptions.publicPath ?? '', {});
+export const loadImports = (context: webpack.LoaderContext): posthtml.Plugin => async tree => {
+  const publicPath = context._compilation.getPath(
+    context._compilation.outputOptions.publicPath ?? '',
+  );
 
   let html = render(tree);
 

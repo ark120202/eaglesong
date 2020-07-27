@@ -22,30 +22,36 @@ function wrapXmlComment(str: string) {
   return `<!--\n${str}\n-->`;
 }
 
-export class OutputHeaderWebpackPlugin implements webpack.Plugin {
+export class OutputHeaderWebpackPlugin {
   constructor(private options: OutputOptions) {}
 
   public apply(compiler: webpack.Compiler) {
     compiler.hooks.compilation.tap('OutputHeaderWebpackPlugin', compilation => {
-      compilation.hooks.optimizeChunkAssets.tap('OutputHeaderWebpackPlugin', chunks => {
-        for (const chunk of chunks) {
-          for (const file of chunk.files) {
-            // html-webpack-plugin passes JavaScript code under .xml extension
-            // Note: compilation.compiler !== compiler
-            // TODO: Add header to custom_ui_manifest.xml too
-            if (compilation.compiler.name?.startsWith('html-webpack-plugin for')) return;
+      compilation.hooks.processAssets.tap(
+        {
+          name: 'OutputHeaderWebpackPlugin',
+          stage: webpack.Compilation.PROCESS_ASSETS_STAGE_ADDITIONS,
+        },
+        () => {
+          for (const chunk of compilation.chunks) {
+            for (const file of chunk.files) {
+              // html-webpack-plugin passes JavaScript code under .xml extension
+              // Note: compilation.compiler !== compiler
+              // TODO: Add header to custom_ui_manifest.xml too
+              if (compilation.compiler.name?.startsWith('html-webpack-plugin for')) return;
 
-            if (!(file.endsWith('.js') || file.endsWith('.css') || file.endsWith('.xml'))) return;
+              if (!(file.endsWith('.js') || file.endsWith('.css') || file.endsWith('.xml'))) return;
 
-            const header = getOutputHeader(this.options, file);
-            if (header === undefined) continue;
+              const header = getOutputHeader(this.options, file);
+              if (header === undefined) continue;
 
-            const prefix = file.endsWith('.xml') ? wrapXmlComment(header) : wrapComment(header);
-            // @ts-ignore compilation.updateAsset is not typed
-            compilation.updateAsset(file, (old: any) => new ConcatSource(prefix, '\n', old));
+              const prefix = file.endsWith('.xml') ? wrapXmlComment(header) : wrapComment(header);
+              // @ts-ignore
+              compilation.updateAsset(file, old => new ConcatSource(prefix, '\n', old));
+            }
           }
-        }
-      });
+        },
+      );
     });
   }
 }

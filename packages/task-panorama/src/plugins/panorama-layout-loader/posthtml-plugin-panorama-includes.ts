@@ -29,9 +29,7 @@ export const preserveIncludesAfter: posthtml.Plugin = tree => {
     });
 };
 
-export const validateIncludes = (
-  context: webpack.loader.LoaderContext,
-): posthtml.Plugin => tree => {
+export const validateIncludes = (context: webpack.LoaderContext): posthtml.Plugin => tree => {
   for (const scope of getIncludeRoots(tree)) {
     for (const node of scope.content) {
       if (typeof node !== 'object') continue;

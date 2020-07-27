@@ -1,10 +1,6 @@
-declare class WebpackError extends Error {
-  details?: any;
-  missing?: any;
-  origin?: any;
-  dependencies?: any;
-  module?: any;
-  constructor(message?: string);
-}
+import webpack from 'webpack';
+
+type WebpackError = webpack.Compilation['errors'][number];
+declare const WebpackError: new (message?: string) => WebpackError;
 
 export = WebpackError;

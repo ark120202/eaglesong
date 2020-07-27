@@ -2,20 +2,16 @@ import { Task } from '@eaglesong/helper-task';
 import { IssueWebpackError } from 'fork-ts-checker-webpack-plugin/lib/issue/IssueWebpackError';
 import fs from 'fs-extra';
 import _ from 'lodash';
-import MemoryFS from 'memory-fs';
+import MemoryFileSystem from 'memory-fs';
 import webpack from 'webpack';
 import { createWebpackConfig } from './config';
 import { manifestSchema } from './plugins/PanoramaManifestPlugin/manifest';
 
-interface RealWebpackStats extends webpack.Stats {
-  compilation: webpack.compilation.Compilation;
-}
-
 type WebpackError = Error | string;
-function extractErrorsFromStats(stats: RealWebpackStats, type: 'errors' | 'warnings') {
+function extractErrorsFromStats(stats: webpack.Stats, type: 'errors' | 'warnings') {
   const errors: WebpackError[] = [];
 
-  const processCompilation = (compilation: webpack.compilation.Compilation) => {
+  const processCompilation = (compilation: webpack.Compilation) => {
     errors.push(...compilation[type]);
     compilation.children.forEach(processCompilation);
   };
@@ -50,44 +46,55 @@ export default class PanoramaTask extends Task<Options> {
   private async build() {
     let webpackConfig = createWebpackConfig(this);
     if (this.options.config) webpackConfig = this.options.config(webpackConfig);
-    if (!webpackConfig.plugins) webpackConfig.plugins = [];
 
     const compiler = webpack(webpackConfig);
     if (this.dotaPath == null) {
-      compiler.outputFileSystem = new MemoryFS();
+      // @ts-ignore Incompatible types
+      compiler.outputFileSystem = new MemoryFileSystem();
     }
 
     if (this.isWatching) {
-      compiler.watch({}, (error, stats) => this.compilationHandler(error, stats));
+      compiler.watch({}, (error, stats) => {
+        if (error) {
+          // TODO:
+          console.error(error);
+          process.exit(1);
+        }
+
+        this.compilationHandler(stats!);
+      });
+
+      // Should be after compiler.watch, because it's emitted on first compilation
+      compiler.hooks.watchRun.tap(this.constructor.name, () => {
+        this.removeErrors();
+        this.start();
+      });
     } else {
-      compiler.run((error, stats) => this.compilationHandler(error, stats));
+      return new Promise<void>((resolve, reject) => {
+        compiler.run((error, stats) => {
+          compiler.close((error2?: Error) => {
+            if (error2 || error) {
+              reject(error2 || error);
+            } else {
+              this.compilationHandler(stats!);
+              resolve();
+            }
+          });
+        });
+      });
     }
-
-    compiler.hooks.watchRun.tap(this.constructor.name, () => {
-      this.removeErrors();
-      this.start();
-    });
-
-    return new Promise<void>(resolve =>
-      compiler.hooks.done.tap(this.constructor.name, () =>
-        setImmediate(() => {
-          this.finish();
-          resolve();
-        }),
-      ),
-    );
   }
 
-  private compilationHandler(webpackError: Error | undefined, stats: webpack.Stats) {
-    if (webpackError) throw webpackError;
-
+  private compilationHandler(stats: webpack.Stats) {
     if (stats.hasErrors()) {
-      this.displayErrors(extractErrorsFromStats(stats as RealWebpackStats, 'errors'), 'error');
+      this.displayErrors(extractErrorsFromStats(stats, 'errors'), 'error');
     }
 
     if (stats.hasWarnings()) {
-      this.displayErrors(extractErrorsFromStats(stats as RealWebpackStats, 'warnings'), 'warning');
+      this.displayErrors(extractErrorsFromStats(stats, 'warnings'), 'warning');
     }
+
+    this.finish();
   }
 
   private displayErrors(errors: WebpackError[], level: 'error' | 'warning') {

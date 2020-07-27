@@ -1,2 +1,2 @@
-declare const Template: any;
-export = Template;
+import webpack from 'webpack';
+export = webpack.Template;

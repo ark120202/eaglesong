@@ -11,41 +11,34 @@ class PanoramaManifestError extends WebpackError {
   public name = 'PanoramaManifestError';
   constructor(filename: string, message: string) {
     super(`Panorama manifest ${filename}\n${message}`);
-    Error.captureStackTrace(this, this.constructor);
   }
 }
 
 class PanoramaEntryDependency extends ModuleDependency {
-  public readonly type = 'panorama entry';
+  public get type() {
+    return 'panorama entry';
+  }
 }
 
 export class PanoramaManifestPlugin {
   constructor(private readonly manifestPath: string) {}
 
   public apply(compiler: webpack.Compiler) {
-    // FIXME:
-    delete compiler.options.entry;
+    compiler.options.entry = {};
 
-    // @ts-ignore
-    // eslint-disable-next-line prefer-destructuring
-    const context: string = compiler.context;
-
-    // @ts-ignore
-    const manifestPath = makePathsRelative(compiler.options.context, this.manifestPath);
-
+    const { context } = compiler;
+    const manifestPath = makePathsRelative(context, this.manifestPath);
     const readFile = promisify(compiler.inputFileSystem.readFile.bind(compiler.inputFileSystem));
 
     compiler.hooks.compilation.tap(
       this.constructor.name,
       (compilation, { normalModuleFactory }) => {
-        // @ts-ignore
         compilation.dependencyFactories.set(PanoramaEntryDependency, normalModuleFactory);
       },
     );
 
     compiler.hooks.make.tapPromise(this.constructor.name, async compilation => {
-      // @ts-ignore
-      compilation.compilationDependencies.add(this.manifestPath);
+      compilation.fileDependencies.add(this.manifestPath);
       const rawManifest = await readFile(this.manifestPath);
 
       let entries: Entry[];
@@ -67,11 +60,12 @@ export class PanoramaManifestPlugin {
         return;
       }
 
+      const addEntry = promisify(compilation.addEntry.bind(compilation));
       await Promise.all(
         entries.map(async ({ source, name }) => {
           const dep = new PanoramaEntryDependency(source);
           dep.loc = { name };
-          await new Promise<void>(resolve => compilation.addEntry(context, dep, name, resolve));
+          await addEntry(context, dep, name);
         }),
       );
 

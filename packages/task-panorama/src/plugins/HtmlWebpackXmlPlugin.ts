@@ -1,9 +1,10 @@
+import assert from 'assert';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import path from 'path';
 import { URL } from 'url';
 import webpack from 'webpack';
 
-export interface XmlChunk extends webpack.compilation.Chunk {
+export interface XmlChunk extends webpack.Chunk {
   __type?: string;
 }
 
@@ -12,19 +13,17 @@ interface XmlAsset {
   type: string;
 }
 
-export class HtmlWebpackXmlPlugin implements webpack.Plugin {
+export class HtmlWebpackXmlPlugin {
   public apply(compiler: webpack.Compiler) {
     compiler.hooks.compilation.tap(this.constructor.name, compilation => {
+      // @ts-ignore HtmlWebpackPlugin depends on @types/webpack
       const hooks = HtmlWebpackPlugin.getHooks(compilation);
-      const { publicPath } = compilation.outputOptions;
 
       hooks.beforeAssetTagGeneration.tap(this.constructor.name, args => {
         const xmlAssets: XmlAsset[] = [];
 
-        // eslint-disable-next-line prefer-destructuring
-        const chunks: XmlChunk[] = compilation.chunks;
-        for (const chunk of chunks) {
-          for (const file of chunk.files as string[]) {
+        for (const chunk of compilation.chunks as Set<XmlChunk>) {
+          for (const file of chunk.files) {
             if (!file.endsWith('.xml') || chunk.__type == null) continue;
 
             xmlAssets.push({
@@ -39,12 +38,14 @@ export class HtmlWebpackXmlPlugin implements webpack.Plugin {
         return args;
       });
 
+      const { publicPath } = compilation.outputOptions;
+      assert(typeof publicPath === 'string');
+
       hooks.beforeEmit.tap(this.constructor.name, args => {
         const images = Object.keys(compilation.assets)
           .filter(assetName => /\.(png|je?pg)$/.test(assetName))
           .map(assetName => {
-            const url = new URL(publicPath);
-            // TODO: Move publicPath higher?
+            const url = new URL(publicPath as string);
             url.pathname = path.posix.resolve(url.pathname, assetName);
             return url.toString();
           });

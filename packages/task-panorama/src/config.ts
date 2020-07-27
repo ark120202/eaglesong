@@ -119,12 +119,13 @@ export function createWebpackConfig({
     },
     plugins: [
       new PanoramaManifestPlugin(path.join(context, 'src', 'panorama', 'manifest.yml')),
+      // TODO: HtmlWebpackPlugin depends on @types/webpack
       new HtmlWebpackPlugin({
         filename: 'custom_ui_manifest.xml',
         inject: false,
         template: path.resolve(__dirname, '../template.ejs'),
         xhtml: true,
-      }),
+      }) as any,
       new HtmlWebpackXmlPlugin(),
     ],
   };
