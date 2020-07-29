@@ -110,10 +110,7 @@ export function createWebpackConfig({
       rules: [
         {
           test: /\.xml$/,
-          use: [
-            require.resolve('./plugins/emit-loader'),
-            require.resolve('./plugins/panorama-layout-loader'),
-          ],
+          loader: require.resolve('./plugins/panorama-layout-loader'),
         },
       ],
     },
