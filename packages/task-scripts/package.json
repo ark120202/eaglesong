@@ -11,11 +11,11 @@
   "repository": "https://github.com/ark120202/eaglesong/tree/master/packages/task-scripts",
   "license": "Apache-2.0",
   "author": "ark120202",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "files": [
     "lib/**/*.{js,ts,json}"
   ],
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
   "dependencies": {
     "@eaglesong/helper-task": "link:../helper-task",
     "@types/fs-extra": "^8.0.1",

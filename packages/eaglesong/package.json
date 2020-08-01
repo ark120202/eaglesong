@@ -11,12 +11,12 @@
   "repository": "https://github.com/ark120202/eaglesong/tree/master/packages/eaglesong",
   "license": "Apache-2.0",
   "author": "ark120202",
-  "files": [
-    "lib/**/*.{js,ts,json}"
-  ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "bin": "lib/eaglesong.js",
+  "files": [
+    "lib/**/*.{js,ts,json}"
+  ],
   "dependencies": {
     "@eaglesong/helper-task": "link:../helper-task",
     "@types/bytes": "^3.1.0",

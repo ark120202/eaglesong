@@ -11,12 +11,12 @@
   "repository": "https://github.com/ark120202/eaglesong/tree/master/packages/task-panorama",
   "license": "Apache-2.0",
   "author": "ark120202",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "files": [
     "lib/**/*.{js,ts,json}",
     "template.ejs"
   ],
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
   "dependencies": {
     "@eaglesong/helper-task": "link:../helper-task",
     "@posthtml/esm": "^1.0.0",
