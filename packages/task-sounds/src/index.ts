@@ -6,7 +6,7 @@ import path from 'upath';
 import { SoundEvents, soundEventsSchema, validateSoundEvents } from './soundevents';
 
 const toOperatorVariableValues = (value: Record<string, unknown>) =>
-  _.mapValues(value, x => (x == null ? x : toOperatorVariableValue(x)));
+  _.mapValues(value, (x) => (x == null ? x : toOperatorVariableValue(x)));
 
 function toOperatorVariableValue(value: unknown) {
   if (Array.isArray(value)) value = Object.fromEntries(value.map((v, i) => [`value${i}`, v]));
@@ -35,7 +35,7 @@ export default class SoundsTask extends TransformTask<void> {
       }
     });
 
-    this.hooks.compile.tap(this.constructor.name, addResource =>
+    this.hooks.compile.tap(this.constructor.name, (addResource) =>
       addResource([
         'soundevents/**/*',
         `sounds/custom_game/**/*.{${SUPPORTED_AUDIO_EXTENSIONS.join(',')}}`,
@@ -54,7 +54,7 @@ export default class SoundsTask extends TransformTask<void> {
       }
     }
 
-    const data = await pProps(content, async soundEvent => {
+    const data = await pProps(content, async (soundEvent) => {
       if (!_.isObjectLike(soundEvent)) return;
 
       const { files, type, ...variables } = soundEvent;
@@ -87,7 +87,7 @@ export default class SoundsTask extends TransformTask<void> {
   private async mapFiles(filePath: string, files: string[]) {
     const fileDirectory = path.dirname(filePath);
     return Promise.all(
-      files.map(async fileName => {
+      files.map(async (fileName) => {
         if (typeof fileName !== 'string') return '';
 
         const extension = path.extname(fileName);

@@ -17,9 +17,9 @@ const isPrettierSyntaxError = (error: unknown): error is PrettierSyntaxError =>
   error instanceof SyntaxError && 'loc' in error;
 
 const { languages } = prettier.getSupportInfo();
-const prettierPatterns = languages.flatMap(language => [
-  ...(language.filenames ?? []).map(fileName => `**/${fileName}`),
-  ...(language.extensions ?? []).map(extension => `**/*${extension}`),
+const prettierPatterns = languages.flatMap((language) => [
+  ...(language.filenames ?? []).map((fileName) => `**/${fileName}`),
+  ...(language.extensions ?? []).map((extension) => `**/*${extension}`),
 ]);
 
 export default class PrettierTask extends TransformTask<void> {

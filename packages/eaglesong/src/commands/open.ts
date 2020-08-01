@@ -15,7 +15,7 @@ export default class OpenCommand extends CommandGroup {
       command,
       describe,
       handler: () => this.run(),
-      builder: argv =>
+      builder: (argv) =>
         argv.usage(`$0 open <directory>/...
 
 ${describe}

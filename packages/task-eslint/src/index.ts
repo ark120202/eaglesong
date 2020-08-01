@@ -29,7 +29,7 @@ export default class ESLintTask extends TransformTask<Options> {
 
   protected async afterWatch() {
     this.worker.postMessage(undefined);
-    const results = await new Promise<CLIEngine.LintResult[]>(resolve =>
+    const results = await new Promise<CLIEngine.LintResult[]>((resolve) =>
       this.worker.on('message', resolve),
     );
 

@@ -3,7 +3,7 @@ import inquirer from 'inquirer';
 
 async function prompt(question: inquirer.DistinctQuestion) {
   const { value } = await inquirer.prompt<{ value: any }>([{ ...question, name: 'value' }]);
-  await new Promise<void>(resolve => setTimeout(resolve, 10));
+  await new Promise<void>((resolve) => setTimeout(resolve, 10));
   return value;
 }
 
@@ -36,7 +36,7 @@ export async function ask() {
 
   const displayName = await promptString({
     message: 'Display Name:',
-    validate: name => (name === '' ? 'Name should not be empty' : true),
+    validate: (name) => (name === '' ? 'Name should not be empty' : true),
   });
 
   const internalName = await promptString({

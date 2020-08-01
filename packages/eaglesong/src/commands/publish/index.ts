@@ -79,7 +79,7 @@ export default class PublishCommand extends CommandGroup {
       command: 'publish <strategy>',
       describe: 'Prepare and publish custom game to Steam Workshop.',
       handler: () => this.run(),
-      builder: argv =>
+      builder: (argv) =>
         argv
           .positional('strategy', { type: 'string' })
           .option('new-version', {
@@ -299,7 +299,7 @@ export default class PublishCommand extends CommandGroup {
     if (await this.git.checkIsRepo()) {
       [info.commit, info.clean] = await Promise.all([
         this.git.revparse(['HEAD']),
-        this.git.status().then(x => x.isClean()),
+        this.git.status().then((x) => x.isClean()),
       ]);
     }
 

@@ -91,7 +91,7 @@ export class LocalizationService {
       context,
     };
 
-    plugins.forEach(p => p(api));
+    plugins.forEach((p) => p(api));
   }
 
   private readonly baseFiles: FlatLocalizationFiles = {};
@@ -197,7 +197,7 @@ export class LocalizationService {
 
     const keyCache: Record<string, string[]> = {};
     _.each(files, (file, fileName) =>
-      Object.keys(file).forEach(key => {
+      Object.keys(file).forEach((key) => {
         if (keyCache[key] == null) keyCache[key] = [];
         keyCache[key].push(fileName);
       }),

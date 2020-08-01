@@ -79,7 +79,7 @@ export default class ImagesTask extends TransformTask<Options> {
     }
 
     for (const rule of rules) {
-      if (!rule.sizes.some(x => x[0] === realSizes[0] && x[1] === realSizes[1])) {
+      if (!rule.sizes.some((x) => x[0] === realSizes[0] && x[1] === realSizes[1])) {
         this.error({
           filePath,
           level: 'warning',

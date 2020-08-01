@@ -60,11 +60,11 @@ class CustomEnumsSchema extends s.EnumsSchema {
 }
 
 export const BetterEnumsPlugin: Plugin = ({ hooks, collectedSchemas }) => {
-  hooks.schemas.tap('BetterEnumsPlugin', schemas => {
+  hooks.schemas.tap('BetterEnumsPlugin', (schemas) => {
     for (const schema of Object.values(schemas)) {
       schema
         .getChildrenDeepLike(s.EnumsSchema)
-        .forEach(x => x.replaceWith(CustomEnumsSchema.from(x)));
+        .forEach((x) => x.replaceWith(CustomEnumsSchema.from(x)));
     }
   });
 
@@ -72,7 +72,7 @@ export const BetterEnumsPlugin: Plugin = ({ hooks, collectedSchemas }) => {
     const schema = getGroupSchema(collectedSchemas, group);
     if (schema == null) return;
 
-    _.each(files, file => {
+    _.each(files, (file) => {
       schema.validateRoot(file, {
         afterVisit(element, value, context) {
           if (element instanceof CustomEnumsSchema) {

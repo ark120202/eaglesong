@@ -20,7 +20,7 @@ function getTaskStateSymbol(state: TaskState) {
 }
 
 const formatTaskErrors = (context: string, indent: string, task: Task<any>) =>
-  task.errors.map(error => {
+  task.errors.map((error) => {
     const filePath = error.filePath != null ? ` ${path.relative(context, error.filePath)}` : '';
     const message = error.message.trim().replace(/\n/g, `\n   ${indent}`);
     const level = error.level === 'error' ? chalk.bgRed('[E]') : chalk.bgYellow('[W]');
@@ -75,12 +75,12 @@ export const watchReporter = defaultReporter;
 const simpleReporterLoggedTasks = new Set<Task<any>>();
 const simpleReporter: Reporter = (context, tasks) =>
   tasks
-    .filter(t => t.state !== TaskState.Working)
-    .filter(t => !simpleReporterLoggedTasks.has(t))
-    .forEach(task => {
+    .filter((t) => t.state !== TaskState.Working)
+    .filter((t) => !simpleReporterLoggedTasks.has(t))
+    .forEach((task) => {
       simpleReporterLoggedTasks.add(task);
       console.log(`${getTaskStateSymbol(task.state)} ${task.name}`);
-      formatTaskErrors(context, ' ', task).forEach(line => console.log(line));
+      formatTaskErrors(context, ' ', task).forEach((line) => console.log(line));
     });
 
 export const buildReporter = simpleReporter;

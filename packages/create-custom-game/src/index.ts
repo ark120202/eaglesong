@@ -144,7 +144,7 @@ async function main(): Promise<number> {
   if (disabledTasks.length > 0) {
     variables.set(
       'getTasks',
-      ['{', ...disabledTasks.map(task => `    ${task}: false,`), '  }'].join('\n'),
+      ['{', ...disabledTasks.map((task) => `    ${task}: false,`), '  }'].join('\n'),
     );
   }
 
@@ -160,7 +160,7 @@ async function main(): Promise<number> {
     const templateRootPath = path.join(__dirname, '..', 'templates', template);
     const files = await globby('**/*', { cwd: templateRootPath, dot: true });
     await Promise.all(
-      files.map(async fileName => {
+      files.map(async (fileName) => {
         if (isBinaryPath(fileName)) {
           await fs.copy(path.join(templateRootPath, fileName), path.join(rootPath, fileName));
           return;
@@ -215,7 +215,7 @@ async function main(): Promise<number> {
 
 (async () => {
   process.exitCode = await main();
-})().catch(error => {
+})().catch((error) => {
   console.error(error);
   process.exitCode = 1;
 });

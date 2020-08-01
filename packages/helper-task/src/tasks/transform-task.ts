@@ -12,11 +12,11 @@ export abstract class TransformTask<T> extends Task<T> {
       if (this.beforeWatch) await this.beforeWatch(true);
 
       const files = await this.matchFiles(this.pattern);
-      if (this.transformFile) await Promise.all(files.map(f => this.transformFile!(f)));
+      if (this.transformFile) await Promise.all(files.map((f) => this.transformFile!(f)));
       if (this.afterWatch) await this.afterWatch(true);
 
       this.finish();
-      this.watch(this.pattern, e => this.addEventToStack(e));
+      this.watch(this.pattern, (e) => this.addEventToStack(e));
     });
   }
 

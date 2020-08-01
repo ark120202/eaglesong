@@ -13,23 +13,23 @@ const getIncludeRoots = (tree: posthtml.Api) =>
 
 export const preserveIncludesBefore: posthtml.Plugin = (tree: posthtml.Api) => {
   getIncludeRoots(tree)
-    .flatMap(x => x.content)
+    .flatMap((x) => x.content)
     .filter(createNodeFilter(['include']))
-    .forEach(node => {
+    .forEach((node) => {
       node.tag = 'panorama-include';
     });
 };
 
-export const preserveIncludesAfter: posthtml.Plugin = tree => {
+export const preserveIncludesAfter: posthtml.Plugin = (tree) => {
   getIncludeRoots(tree)
-    .flatMap(x => x.content)
+    .flatMap((x) => x.content)
     .filter(createNodeFilter(['panorama-include']))
-    .forEach(node => {
+    .forEach((node) => {
       node.tag = 'include';
     });
 };
 
-export const validateIncludes = (context: webpack.LoaderContext): posthtml.Plugin => tree => {
+export const validateIncludes = (context: webpack.LoaderContext): posthtml.Plugin => (tree) => {
   for (const scope of getIncludeRoots(tree)) {
     for (const node of scope.content) {
       if (typeof node !== 'object') continue;

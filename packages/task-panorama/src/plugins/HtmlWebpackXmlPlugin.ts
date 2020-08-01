@@ -15,11 +15,11 @@ interface XmlAsset {
 
 export class HtmlWebpackXmlPlugin {
   public apply(compiler: webpack.Compiler) {
-    compiler.hooks.compilation.tap(this.constructor.name, compilation => {
+    compiler.hooks.compilation.tap(this.constructor.name, (compilation) => {
       // @ts-ignore HtmlWebpackPlugin depends on @types/webpack
       const hooks = HtmlWebpackPlugin.getHooks(compilation);
 
-      hooks.beforeAssetTagGeneration.tap(this.constructor.name, args => {
+      hooks.beforeAssetTagGeneration.tap(this.constructor.name, (args) => {
         const xmlAssets: XmlAsset[] = [];
 
         for (const chunk of compilation.chunks as Set<XmlChunk>) {
@@ -41,17 +41,17 @@ export class HtmlWebpackXmlPlugin {
       const { publicPath } = compilation.outputOptions;
       assert(typeof publicPath === 'string');
 
-      hooks.beforeEmit.tap(this.constructor.name, args => {
+      hooks.beforeEmit.tap(this.constructor.name, (args) => {
         const images = Object.keys(compilation.assets)
-          .filter(assetName => /\.(png|je?pg)$/.test(assetName))
-          .map(assetName => {
+          .filter((assetName) => /\.(png|je?pg)$/.test(assetName))
+          .map((assetName) => {
             const url = new URL(publicPath as string);
             url.pathname = path.posix.resolve(url.pathname, assetName);
             return url.toString();
           });
 
         if (images.length > 0) {
-          args.html = `<!--\n${images.map(x => `"${x}"`).join('\n')}\n-->\n${args.html}`;
+          args.html = `<!--\n${images.map((x) => `"${x}"`).join('\n')}\n-->\n${args.html}`;
         }
 
         return args;

@@ -26,7 +26,7 @@ export class OutputHeaderWebpackPlugin {
   constructor(private options: OutputOptions) {}
 
   public apply(compiler: webpack.Compiler) {
-    compiler.hooks.compilation.tap('OutputHeaderWebpackPlugin', compilation => {
+    compiler.hooks.compilation.tap('OutputHeaderWebpackPlugin', (compilation) => {
       compilation.hooks.processAssets.tap(
         {
           name: 'OutputHeaderWebpackPlugin',
@@ -47,7 +47,7 @@ export class OutputHeaderWebpackPlugin {
 
               const prefix = file.endsWith('.xml') ? wrapXmlComment(header) : wrapComment(header);
               // @ts-ignore
-              compilation.updateAsset(file, old => new ConcatSource(prefix, '\n', old));
+              compilation.updateAsset(file, (old) => new ConcatSource(prefix, '\n', old));
             }
           }
         },

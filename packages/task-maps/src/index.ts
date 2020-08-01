@@ -47,7 +47,7 @@ export default class MapsTask extends Task<void> {
       });
     });
 
-    this.hooks.compile.tap(this.constructor.name, addResource => addResource('maps/*.vmap'));
+    this.hooks.compile.tap(this.constructor.name, (addResource) => addResource('maps/*.vmap'));
   }
 
   private async reloadMetadata() {
@@ -97,8 +97,8 @@ export default class MapsTask extends Task<void> {
   private async validateOverviews(maps: MapsMetadata) {
     const mapNames = Object.keys(maps);
     const compare = async (directory: string, extensions: string[]) => {
-      const expected = mapNames.flatMap(n => extensions.map(e => path.join(directory, n) + e));
-      const actual = (await fs.readdir(directory)).map(name => path.join(directory, name));
+      const expected = mapNames.flatMap((n) => extensions.map((e) => path.join(directory, n) + e));
+      const actual = (await fs.readdir(directory)).map((name) => path.join(directory, name));
       return {
         extra: _.difference(actual, expected),
         missing: _.difference(expected, actual),
@@ -112,11 +112,13 @@ export default class MapsTask extends Task<void> {
     ]);
 
     diff
-      .flatMap(x => x.extra)
-      .forEach(filePath => this.error({ filePath, message: 'Map overview file should not exist' }));
+      .flatMap((x) => x.extra)
+      .forEach((filePath) =>
+        this.error({ filePath, message: 'Map overview file should not exist' }),
+      );
 
     diff
-      .flatMap(x => x.missing)
-      .forEach(filePath => this.error({ filePath, message: 'Map overview file not found' }));
+      .flatMap((x) => x.missing)
+      .forEach((filePath) => this.error({ filePath, message: 'Map overview file not found' }));
   }
 }

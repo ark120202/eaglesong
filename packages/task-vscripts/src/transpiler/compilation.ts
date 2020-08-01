@@ -121,7 +121,7 @@ export class Compilation {
   protected transformLuaFile(filePath: string, fileContent: string) {
     if (this.options.resolveDependencies === false) return fileContent;
 
-    return replaceResolve(fileContent, request => {
+    return replaceResolve(fileContent, (request) => {
       let modulePath: string;
       try {
         modulePath = this.resolveDependency(filePath, request);

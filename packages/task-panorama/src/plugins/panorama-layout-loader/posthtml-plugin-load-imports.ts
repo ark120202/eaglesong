@@ -43,7 +43,7 @@ function evaluateModule(publicPath: string, filename: string, source: string) {
 const isImportMessage = (message: posthtml.Message): message is ImportMessage =>
   message.type === 'import';
 
-export const loadImports = (context: webpack.LoaderContext): posthtml.Plugin => async tree => {
+export const loadImports = (context: webpack.LoaderContext): posthtml.Plugin => async (tree) => {
   const publicPath = context._compilation.getPath(
     context._compilation.outputOptions.publicPath ?? '',
   );
@@ -51,7 +51,7 @@ export const loadImports = (context: webpack.LoaderContext): posthtml.Plugin => 
   let html = render(tree);
 
   const loadedModules = await Promise.all(
-    tree.messages.filter(isImportMessage).map(async message => {
+    tree.messages.filter(isImportMessage).map(async (message) => {
       const source = await loadModule(context, message.url);
       const result = evaluateModule(publicPath, message.url, source);
       return { name: message.name, result };

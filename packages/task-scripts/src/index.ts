@@ -66,7 +66,7 @@ export default class ScriptsTask extends TransformTask<Options> {
         return { name, content, globals, schema };
       });
 
-      let globals = _.union(...compiledSchemas.map(x => x.globals))
+      let globals = _.union(...compiledSchemas.map((x) => x.globals))
         .sort((a, b) => a.localeCompare(b))
         .join('\n\n');
       globals += '\n';

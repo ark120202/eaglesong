@@ -20,7 +20,7 @@ export abstract class CommandGroup {
   protected command(command: yargs.CommandModule<any, any>) {
     return yargs.command({
       ...command,
-      handler: args => {
+      handler: (args) => {
         this.args = args;
         command.handler(args);
       },

@@ -3,8 +3,8 @@ import posthtml from 'posthtml';
 import webpack from 'webpack';
 
 const xmlCommentRegex = /^<!--(.*?)-->$/s;
-export const banTextNodes = (context: webpack.LoaderContext): posthtml.Plugin => tree => {
-  tree.match(/^\s*\S/, node => {
+export const banTextNodes = (context: webpack.LoaderContext): posthtml.Plugin => (tree) => {
+  tree.match(/^\s*\S/, (node) => {
     const content = node.trim();
     if (xmlCommentRegex.test(content)) return node;
 

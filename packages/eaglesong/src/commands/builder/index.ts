@@ -48,7 +48,7 @@ export default class BuilderCommand extends CommandGroup {
       describe:
         'Runs tasks in development mode, watching for resources and building them as-needed.',
       handler: () => this.runWatch(),
-      builder: argv => argv.options(buildOptions),
+      builder: (argv) => argv.options(buildOptions),
     });
 
     this.command({
@@ -56,7 +56,7 @@ export default class BuilderCommand extends CommandGroup {
       describe:
         'Runs tasks in production mode, optimizing resources and compiling them with resourcecompiler.',
       handler: () => errorOnFailure(this.runBuild()),
-      builder: argv =>
+      builder: (argv) =>
         argv.options({
           ...buildOptions,
           'skip-compilation': {
@@ -102,7 +102,7 @@ export default class BuilderCommand extends CommandGroup {
 
     if (!(this.args.skipCompilation || this.args.noDota)) {
       const compiler = new ResourceCompiler(await this.getDotaPath(), await this.getAddonName());
-      await this.hooks.compile.promise(p => compiler.addResource(p));
+      await this.hooks.compile.promise((p) => compiler.addResource(p));
 
       console.log('');
       console.log('Executing resourcecompiler...');
@@ -125,7 +125,7 @@ export default class BuilderCommand extends CommandGroup {
   }
 
   private isSuccess() {
-    return [...this.tasks.values()].every(t => t.getErrorLevel() == null);
+    return [...this.tasks.values()].every((t) => t.getErrorLevel() == null);
   }
 
   private report() {
@@ -136,7 +136,7 @@ export default class BuilderCommand extends CommandGroup {
     let { tasks, output } = await this.getOptions();
     if (typeof tasks === 'function') tasks = await tasks();
     if (tasks.length === 0) throw new Error('Builder got an empty task list');
-    tasks.forEach(t => this.tasks.set(t.constructor as TaskConstructor<any>, t));
+    tasks.forEach((t) => this.tasks.set(t.constructor as TaskConstructor<any>, t));
 
     const helper = new BuildHelper(
       this.context,
@@ -154,6 +154,6 @@ export default class BuilderCommand extends CommandGroup {
       task._stateCallback = () => this.report();
     }
 
-    await Promise.all([...this.tasks.values()].map(p => p.apply()));
+    await Promise.all([...this.tasks.values()].map((p) => p.apply()));
   }
 }

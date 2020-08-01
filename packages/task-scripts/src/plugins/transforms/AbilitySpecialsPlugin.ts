@@ -16,14 +16,14 @@ const inferVarType = (value: unknown) => {
     typeof value === 'number'
       ? value % 1 !== 0
       : typeof value === 'string'
-      ? value.split(' ').some(x => Number(x) % 1 !== 0)
+      ? value.split(' ').some((x) => Number(x) % 1 !== 0)
       : false;
   return isFloat ? 'FIELD_FLOAT' : 'FIELD_INTEGER';
 };
 
 const fileFilter = new Set(['npc/npc_items_custom', 'npc/npc_abilities_custom']);
 export const AbilitySpecialsPlugin: Plugin = ({ hooks, error }) => {
-  hooks.schemas.tap('AbilitySpecialsPlugin', schemas => {
+  hooks.schemas.tap('AbilitySpecialsPlugin', (schemas) => {
     for (const schemaName of fileFilter) {
       for (const element of schemas[schemaName].getRestRootsLike(s.ObjectSchema)) {
         element.delete('AbilitySpecials').field(
@@ -52,7 +52,7 @@ export const AbilitySpecialsPlugin: Plugin = ({ hooks, error }) => {
     special: any,
   ): { error: string } | { mainName: string; mainValue: any; mainIndex: number } {
     const fields = Object.keys(special);
-    const mainCandidates = fields.filter(x => !(x in reservedFields) && !x.startsWith('$'));
+    const mainCandidates = fields.filter((x) => !(x in reservedFields) && !x.startsWith('$'));
 
     if (mainCandidates.length === 0) {
       return { error: 'not contains special name' };
@@ -67,7 +67,7 @@ export const AbilitySpecialsPlugin: Plugin = ({ hooks, error }) => {
 
     const mainName = mainCandidates[0];
     const mainValue = special[mainName];
-    const mainIndex = fields.findIndex(x => x === mainName);
+    const mainIndex = fields.findIndex((x) => x === mainName);
     return { mainName, mainValue, mainIndex };
   }
 
@@ -203,8 +203,8 @@ export const AbilitySpecialsPlugin: Plugin = ({ hooks, error }) => {
   hooks.migrate.tap('AbilitySpecialsPlugin', (files, group) => {
     if (!fileFilter.has(group)) return;
 
-    _.each(files, file => {
-      _.each(file, ability => {
+    _.each(files, (file) => {
+      _.each(file, (ability) => {
         if (ability.AbilitySpecial == null) return;
         ability.Specials = Object.entries<any>(ability.AbilitySpecial)
           .sort(([a], [b]) => Number(a) - Number(b))

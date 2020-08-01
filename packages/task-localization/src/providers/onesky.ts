@@ -9,7 +9,7 @@ import { DotaLanguage, FlatLocalizationFile, FlatLocalizationFiles, Multilingual
 const escapeFileName = (fileName: string) => fileName.replace(/\//g, ' -> ');
 
 const languageCodeToDotaLanguage = _.invert({
-  ..._.mapValues(dotaLanguagesData, d => d.code),
+  ..._.mapValues(dotaLanguagesData, (d) => d.code),
   english: 'en-US',
   russian: 'ru-RU',
   vietnamese: 'vi',
@@ -81,11 +81,11 @@ export class OneSkyProvider implements Provider {
   }
 
   public async pushFiles(files: FlatLocalizationFiles) {
-    const oldFileNames = (await this.listAllFiles()).map(x => x.file_name);
+    const oldFileNames = (await this.listAllFiles()).map((x) => x.file_name);
     const newFileNames = Object.keys(files).map(escapeFileName);
     const removedFileNames = _.difference(oldFileNames, newFileNames);
 
-    await Promise.all(removedFileNames.map(f => this.removeFile(f)));
+    await Promise.all(removedFileNames.map((f) => this.removeFile(f)));
     await Promise.all(Object.entries(files).map(([path, tokens]) => this.uploadFile(path, tokens)));
 
     return { removed: removedFileNames };

@@ -19,7 +19,7 @@ createTsAutoWatch(
   { noEmit: true },
   workerData.isWatching,
   () => postMessage({ type: 'start' }),
-  builderProgram => {
+  (builderProgram) => {
     const diagnostics = ts.getPreEmitDiagnostics(builderProgram.getProgram());
     postMessage({ type: 'end', errors: diagnostics.map(convertDiagnosticToError) });
   },

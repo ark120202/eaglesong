@@ -62,5 +62,5 @@ createTsAutoWatch(
   { outDir: workerData.outDir },
   workerData.isWatching,
   () => postMessage({ type: 'start' }),
-  builderProgram => postMessage({ type: 'end', errors: emit(builderProgram.getProgram()) }),
+  (builderProgram) => postMessage({ type: 'end', errors: emit(builderProgram.getProgram()) }),
 );

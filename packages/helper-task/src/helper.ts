@@ -68,9 +68,9 @@ export class BuildHelper {
       awaitWriteFinish: { stabilityThreshold: 200 },
     });
 
-    watcher.on('add', file => callback({ event: 'add', file: toPath(file) }));
-    watcher.on('change', file => callback({ event: 'change', file: toPath(file) }));
-    watcher.on('unlink', file => callback({ event: 'unlink', file: toPath(file) }));
+    watcher.on('add', (file) => callback({ event: 'add', file: toPath(file) }));
+    watcher.on('change', (file) => callback({ event: 'change', file: toPath(file) }));
+    watcher.on('unlink', (file) => callback({ event: 'unlink', file: toPath(file) }));
   }
 
   public async outputKV1(filePath: string, data: Record<string, any>, utf16 = false) {
@@ -110,7 +110,7 @@ export class BuildHelper {
     }
   }
 
-  public taskProvider: TaskProvider = key => this.tasks.get(key);
+  public taskProvider: TaskProvider = (key) => this.tasks.get(key);
 
   public hasFlag(flag: string) {
     return Boolean(this.flags[flag]);

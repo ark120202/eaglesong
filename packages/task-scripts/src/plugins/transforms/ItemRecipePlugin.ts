@@ -8,7 +8,7 @@ export interface Recipe {
 }
 
 export const ItemRecipePlugin: Plugin = ({ hooks }) => {
-  hooks.schemas.tap('ItemRecipePlugin', schemas => {
+  hooks.schemas.tap('ItemRecipePlugin', (schemas) => {
     const schema = schemas['npc/npc_items_custom'];
     for (const element of schema.getRestRootsLike(s.ObjectSchema)) {
       element.field(
@@ -25,17 +25,17 @@ export const ItemRecipePlugin: Plugin = ({ hooks }) => {
     if (group !== 'npc/npc_items_custom') return;
 
     const recipeItems: Record<string, any> = {};
-    _.each(files, file =>
+    _.each(files, (file) =>
       _.each(file, (item: { Recipe?: Recipe }, itemName) => {
         if (item.Recipe == null) return;
 
         let allRequirements: string[][] = [];
         if (item.Recipe.requirements != null && Array.isArray(item.Recipe.requirements)) {
           // @ts-ignore
-          if (item.Recipe.requirements.every(x => typeof x === 'string')) {
+          if (item.Recipe.requirements.every((x) => typeof x === 'string')) {
             allRequirements = [item.Recipe.requirements as string[]];
             // @ts-ignore
-          } else if (item.Recipe.requirements.every(x => Array.isArray(x))) {
+          } else if (item.Recipe.requirements.every((x) => Array.isArray(x))) {
             allRequirements = item.Recipe.requirements as string[][];
           }
         }

@@ -46,7 +46,7 @@ function createCompiler(
 
   const allowedPlugins = pluginsOption.filter((x): x is string => typeof x === 'string');
   const plugins = [
-    ...oldCompiler.options.plugins!.filter(p => allowedPlugins.includes(p.constructor.name)),
+    ...oldCompiler.options.plugins!.filter((p) => allowedPlugins.includes(p.constructor.name)),
     ...pluginsOption.filter((x): x is webpack.WebpackPluginInstance => typeof x !== 'string'),
   ];
 

@@ -2,7 +2,7 @@ Object.assign(getfenv(1), {
   Activate(this: void) {
     ListenToGameEvent(
       'npc_spawned',
-      event => {
+      (event) => {
         const unit = EntIndexToHScript(event.entindex) as CDOTA_BaseNPC;
         if (unit.IsHero()) {
           unit.ModifyGold(1000, true, ModifyGoldReason.UNSPECIFIED);

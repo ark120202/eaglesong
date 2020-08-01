@@ -63,12 +63,12 @@ export class ScriptsService {
     taskProvider: TaskProvider,
     private readonly error: ServiceErrorReporter,
   ) {
-    this.hooks.schemas.tap({ name: 'ScriptsService', stage: -1000 }, schemas => {
+    this.hooks.schemas.tap({ name: 'ScriptsService', stage: -1000 }, (schemas) => {
       Object.assign(schemas, getDefaultSchemas());
     });
 
     const collectedSchemas: Schemas = {};
-    this.hooks.schemas.tap({ name: 'ScriptsService', stage: 1000 }, schemas => {
+    this.hooks.schemas.tap({ name: 'ScriptsService', stage: 1000 }, (schemas) => {
       Object.assign(collectedSchemas, schemas);
     });
 
@@ -80,7 +80,7 @@ export class ScriptsService {
       collectedSchemas,
     };
 
-    plugins.forEach(p => p(api));
+    plugins.forEach((p) => p(api));
   }
 
   private groups: FileGroups = {};
@@ -121,7 +121,7 @@ export class ScriptsService {
 
     const keyCache: Record<string, string[]> = {};
     _.each(files, (file, fileName) =>
-      Object.keys(file).forEach(key => {
+      Object.keys(file).forEach((key) => {
         if (keyCache[key] == null) keyCache[key] = [];
         keyCache[key].push(fileName);
       }),

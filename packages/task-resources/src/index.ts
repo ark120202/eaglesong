@@ -26,7 +26,7 @@ export default class ResourcesTask extends Task<Options> {
     ) as Record<string, ResourceTarget>;
 
     this.hooks.build.tapPromise(this.constructor.name, () => this.makeSymlinks());
-    this.hooks.compile.tap(this.constructor.name, addResource => {
+    this.hooks.compile.tap(this.constructor.name, (addResource) => {
       if (this.enabledDirectories.materials === 'content') {
         addResource('materials/**/*.{vmat,vtex}');
       }
@@ -44,7 +44,7 @@ export default class ResourcesTask extends Task<Options> {
   private async makeSymlinks() {
     if (this.dotaPath != null) {
       await Promise.all(
-        Object.keys(this.enabledDirectories).map(n => fs.ensureDir(this.resolvePath(`src/${n}`))),
+        Object.keys(this.enabledDirectories).map((n) => fs.ensureDir(this.resolvePath(`src/${n}`))),
       );
 
       await Promise.all(

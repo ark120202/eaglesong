@@ -15,7 +15,7 @@ export interface Options extends BuildOptions, PublishOptions, LaunchOptions {
 export const loadOptions = mem(
   async (context: string): Promise<Options> => {
     const configPath = ['eaglesong.config.local.ts', 'eaglesong.config.ts']
-      .map(name => path.resolve(context, name))
+      .map((name) => path.resolve(context, name))
       .find(fs.existsSync);
 
     if (configPath == null) {

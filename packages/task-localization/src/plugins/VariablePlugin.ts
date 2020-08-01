@@ -161,8 +161,8 @@ export const VariablePlugin: Plugin = ({ hooks, error: addError, context }) => {
     }
 
     const usesDotaVariables = Object.values(files)
-      .flatMap(file => Object.values(file))
-      .flatMap(value => [...value.matchAll(VARIABLE_REGEXP)])
+      .flatMap((file) => Object.values(file))
+      .flatMap((value) => [...value.matchAll(VARIABLE_REGEXP)])
       .some(([, expression]) => {
         const [variable] = expression.split(' | ');
         return variable.startsWith('dota:');
@@ -184,8 +184,8 @@ export const VariablePlugin: Plugin = ({ hooks, error: addError, context }) => {
   });
 
   // Don't localize strings consisting only of variables
-  hooks.push.tap('VariablePlugin', files =>
-    _.each(files, file =>
+  hooks.push.tap('VariablePlugin', (files) =>
+    _.each(files, (file) =>
       _.each(file, (value, key) => {
         if (value.replace(VARIABLE_REGEXP, '').replace(/\s/g, '').length === 0) {
           delete file[key];

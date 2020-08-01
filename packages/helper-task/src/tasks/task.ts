@@ -30,7 +30,7 @@ export abstract class Task<T> {
     const props = new Set<string>();
     let proto: any = value;
     do {
-      Object.getOwnPropertyNames(proto).forEach(p => props.add(p));
+      Object.getOwnPropertyNames(proto).forEach((p) => props.add(p));
       proto = Object.getPrototypeOf(proto);
     } while (proto);
 

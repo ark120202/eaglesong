@@ -10,7 +10,7 @@ if (isInstalledGlobally) {
   );
 }
 
-process.on('unhandledRejection', error => {
+process.on('unhandledRejection', (error) => {
   const message =
     error instanceof Error ? error.stack : `Promise rejected with value: ${inspect(error)}`;
 
@@ -18,7 +18,7 @@ process.on('unhandledRejection', error => {
   process.exit(1);
 });
 
-_.each(commands, Command => new Command().register());
+_.each(commands, (Command) => new Command().register());
 yargs
   .alias('h', 'help')
   .alias('v', 'version')

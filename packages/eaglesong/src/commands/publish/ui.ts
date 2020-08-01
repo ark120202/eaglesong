@@ -10,8 +10,8 @@ export const askForWorkshopMessage = (newVersion: string) =>
     type: 'input',
     message: 'Workshop Message',
     default: `v${newVersion}`,
-    validate: input => (input === '' ? 'Empty message is not allowed' : true),
-    filter: input => input !== '',
+    validate: (input) => (input === '' ? 'Empty message is not allowed' : true),
+    filter: (input) => input !== '',
   });
 
 export async function askForNewVersion(oldVersion: string) {
@@ -21,14 +21,14 @@ export async function askForNewVersion(oldVersion: string) {
       name: 'newVersion',
       message: 'Select semver increment or specify new version',
       choices: [
-        ...version.RELEASE_TYPES.map(inc => ({
+        ...version.RELEASE_TYPES.map((inc) => ({
           name: `${inc} ${inc.length <= 4 ? '\t\t' : '\t'}${version.prettyDiff(oldVersion, inc)}`,
           value: inc,
         })),
         new inquirer.Separator(),
         { name: 'Other (specify)', value: null },
       ],
-      filter: input => (version.isValidInput(input) ? version.bump(oldVersion, input) : input),
+      filter: (input) => (version.isValidInput(input) ? version.bump(oldVersion, input) : input),
       pageSize: version.RELEASE_TYPES.length + 2,
     },
     {
@@ -45,14 +45,14 @@ export async function askForNewVersion(oldVersion: string) {
 
         return true;
       },
-      filter: input => (version.isValidInput(input) ? version.bump(oldVersion, input) : input),
-      when: answers => answers.newVersion == null,
+      filter: (input) => (version.isValidInput(input) ? version.bump(oldVersion, input) : input),
+      when: (answers) => answers.newVersion == null,
     },
     {
       type: 'confirm',
       name: 'confirm',
       message: 'The addon will be published without version change. Continue?',
-      when: answers => version.eq(answers.newVersion, oldVersion),
+      when: (answers) => version.eq(answers.newVersion, oldVersion),
     },
   ]);
 

@@ -18,7 +18,7 @@ function extractErrorsFromStats(stats: webpack.Stats, type: 'errors' | 'warnings
 
   processCompilation(stats.compilation);
 
-  return _.unionBy(errors, error => (typeof error === 'string' ? error : error.message));
+  return _.unionBy(errors, (error) => (typeof error === 'string' ? error : error.message));
 }
 
 export interface Options {
@@ -38,7 +38,7 @@ export default class PanoramaTask extends Task<Options> {
       await fs.outputJson(schemaPath, manifestSchema, { spaces: 2 });
     });
 
-    this.hooks.compile.tap(this.constructor.name, addResource =>
+    this.hooks.compile.tap(this.constructor.name, (addResource) =>
       addResource('panorama/**/*.{xml,js,css}'),
     );
   }

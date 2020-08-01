@@ -37,7 +37,7 @@ export class PanoramaManifestPlugin {
       },
     );
 
-    compiler.hooks.make.tapPromise(this.constructor.name, async compilation => {
+    compiler.hooks.make.tapPromise(this.constructor.name, async (compilation) => {
       compilation.fileDependencies.add(this.manifestPath);
       const rawManifest = await readFile(this.manifestPath);
 
@@ -69,9 +69,9 @@ export class PanoramaManifestPlugin {
         }),
       );
 
-      compilation.hooks.reviveChunks.tap(this.constructor.name, chunks => {
+      compilation.hooks.reviveChunks.tap(this.constructor.name, (chunks) => {
         for (const chunk of chunks) {
-          const entry = entries.find(e => e.name === chunk.name);
+          const entry = entries.find((e) => e.name === chunk.name);
           if (entry?.type != null) {
             (chunk as XmlChunk).__type = entry.type;
           }

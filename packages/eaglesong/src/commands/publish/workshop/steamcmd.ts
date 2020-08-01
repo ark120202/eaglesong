@@ -12,7 +12,7 @@ async function getPassword() {
   return prompt({
     type: 'password',
     message: 'Password:',
-    validate: x => x !== '',
+    validate: (x) => x !== '',
     mask: '*',
   });
 }
@@ -20,7 +20,7 @@ async function getPassword() {
 async function getGuardCode() {
   if (!process.stdin.isTTY) throw new Error('Disable Steam Guard or run this command with a tty');
 
-  return prompt({ message: 'Steam Guard code:', filter: v => v.toUpperCase() });
+  return prompt({ message: 'Steam Guard code:', filter: (v) => v.toUpperCase() });
 }
 
 export async function uploadToSteam(metadataPath: string, workshopId: number) {
@@ -30,7 +30,7 @@ export async function uploadToSteam(metadataPath: string, workshopId: number) {
       // FIXME: TS can't choose between InputQuestion and NumberQuestion for validate
       type: 'input',
       message: 'Login:',
-      validate: x => x !== '',
+      validate: (x) => x !== '',
     });
   } else if (!login) {
     throw new Error('Provide a Steam login with a STEAMCMD_LOGIN environment variable');
