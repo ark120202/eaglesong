@@ -3,7 +3,9 @@
   "include": ["src/**/*", "src/**/*.json"],
   "compilerOptions": {
     "rootDir": "src",
-    "outDir": "lib"
+    "outDir": "lib",
+    // Required for @types/copy-webpack-plugin, fork-ts-checker-webpack-plugin, ts-loader, html-webpack-plugin
+    "skipLibCheck": true
   },
   "references": [{ "path": "../helper-task" }]
 }

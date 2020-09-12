@@ -1,29 +1,25 @@
 import { getOutputHeader, OutputOptions } from '@eaglesong/helper-task';
 import webpack from 'webpack';
-import { ConcatSource } from 'webpack-sources';
-import Template from 'webpack/lib/Template';
 
 export { OutputOptions };
 
-function wrapComment(str: string) {
-  if (!str.includes('\n')) {
-    return Template.toComment(str);
+function wrapComment(comment: string) {
+  if (!comment.includes('\n')) {
+    return webpack.Template.toComment(comment);
   }
 
-  return `/*!\n * ${str
+  return `/*!\n * ${comment
     .replace(/\*\//g, '* /')
     .split('\n')
     .join('\n * ')
     .replace(/\s+\n/g, '\n')
-    .trimRight()}\n */`;
+    .trimEnd()}\n */`;
 }
 
-function wrapXmlComment(str: string) {
-  return `<!--\n${str}\n-->`;
-}
+const wrapXmlComment = (comment: string) => `<!--\n${comment}\n-->`;
 
 export class OutputHeaderWebpackPlugin {
-  constructor(private options: OutputOptions) {}
+  constructor(private readonly options: OutputOptions) {}
 
   public apply(compiler: webpack.Compiler) {
     compiler.hooks.compilation.tap('OutputHeaderWebpackPlugin', (compilation) => {
@@ -38,6 +34,7 @@ export class OutputHeaderWebpackPlugin {
               // html-webpack-plugin passes JavaScript code under .xml extension
               // Note: compilation.compiler !== compiler
               // TODO: Add header to custom_ui_manifest.xml too
+              // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
               if (compilation.compiler.name?.startsWith('html-webpack-plugin for')) return;
 
               if (!(file.endsWith('.js') || file.endsWith('.css') || file.endsWith('.xml'))) return;
@@ -46,8 +43,10 @@ export class OutputHeaderWebpackPlugin {
               if (header === undefined) continue;
 
               const prefix = file.endsWith('.xml') ? wrapXmlComment(header) : wrapComment(header);
-              // @ts-ignore
-              compilation.updateAsset(file, (old) => new ConcatSource(prefix, '\n', old));
+              compilation.updateAsset(
+                file,
+                (old) => new webpack.sources.ConcatSource(prefix, '\n', old),
+              );
             }
           }
         },

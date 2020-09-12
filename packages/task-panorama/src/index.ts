@@ -1,25 +1,10 @@
 import { Task } from '@eaglesong/helper-task';
 import { IssueWebpackError } from 'fork-ts-checker-webpack-plugin/lib/issue/IssueWebpackError';
 import fs from 'fs-extra';
-import _ from 'lodash';
 import MemoryFileSystem from 'memory-fs';
 import webpack from 'webpack';
+import { manifestSchema } from 'webpack-panorama';
 import { createWebpackConfig } from './config';
-import { manifestSchema } from './plugins/PanoramaManifestPlugin/manifest';
-
-type WebpackError = Error | string;
-function extractErrorsFromStats(stats: webpack.Stats, type: 'errors' | 'warnings') {
-  const errors: WebpackError[] = [];
-
-  const processCompilation = (compilation: webpack.Compilation) => {
-    errors.push(...compilation[type]);
-    compilation.children.forEach(processCompilation);
-  };
-
-  processCompilation(stats.compilation);
-
-  return _.unionBy(errors, (error) => (typeof error === 'string' ? error : error.message));
-}
 
 export interface Options {
   config?(w: webpack.Configuration): webpack.Configuration;
@@ -44,17 +29,17 @@ export default class PanoramaTask extends Task<Options> {
   }
 
   private async build() {
-    let webpackConfig = createWebpackConfig(this);
-    if (this.options.config) webpackConfig = this.options.config(webpackConfig);
+    let config = createWebpackConfig(this);
+    if (this.options.config) config = this.options.config(config);
 
-    const compiler = webpack(webpackConfig);
+    const compiler = webpack(config);
     if (this.dotaPath == null) {
       // @ts-ignore Incompatible types
       compiler.outputFileSystem = new MemoryFileSystem();
     }
 
     if (this.isWatching) {
-      compiler.watch({}, (error, stats) => {
+      compiler.watch(config.watchOptions ?? {}, (error, stats) => {
         if (error) {
           // TODO:
           console.error(error);
@@ -72,7 +57,7 @@ export default class PanoramaTask extends Task<Options> {
     } else {
       return new Promise<void>((resolve, reject) => {
         compiler.run((error, stats) => {
-          compiler.close((error2?: Error) => {
+          compiler.close((error2) => {
             if (error2 || error) {
               reject(error2 || error);
             } else {
@@ -86,18 +71,13 @@ export default class PanoramaTask extends Task<Options> {
   }
 
   private compilationHandler(stats: webpack.Stats) {
-    if (stats.hasErrors()) {
-      this.displayErrors(extractErrorsFromStats(stats, 'errors'), 'error');
-    }
-
-    if (stats.hasWarnings()) {
-      this.displayErrors(extractErrorsFromStats(stats, 'warnings'), 'warning');
-    }
-
+    this.displayErrors(stats.compilation.errors, 'error');
+    this.displayErrors(stats.compilation.warnings, 'warning');
     this.finish();
   }
 
-  private displayErrors(errors: WebpackError[], level: 'error' | 'warning') {
+  // TODO: Use WebpackError type once webpack would export it
+  private displayErrors(errors: Error[], level: 'error' | 'warning') {
     for (const error of errors) {
       if (error instanceof IssueWebpackError) {
         const { line, column } = error.issue.location?.start ?? {};
@@ -106,7 +86,7 @@ export default class PanoramaTask extends Task<Options> {
         continue;
       }
 
-      this.error({ level, message: typeof error === 'string' ? error : error.toString() });
+      this.error({ level, message: error.toString() });
     }
   }
 }
