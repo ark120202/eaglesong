@@ -30,17 +30,17 @@
     "@eaglesong/task-scripts": "link:../task-scripts",
     "@eaglesong/task-sounds": "link:../task-sounds",
     "@eaglesong/task-vscripts": "link:../task-vscripts",
-    "tslib": "^1.10.0"
+    "tslib": "^2.0.1"
   },
   "devDependencies": {
-    "dota-data": "^0.9.0",
-    "dota-lua-types": "^4.4.0",
-    "panorama-types": "^1.5.1",
-    "typescript": "^3.7.4"
+    "dota-data": "^0.11.0",
+    "dota-lua-types": "^4.5.0",
+    "panorama-types": "^1.5.2",
+    "typescript": "^4.0.2"
   },
   "peerDependencies": {
-    "dota-data": "^0.7.0",
-    "dota-lua-types": "^3.0.0",
+    "dota-data": "^0.11.0",
+    "dota-lua-types": "^4.5.0",
     "panorama-types": "^1.2.0",
     "typescript": "^3.0.0"
   },

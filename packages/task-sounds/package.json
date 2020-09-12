@@ -18,13 +18,13 @@
   ],
   "dependencies": {
     "@eaglesong/helper-task": "link:../helper-task",
-    "@types/fs-extra": "^8.0.1",
-    "@types/lodash": "^4.14.149",
-    "ajv": "^6.10.2",
-    "fs-extra": "^8.1.0",
-    "lodash": "^4.17.15",
-    "p-props": "^3.1.0",
-    "tslib": "^1.10.0",
+    "@types/fs-extra": "^9.0.1",
+    "@types/lodash": "^4.14.161",
+    "ajv": "^6.12.4",
+    "fs-extra": "^9.0.1",
+    "lodash": "^4.17.20",
+    "p-props": "^4.0.0",
+    "tslib": "^2.0.1",
     "upath": "^1.2.0"
   },
   "publishConfig": {
