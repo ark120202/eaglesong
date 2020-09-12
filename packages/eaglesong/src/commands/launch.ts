@@ -23,7 +23,7 @@ export default class LaunchCommand extends CommandGroup {
 
   private async run() {
     const win64 = path.join(await this.getDotaPath(), 'game', 'bin', 'win64');
-    const args = ['-tools', '-addon', await this.getAddonName()];
+    const args = ['-novid', '-tools', '-addon', await this.getAddonName()];
     const spawnOptions: SpawnOptions = { cwd: win64, detached: true, stdio: 'ignore' };
 
     let launchOptions = (await this.getOptions()).launch;
