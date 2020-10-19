@@ -1,4 +1,4 @@
-import { FlatLocalizationFiles, Multilingual, DotaLanguage } from '../types';
+import { DotaLanguage, FlatLocalizationFiles, Multilingual } from '../types';
 import { FileSystemProvider } from './fs';
 import { OneSkyProvider, OneSkyProviderOptions } from './onesky';
 
@@ -18,6 +18,7 @@ export type ProviderOption =
   | Provider
   | undefined;
 
+// eslint-disable-next-line unicorn/no-object-as-default-parameter
 export function resolveProviderOption(option: ProviderOption = { type: 'fs' }): Provider {
   if ('type' in option) {
     switch (option.type) {

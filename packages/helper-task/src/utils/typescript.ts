@@ -10,7 +10,7 @@ export function convertDiagnosticToError(diagnostic: ts.Diagnostic): ErrorMessag
   if (!diagnostic.file) return { level, message };
   assert(diagnostic.start != null);
 
-  const { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start!);
+  const { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
   return {
     filePath: diagnostic.file.fileName,
     level,

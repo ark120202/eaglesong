@@ -29,14 +29,14 @@
     },
     "extends": "@ark120202/eslint-config/node",
     "rules": {
-      "node/no-unpublished-bin": "off"
+      "@typescript-eslint/no-unnecessary-condition": "off"
     }
   },
   "resolutions": {
     "**/typescript-to-lua/typescript": "^4.0.2"
   },
   "devDependencies": {
-    "@ark120202/eslint-config": "^2.4.2",
+    "@ark120202/eslint-config": "^2.5.0",
     "@ark120202/typescript-config": "^2.2.0",
     "@types/fs-extra": "^9.0.1",
     "@types/htmlparser2": "^3.10.2",

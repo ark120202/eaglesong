@@ -34,7 +34,6 @@ export class OutputHeaderWebpackPlugin {
               // html-webpack-plugin passes JavaScript code under .xml extension
               // Note: compilation.compiler !== compiler
               // TODO: Add header to custom_ui_manifest.xml too
-              // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
               if (compilation.compiler.name?.startsWith('html-webpack-plugin for')) return;
 
               if (!(file.endsWith('.js') || file.endsWith('.css') || file.endsWith('.xml'))) return;

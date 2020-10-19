@@ -15,7 +15,6 @@ export async function ask() {
       .toLowerCase()
       .replace(/ ?& ?/g, '-and-')
       .replace(/[ _]/g, '-')
-      // eslint-disable-next-line unicorn/regex-shorthand
       .replace(/[^a-z\d-]/g, '');
 
   // https://github.com/SBoudrias/Inquirer.js/issues/538

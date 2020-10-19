@@ -44,7 +44,7 @@ export const AbilityPrecachePlugin: Plugin = ({ hooks }) => {
 
         _.each(precache, (value, key) => {
           const values: string[] = [value];
-          if (precache[vdf.EXTRA_VALUES] && precache[vdf.EXTRA_VALUES][key]) {
+          if (precache[vdf.EXTRA_VALUES]?.[key]) {
             values.push(...precache[vdf.EXTRA_VALUES][key]);
           }
 
