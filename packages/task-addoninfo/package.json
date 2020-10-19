@@ -18,8 +18,8 @@
   ],
   "dependencies": {
     "@eaglesong/helper-task": "link:../helper-task",
-    "p-queue": "^6.6.1",
-    "tslib": "^2.0.1"
+    "p-queue": "^6.6.2",
+    "tslib": "^2.0.3"
   },
   "publishConfig": {
     "access": "public"

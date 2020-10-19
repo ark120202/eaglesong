@@ -18,15 +18,15 @@
   ],
   "dependencies": {
     "@eaglesong/helper-task": "link:../helper-task",
-    "@types/fs-extra": "^9.0.1",
+    "@types/fs-extra": "^9.0.2",
     "fs-extra": "^9.0.1",
     "lines-and-columns": "^1.1.6",
     "prettier-linter-helpers": "^1.0.0",
-    "tslib": "^2.0.1"
+    "tslib": "^2.0.3"
   },
   "devDependencies": {
-    "@types/prettier": "^2.1.0",
-    "prettier": "^2.1.1"
+    "@types/prettier": "^2.1.5",
+    "prettier": "^2.1.2"
   },
   "peerDependencies": {
     "prettier": "^1.18.2"

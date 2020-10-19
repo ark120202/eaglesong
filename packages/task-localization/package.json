@@ -19,17 +19,17 @@
   "dependencies": {
     "@eaglesong/helper-task": "link:../helper-task",
     "@types/dedent": "^0.7.0",
-    "@types/fs-extra": "^9.0.1",
-    "@types/lodash": "^4.14.161",
+    "@types/fs-extra": "^9.0.2",
+    "@types/lodash": "^4.14.162",
     "dedent": "^0.7.0",
     "form-data": "^3.0.0",
     "fs-extra": "^9.0.1",
-    "got": "^11.6.2",
+    "got": "^11.7.0",
     "lodash": "^4.17.20",
     "p-props": "^4.0.0",
-    "tapable": "^2.0.0-beta.11",
-    "tslib": "^2.0.1",
-    "upath": "^1.2.0"
+    "tapable": "^2.0.0",
+    "tslib": "^2.0.3",
+    "upath": "^2.0.0"
   },
   "devDependencies": {
     "dota-data": "^0.11.0"

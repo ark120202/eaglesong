@@ -33,21 +33,21 @@
     }
   },
   "resolutions": {
-    "**/typescript-to-lua/typescript": "^4.0.2"
+    "**/typescript-to-lua/typescript": "^4.0.3"
   },
   "devDependencies": {
     "@ark120202/eslint-config": "^2.5.0",
     "@ark120202/typescript-config": "^2.2.0",
-    "@types/fs-extra": "^9.0.1",
+    "@types/fs-extra": "^9.0.2",
     "@types/htmlparser2": "^3.10.2",
-    "@types/node": "^14.10.1",
-    "eslint": "^7.8.1",
+    "@types/node": "^14.11.10",
+    "eslint": "^7.11.0",
     "fs-extra": "^9.0.1",
     "lerna": "^3.22.1",
     "npm-run-all": "^4.1.5",
-    "prettier": "^2.1.1",
+    "prettier": "^2.1.2",
     "ts-node": "^9.0.0",
-    "tslib": "^2.0.1",
-    "typescript": "^4.0.2"
+    "tslib": "^2.0.3",
+    "typescript": "^4.0.3"
   }
 }

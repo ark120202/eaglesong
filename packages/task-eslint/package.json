@@ -18,11 +18,11 @@
   ],
   "dependencies": {
     "@eaglesong/helper-task": "link:../helper-task",
-    "tslib": "^2.0.1"
+    "tslib": "^2.0.3"
   },
   "devDependencies": {
-    "@types/eslint": "^7.2.2",
-    "eslint": "^7.8.1"
+    "@types/eslint": "^7.2.4",
+    "eslint": "^7.11.0"
   },
   "peerDependencies": {
     "eslint": "^6.0.0"
