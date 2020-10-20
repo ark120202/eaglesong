@@ -1,8 +1,10 @@
 #!/usr/bin/env node
+/* eslint-disable @typescript-eslint/require-array-sort-compare */
 import execa from 'execa';
 import fs from 'fs-extra';
 import globby from 'globby';
 import isBinaryPath from 'is-binary-path';
+import latestVersion from 'latest-version';
 import path from 'path';
 import yargs from 'yargs';
 import { ask } from './input';
@@ -54,8 +56,6 @@ async function main(): Promise<number> {
 
   const rootPath = path.resolve(internalName);
 
-  const runPackageManager = (args: string[]) =>
-    execa(packageManager, args, { stdio: 'inherit', cwd: rootPath });
   const outputFile = (filePath: string, content: string) =>
     fs.outputFile(path.join(rootPath, filePath), content);
   const outputJson = (filePath: string, data: any) =>
@@ -81,25 +81,25 @@ async function main(): Promise<number> {
     commitlint: lateDefinedField,
     prettier: lateDefinedField,
     eslintConfig: lateDefinedField,
-    dependencies: {},
-    devDependencies: {},
+    dependencies: lateDefinedField,
+    devDependencies: lateDefinedField,
   };
 
-  const dependencies = [
+  const dependencies = new Set([
     '@types/node',
     '@types/webpack-env',
     'dota-lua-types',
     'panorama-types',
     'tslib',
-  ];
+  ]);
 
-  const devDependencies = [
+  const devDependencies = new Set([
     '@ark120202/typescript-config',
     '@eaglesong/tasks',
     'dota-data',
     'eaglesong',
     'typescript',
-  ];
+  ]);
 
   if (useGit) {
     templates.add('git');
@@ -111,7 +111,9 @@ async function main(): Promise<number> {
 
   if (conventionalCommits) {
     templates.add('conventional-commits');
-    devDependencies.push('husky', '@commitlint/cli', '@commitlint/config-conventional');
+    devDependencies.add('husky');
+    devDependencies.add('@commitlint/cli');
+    devDependencies.add('@commitlint/config-conventional');
     packageJson.husky = { hooks: { 'commit-msg': 'commitlint -E HUSKY_GIT_PARAMS' } };
     packageJson.commitlint = { extends: '@commitlint/config-conventional' };
   }
@@ -124,7 +126,8 @@ async function main(): Promise<number> {
       },
     };
 
-    devDependencies.push('eslint', '@ark120202/eslint-config');
+    devDependencies.add('eslint');
+    devDependencies.add('@ark120202/eslint-config');
   }
 
   if (usePrettier) {
@@ -135,7 +138,7 @@ async function main(): Promise<number> {
       trailingComma: 'all',
     };
 
-    devDependencies.push('prettier');
+    devDependencies.add('prettier');
   }
 
   const disabledTasks: string[] = [];
@@ -147,9 +150,6 @@ async function main(): Promise<number> {
       ['{', ...disabledTasks.map((task) => `    ${task}: false,`), '  }'].join('\n'),
     );
   }
-
-  dependencies.sort((a, b) => a.localeCompare(b));
-  devDependencies.sort((a, b) => a.localeCompare(b));
 
   await fs.mkdir(rootPath);
   if (useGit) {
@@ -191,21 +191,31 @@ async function main(): Promise<number> {
     );
   }
 
+  const dependencyVersions = new Map(
+    await Promise.all(
+      [...dependencies, ...devDependencies].map(
+        async (packageName) => [packageName, `^${await latestVersion(packageName)}`] as const,
+      ),
+    ),
+  );
+
+  packageJson.dependencies = Object.fromEntries(
+    [...dependencies].sort().map((name) => [name, dependencyVersions.get(name)!]),
+  );
+
+  packageJson.devDependencies = Object.fromEntries(
+    [...devDependencies].sort().map((name) => [name, dependencyVersions.get(name)!]),
+  );
+
   await outputJson('package.json', packageJson);
 
-  let installedDevDependencies = false;
   try {
-    await runPackageManager(['add', '-D', ...devDependencies]);
-    installedDevDependencies = true;
-    await runPackageManager(['add', ...dependencies]);
+    await execa(packageManager, ['install'], { cwd: rootPath, stdio: 'inherit' });
   } catch {
     console.log('');
     console.log('Failed to install dependencies.');
     console.log('To complete project initialization run:');
-    console.log(`$ ${packageManager} add ${dependencies.join(' ')}`);
-    if (!installedDevDependencies) {
-      console.log(`$ ${packageManager} add -D ${devDependencies.join(' ')}`);
-    }
+    console.log(`$ ${packageManager} install`);
 
     return 1;
   }
