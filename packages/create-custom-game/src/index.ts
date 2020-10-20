@@ -95,7 +95,6 @@ async function main(): Promise<number> {
 
   const devDependencies = new Set([
     '@ark120202/typescript-config',
-    '@eaglesong/tasks',
     'dota-data',
     'eaglesong',
     'typescript',
