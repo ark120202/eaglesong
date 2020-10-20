@@ -41,7 +41,6 @@
     "lodash": "^4.17.20",
     "log-symbols": "^4.0.0",
     "mem": "^8.0.0",
-    "open": "^7.3.0",
     "please-upgrade-node": "^3.2.0",
     "read-pkg": "^5.2.0",
     "semver": "^7.3.2",

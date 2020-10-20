@@ -4,7 +4,6 @@
 - [Environment](/environment)
 - Commands
   - [launch](/commands/launch)
-  - [open](/commands/open)
   - [publish](/commands/publish)
   - [build](/commands/build/)
     - [VScripts](/commands/build/vscripts/)

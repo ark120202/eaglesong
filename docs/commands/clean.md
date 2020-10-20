@@ -1,4 +1,4 @@
-# open
+# clean
 
 ```shell
 eaglesong clean
