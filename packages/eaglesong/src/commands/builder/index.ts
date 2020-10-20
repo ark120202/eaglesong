@@ -8,6 +8,7 @@ import {
 } from '@eaglesong/helper-task';
 import yargs from 'yargs';
 import { CommandGroup } from '../../command';
+import { AddonDirectoriesTask } from './AddonDirectoriesTask';
 import { buildReporter, watchReporter } from './reporters';
 import { ResourceCompiler } from './resourcecompiler';
 
@@ -136,6 +137,7 @@ export default class BuilderCommand extends CommandGroup {
     let { tasks, output } = await this.getOptions();
     if (typeof tasks === 'function') tasks = await tasks();
     if (tasks.length === 0) throw new Error('Builder got an empty task list');
+    this.tasks.set(AddonDirectoriesTask, new AddonDirectoriesTask());
     tasks.forEach((t) => this.tasks.set(t.constructor as TaskConstructor<any>, t));
 
     const helper = new BuildHelper(
