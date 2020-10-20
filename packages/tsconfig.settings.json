@@ -2,11 +2,6 @@
   "extends": "@ark120202/typescript-config/node/12.json",
   "compilerOptions": {
     "composite": true,
-    "lib": ["es2019", "es2020.string", "esnext.bigint"],
-
-    "baseUrl": "..",
-    "paths": {
-      "*": ["types/*"]
-    }
+    "lib": ["es2019", "es2020.string", "esnext.bigint"]
   }
 }

@@ -1,15 +1,7 @@
 {
   "extends": "@ark120202/typescript-config/node/12.json",
-  "include": ["types/**/*", "scripts/**/*"],
+  "include": ["scripts/**/*"],
   "compilerOptions": {
-    "noEmit": true,
-    // TODO:
-    "skipLibCheck": true,
-
-    "baseUrl": ".",
-    "paths": {
-      "*": ["types/*"],
-      "@posthtml/esm": ["types/posthtml__esm.d.ts"]
-    }
+    "noEmit": true
   }
 }
