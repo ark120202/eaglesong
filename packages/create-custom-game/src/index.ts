@@ -64,7 +64,7 @@ async function main(): Promise<number> {
   const templates = new Set(['base']);
   const variables = new Map([
     ['displayName', displayName],
-    ['getTasks', ''],
+    ['tasks', '{}'],
   ]);
 
   const lateDefinedField = undefined as any;
@@ -143,7 +143,7 @@ async function main(): Promise<number> {
   if (!usePrettier) disabledTasks.push('prettier');
   if (disabledTasks.length > 0) {
     variables.set(
-      'getTasks',
+      'tasks',
       ['{', ...disabledTasks.map((task) => `    ${task}: false,`), '  }'].join('\n'),
     );
   }

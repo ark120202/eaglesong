@@ -4,11 +4,12 @@ Eaglesong requires a `eaglesong.config.ts` configuration file to exist in the ro
 It should be a TypeScript file, with a default export:
 
 ```ts
-import { getTasks } from '@eaglesong/tasks';
 import { Options } from 'eaglesong';
 
 const config: Options = {
-  tasks: getTasks(/* Task options */),
+  tasks: {
+    /* Task options */
+  },
 };
 
 export default config;
@@ -25,9 +26,9 @@ correctly configured [editors](/environment#editor-support)), but still want kee
 
 ```ts
 const config: Options = {
-  tasks: getTasks({
+  tasks: {
     prettier: Boolean(process.env.CI),
-  }),
+  },
 };
 ```
 

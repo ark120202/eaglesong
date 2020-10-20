@@ -6,7 +6,8 @@ import { Options as PanoramaOptions } from './panorama';
 import { Options as ResourcesOptions } from './resources';
 import { Options as ScriptsOptions } from './scripts';
 
-export interface GetTasksOptions {
+export interface TasksOptions {
+  addonDirectories?: null | boolean;
   maps?: null | boolean;
   sounds?: null | boolean;
   prettier?: null | boolean;
@@ -23,12 +24,7 @@ export interface GetTasksOptions {
   extraTasks?: (Task<any> | Promise<Task<any>>)[];
 }
 
-export function getTasks(options: GetTasksOptions = {}) {
-  const create = Object.assign(() => loadTasks(create.options), { options });
-  return create;
-}
-
-async function loadTasks(options: GetTasksOptions = {}): Promise<Task<any>[]> {
+export async function getTasks(options: TasksOptions = {}): Promise<Task<any>[]> {
   const tasks: Promise<Task<any>>[] = (options.extraTasks ?? []).map((x) => Promise.resolve(x));
 
   const addTask = <T>(
@@ -44,6 +40,7 @@ async function loadTasks(options: GetTasksOptions = {}): Promise<Task<any>[]> {
     );
   };
 
+  addTask(() => import('./addon-directories'), options.addonDirectories);
   addTask(() => import('./addoninfo'), options.addoninfo);
   addTask(() => import('./eslint'), options.eslint);
   addTask(() => import('./images'), options.images);

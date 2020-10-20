@@ -3,18 +3,17 @@ import {
   BuildHelper,
   createHooks,
   OutputOptions,
-  Task,
   TaskConstructor,
   TaskMap,
 } from '../builder/helper';
 import { buildReporter, watchReporter } from '../builder/reporters';
 import { ResourceCompiler } from '../builder/resourcecompiler';
-import { AddonDirectoriesTask } from '../builder/tasks/addon-directories';
+import { getTasks, TasksOptions } from '../builder/tasks';
 import { CommandGroup } from '../command';
 
 export interface BuildOptions {
   output?: OutputOptions;
-  tasks: Task<any>[] | (() => Promise<Task<any>[]>);
+  tasks: TasksOptions;
 }
 
 export default class BuilderCommand extends CommandGroup {
@@ -134,22 +133,22 @@ export default class BuilderCommand extends CommandGroup {
   }
 
   private async loadTasks(isWatching: boolean, noDota: boolean) {
-    let { tasks, output } = await this.getOptions();
-    if (typeof tasks === 'function') tasks = await tasks();
-    if (tasks.length === 0) throw new Error('Builder got an empty task list');
-    this.tasks.set(AddonDirectoriesTask, new AddonDirectoriesTask());
-    tasks.forEach((t) => this.tasks.set(t.constructor as TaskConstructor<any>, t));
+    const options = await this.getOptions();
 
     const helper = new BuildHelper(
       this.context,
       noDota ? undefined : await this.getDotaPath(),
       await this.getAddonName(),
-      output ?? {},
+      options.output ?? {},
       this.hooks,
       this.tasks,
       isWatching,
       this.args,
     );
+
+    for (const task of await getTasks(options.tasks)) {
+      this.tasks.set(task.constructor as TaskConstructor<any>, task);
+    }
 
     for (const task of this.tasks.values()) {
       task.setHelper(helper);

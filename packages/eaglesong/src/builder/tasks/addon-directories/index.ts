@@ -1,7 +1,7 @@
 import fs from 'fs-extra';
 import { Task } from '../../helper';
 
-export class AddonDirectoriesTask extends Task<void> {
+export default class AddonDirectoriesTask extends Task<void> {
   public apply() {
     if (this.dotaPath == null) return;
 
