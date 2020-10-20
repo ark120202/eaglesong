@@ -1,6 +1,6 @@
 {
   "extends": "@ark120202/typescript-config/node/12.json",
-  "include": ["scripts/**/*"],
+  "include": ["**/*"],
   "compilerOptions": {
     "noEmit": true
   }

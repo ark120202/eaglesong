@@ -8,7 +8,7 @@
     "build:clean": "tsc -b packages --clean",
     "build:tsc": "tsc -b packages",
     "dev": "tsc -b packages --watch",
-    "docs": "ts-node scripts/serve-docs.ts",
+    "docs": "ts-node-script scripts/serve-docs.ts",
     "lint": "run-p lint:*",
     "lint:eslint": "eslint .",
     "lint:prettier": "prettier --check .",
@@ -23,7 +23,7 @@
   "eslintConfig": {
     "parserOptions": {
       "project": [
-        "tsconfig.json",
+        "scripts/tsconfig.json",
         "packages/*/tsconfig.json"
       ]
     },
