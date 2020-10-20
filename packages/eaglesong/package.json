@@ -109,6 +109,14 @@
     "prettier": "^2.1.2",
     "typescript": "^4.0.3"
   },
+  "peerDependenciesMeta": {
+    "eslint": {
+      "optional": true
+    },
+    "prettier": {
+      "optional": true
+    }
+  },
   "engines": {
     "node": ">=12.13.0"
   }
