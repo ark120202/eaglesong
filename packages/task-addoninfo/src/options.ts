@@ -1,1 +1,0 @@
-../../../docs/commands/build/addoninfo/options.ts

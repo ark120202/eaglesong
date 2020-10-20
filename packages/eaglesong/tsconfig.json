@@ -1,9 +1,11 @@
 {
   "extends": "../tsconfig.settings.json",
-  "include": ["src/**/*"],
+  // https://github.com/microsoft/TypeScript/issues/25636
+  "include": ["src/**/*", "src/**/*.json"],
   "compilerOptions": {
     "rootDir": "src",
-    "outDir": "lib"
-  },
-  "references": [{ "path": "../helper-task" }]
+    "outDir": "lib",
+    // Required for: typescript-to-lua, @types/copy-webpack-plugin, fork-ts-checker-webpack-plugin, ts-loader, html-webpack-plugin
+    "skipLibCheck": true
+  }
 }

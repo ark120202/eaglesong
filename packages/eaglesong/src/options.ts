@@ -1,7 +1,7 @@
-import { _import } from '@eaglesong/helper-task';
 import fs from 'fs-extra';
 import mem from 'mem';
 import path from 'path';
+import { _import } from './builder/helper';
 import { BuildOptions } from './commands/builder';
 import { LaunchOptions } from './commands/launch';
 import { PublishOptions } from './commands/publish';

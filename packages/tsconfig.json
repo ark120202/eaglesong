@@ -1,21 +1,4 @@
 {
   "files": [],
-  "references": [
-    { "path": "create-custom-game" },
-    { "path": "eaglesong" },
-    { "path": "helper-task" },
-    { "path": "task-addoninfo" },
-    { "path": "task-eslint" },
-    { "path": "task-images" },
-    { "path": "task-localization" },
-    { "path": "task-maps" },
-    { "path": "task-panorama" },
-    { "path": "task-prettier" },
-    { "path": "task-resources" },
-    { "path": "task-root-scripts" },
-    { "path": "task-scripts" },
-    { "path": "task-sounds" },
-    { "path": "task-vscripts" },
-    { "path": "tasks" }
-  ]
+  "references": [{ "path": "create-custom-game" }, { "path": "eaglesong" }]
 }
