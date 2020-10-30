@@ -1,4 +1,3 @@
-node_modules
 /docs
 /packages/*/lib
 /packages/create-custom-game/templates
