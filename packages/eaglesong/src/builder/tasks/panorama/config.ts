@@ -46,7 +46,9 @@ export function createWebpackConfig({ context, dotaPath, addonName, outputOption
     plugins: [
       // Should be applied before `PanoramaManifestPlugin`, because both tap to the emit hook
       new CopyWebpackPlugin({
-        patterns: [{ from: 'images', to: resolveContent('panorama/images') }],
+        patterns: [
+          { from: 'images', to: resolveContent('panorama/images'), noErrorOnMissing: true },
+        ],
       }),
     ],
   };
