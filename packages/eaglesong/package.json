@@ -62,7 +62,7 @@
     "ts-loader": "^8.0.6",
     "ts-node": "^9.0.0",
     "tslib": "^2.0.3",
-    "typescript-to-lua": "^0.29.1",
+    "typescript-to-lua": "https://gist.github.com/ark120202/f3dde644322f6996f25dccf12ea70e4a/raw/1436812fe4ffd8ef689c80bb412f54c0240be75c/typescript-to-lua-0.36.0.tgz",
     "unique-string": "^2.0.0",
     "upath": "^2.0.0",
     "v8-compile-cache": "^2.1.1",

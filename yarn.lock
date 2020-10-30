@@ -6817,7 +6817,7 @@ resolve-url@^0.2.1:
   resolved "https://registry.yarnpkg.com/resolve-url/-/resolve-url-0.2.1.tgz#2c637fe77c893afd2a663fe21aa9080068e2052a"
   integrity sha1-LGN/53yJOv0qZj/iGqkIAGjiBSo=
 
-resolve@^1.10.0, resolve@^1.10.1, resolve@^1.11.0, resolve@^1.12.0, resolve@^1.18.1, resolve@^1.5.0:
+resolve@^1.10.0, resolve@^1.10.1, resolve@^1.12.0, resolve@^1.18.1, resolve@^1.5.0:
   version "1.18.1"
   resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.18.1.tgz#018fcb2c5b207d2a6424aee361c5a266da8f4130"
   integrity sha512-lDfCPaMKfOJXjy0dPayzPdF1phampNWr3qFCjAu+rw/qbQmr5jWH5xN2hwh9QKfw9E5v4hwV7A+jrCmL8yjjqA==
@@ -7871,16 +7871,15 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript-to-lua@^0.29.1:
-  version "0.29.1"
-  resolved "https://registry.yarnpkg.com/typescript-to-lua/-/typescript-to-lua-0.29.1.tgz#236d5e99b0dc200faac1a78f1b2d9b851bda865b"
-  integrity sha512-vT8ATxbw8KoMnAqgxOykWwQ5ecWjAWfleTPuxGu7bdIhnU37yqKkc0kvLJ2eqKxJvgc+7iK3TSdggEKjuGN4vA==
+"typescript-to-lua@https://gist.github.com/ark120202/f3dde644322f6996f25dccf12ea70e4a/raw/1436812fe4ffd8ef689c80bb412f54c0240be75c/typescript-to-lua-0.36.0.tgz":
+  version "0.36.0"
+  resolved "https://gist.github.com/ark120202/f3dde644322f6996f25dccf12ea70e4a/raw/1436812fe4ffd8ef689c80bb412f54c0240be75c/typescript-to-lua-0.36.0.tgz#28f3b725b82b8b3b150105f50a95599b8bcce97e"
   dependencies:
-    resolve "^1.11.0"
+    enhanced-resolve "^5.2.0"
     source-map "^0.7.3"
-    typescript "^3.6.2"
+    typescript ">=4.0.2"
 
-typescript@^3.6.2, typescript@^4.0.3:
+typescript@>=4.0.2, typescript@^4.0.3:
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.0.3.tgz#153bbd468ef07725c1df9c77e8b453f8d36abba5"
   integrity sha512-tEu6DGxGgRJPb/mVPIZ48e69xCn2yRmCgYmDugAVwmJ6o+0u1RI18eO7E7WBTLYLaEVVOhwQmcdhQHweux/WPg==

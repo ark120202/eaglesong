@@ -4,19 +4,16 @@ import * as tstl from 'typescript-to-lua';
 import { createConfigFileUpdater } from 'typescript-to-lua/dist/cli/tsconfig';
 import { parentPort, workerData as rawWorkerData } from 'worker_threads';
 import { convertDiagnosticToError, createTsAutoWatch, ErrorMessage } from '../../helper';
-import { CustomCompilation } from './compilation';
-import { LuaTransformer } from './transpiler/transformer';
 
 export type Message = { type: 'start' } | { type: 'end'; errors: ErrorMessage[] };
 const postMessage = (message: Message) => parentPort!.postMessage(message);
 
 const workerData: WorkerData = rawWorkerData;
 export interface WorkerData {
-  currentDirectory: string;
   configPath: string;
-  outDir?: string;
   isWatching: boolean;
-  hasDota: boolean;
+  rootDir: string;
+  outDir?: string;
 }
 
 const updateConfigFile = createConfigFileUpdater({
@@ -24,21 +21,18 @@ const updateConfigFile = createConfigFileUpdater({
   luaLibImport: tstl.LuaLibImportKind.Require,
 });
 
+const compiler = new tstl.Compiler();
+
 function emit(program: ts.Program) {
   const options = program.getCompilerOptions();
   const configFileParsingDiagnostics = updateConfigFile(options);
-  if (!options.noEmit) {
-    options.noEmit = !workerData.hasDota;
-  }
 
-  const { diagnostics: transpileDiagnostics, transpiledFiles } = tstl.transpile({
+  options.noEmit ||= options.outDir === undefined;
+
+  const { diagnostics: emitDiagnostics } = compiler.emit({
     program,
     customTransformers: { before: [createDotaTransformer()] },
-    transformer: new LuaTransformer(program),
   });
-
-  const compilation = new CustomCompilation(program);
-  const { errors } = compilation.emit(transpiledFiles);
 
   const diagnostics = ts.sortAndDeduplicateDiagnostics([
     ...configFileParsingDiagnostics,
@@ -46,19 +40,16 @@ function emit(program: ts.Program) {
     ...program.getSyntacticDiagnostics(),
     ...program.getGlobalDiagnostics(),
     ...program.getSemanticDiagnostics(),
-    ...transpileDiagnostics,
+    ...emitDiagnostics,
   ]);
 
-  return [
-    ...diagnostics.map(convertDiagnosticToError),
-    ...errors.map(({ fileName, message }): ErrorMessage => ({ filePath: fileName, message })),
-  ];
+  return diagnostics.filter((diag) => diag.code !== 6059).map(convertDiagnosticToError);
 }
 
 createTsAutoWatch(
-  workerData.currentDirectory,
+  workerData.rootDir,
   workerData.configPath,
-  { outDir: workerData.outDir },
+  { rootDir: workerData.rootDir, outDir: workerData.outDir },
   workerData.isWatching,
   () => postMessage({ type: 'start' }),
   (builderProgram) => postMessage({ type: 'end', errors: emit(builderProgram.getProgram()) }),

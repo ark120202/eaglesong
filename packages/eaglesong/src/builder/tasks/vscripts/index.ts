@@ -18,11 +18,10 @@ export default class VScriptsTask extends Task<void> {
       }
 
       const workerData: WorkerData = {
-        currentDirectory: this.resolvePath('src/vscripts'),
         configPath: this.resolvePath('src/vscripts/tsconfig.json'),
         isWatching: this.isWatching,
+        rootDir: this.resolvePath('src/vscripts'),
         outDir,
-        hasDota: this.dotaPath != null,
       };
 
       const worker = new Worker(path.join(__dirname, 'worker.js'), { workerData });
