@@ -44,7 +44,7 @@ class CustomEnumsSchema extends s.EnumsSchema {
 
     const validNames = this.getNames();
     if (Array.isArray(value)) {
-      for (const [index, element] of value) {
+      for (const [index, element] of value.entries()) {
         if (!validNames.includes(element)) {
           context.of(index).addErrorThere(`should be a ${this._name} enum`);
         }
