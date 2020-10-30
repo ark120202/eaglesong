@@ -5,9 +5,9 @@
   ],
   "scripts": {
     "build": "run-s build:clean build:tsc",
-    "build:clean": "tsc -b packages --clean",
-    "build:tsc": "tsc -b packages",
-    "dev": "tsc -b packages --watch",
+    "build:clean": "tsc --build packages --clean",
+    "build:tsc": "tsc --build packages",
+    "dev": "tsc --build packages --watch",
     "docs": "ts-node-script scripts/serve-docs.ts",
     "lint": "run-p lint:*",
     "lint:eslint": "eslint .",
