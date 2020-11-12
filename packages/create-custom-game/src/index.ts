@@ -45,14 +45,7 @@ async function main(): Promise<number> {
 
   const useGit = isGitAvailable && !argv['no-git'];
   const packageManager = isYarnAvailable && !argv['use-npm'] ? 'yarn' : 'npm';
-  const {
-    displayName,
-    internalName,
-    includeExamples,
-    useESLint,
-    usePrettier,
-    conventionalCommits,
-  } = await ask();
+  const { displayName, internalName, includeExamples, useESLint, usePrettier } = await ask();
 
   const rootPath = path.resolve(internalName);
 
@@ -106,15 +99,6 @@ async function main(): Promise<number> {
 
   if (includeExamples) {
     templates.add('examples');
-  }
-
-  if (conventionalCommits) {
-    templates.add('conventional-commits');
-    devDependencies.add('husky');
-    devDependencies.add('@commitlint/cli');
-    devDependencies.add('@commitlint/config-conventional');
-    packageJson.husky = { hooks: { 'commit-msg': 'commitlint -E HUSKY_GIT_PARAMS' } };
-    packageJson.commitlint = { extends: '@commitlint/config-conventional' };
   }
 
   if (useESLint) {

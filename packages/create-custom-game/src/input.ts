@@ -64,10 +64,6 @@ export async function ask() {
         name: 'Enforce code style consistency with Prettier',
         checked: true,
       },
-      {
-        value: 'conventionalCommits',
-        name: 'Enforce conventional commits (https://www.conventionalcommits.org/)',
-      },
     ],
   });
 
