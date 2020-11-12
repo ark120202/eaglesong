@@ -118,6 +118,8 @@ async function main(): Promise<number> {
   }
 
   if (useESLint) {
+    templates.add('eslint');
+
     packageJson.eslintConfig = {
       extends: '@ark120202/eslint-config/node',
       parserOptions: {
@@ -130,6 +132,8 @@ async function main(): Promise<number> {
   }
 
   if (usePrettier) {
+    templates.add('prettier');
+
     packageJson.prettier = {
       printWidth: 100,
       proseWrap: 'always',
