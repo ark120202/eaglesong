@@ -31,6 +31,16 @@ export function createWebpackConfig({ context, dotaPath, addonName, outputOption
     },
     mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
     plugins: [new PanoramaTargetPlugin(), new OutputHeaderWebpackPlugin(outputOptions)],
+    cache: {
+      type: 'filesystem',
+      buildDependencies: {
+        config: [
+          __filename,
+          path.join(context, 'eaglesong.config.ts'),
+          path.join(context, 'eaglesong.config.local.ts'),
+        ],
+      },
+    },
   };
 
   const resourcesConfig: webpack.Configuration = {
