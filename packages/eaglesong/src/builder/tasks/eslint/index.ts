@@ -18,6 +18,8 @@ export default class ESLintTask extends TransformTask<Options> {
     const workerData: CLIEngine.Options = {
       extensions: this.extensions,
       cwd: this.context,
+      cache: true,
+      cacheLocation: this.resolvePath('node_modules/.cache/eaglesong/.eslintcache'),
       ...this.options,
     };
 
