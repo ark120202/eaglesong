@@ -1,0 +1,12 @@
+<root>
+  <styles>
+    <include src="s2r://panorama/styles/dotastyles.vcss_c" />
+    <include src="./styles.scss" />
+  </styles>
+
+  <scripts>
+    <include src="./script.tsx" />
+  </scripts>
+
+  <Panel class="FullWidthHeight" hittest="false" />
+</root>

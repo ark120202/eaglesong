@@ -1,0 +1,10 @@
+<root>
+  <styles>
+    <include src="s2r://panorama/styles/dotastyles.vcss_c" />
+    <include src="./styles.scss" />
+  </styles>
+
+  <Panel class="loading-screen">
+    <Label text="Hello world" />
+  </Panel>
+</root>

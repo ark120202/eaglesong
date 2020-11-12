@@ -1,0 +1,5 @@
+- import: ./loading-screen/layout.xml
+  filename: custom_loading_screen.xml
+
+- import: ./hud/layout.xml
+  type: Hud
