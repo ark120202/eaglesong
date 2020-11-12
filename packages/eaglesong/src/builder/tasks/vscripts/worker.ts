@@ -22,15 +22,33 @@ const updateConfigFile = createConfigFileUpdater({
 });
 
 const compiler = new tstl.Compiler();
+let hadErrorLastTime = true;
 
-function emit(program: ts.Program) {
+function emit(builderProgram: ts.SemanticDiagnosticsBuilderProgram) {
+  const program = builderProgram.getProgram();
   const options = program.getCompilerOptions();
   const configFileParsingDiagnostics = updateConfigFile(options);
 
   options.noEmit ||= options.outDir === undefined;
 
+  let sourceFiles: ts.SourceFile[] | undefined;
+  if (!tstl.isBundleEnabled(options) && !hadErrorLastTime) {
+    sourceFiles = [];
+    while (true) {
+      const currentFile = builderProgram.getSemanticDiagnosticsOfNextAffectedFile();
+      if (!currentFile) break;
+
+      if ('fileName' in currentFile.affected) {
+        sourceFiles.push(currentFile.affected);
+      } else {
+        sourceFiles.push(...currentFile.affected.getSourceFiles());
+      }
+    }
+  }
+
   const { diagnostics: emitDiagnostics } = compiler.emit({
     program,
+    sourceFiles,
     customTransformers: { before: [createDotaTransformer()] },
   });
 
@@ -43,6 +61,8 @@ function emit(program: ts.Program) {
     ...emitDiagnostics,
   ]);
 
+  hadErrorLastTime = emitDiagnostics.some((d) => d.category === ts.DiagnosticCategory.Error);
+
   return diagnostics.filter((diag) => diag.code !== 6059).map(convertDiagnosticToError);
 }
 
@@ -52,5 +72,5 @@ createTsAutoWatch(
   { rootDir: workerData.rootDir, outDir: workerData.outDir },
   workerData.isWatching,
   () => postMessage({ type: 'start' }),
-  (builderProgram) => postMessage({ type: 'end', errors: emit(builderProgram.getProgram()) }),
+  (builderProgram) => postMessage({ type: 'end', errors: emit(builderProgram) }),
 );
