@@ -7871,9 +7871,9 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-"typescript-to-lua@https://gist.github.com/ark120202/f3dde644322f6996f25dccf12ea70e4a/raw/1436812fe4ffd8ef689c80bb412f54c0240be75c/typescript-to-lua-0.36.0.tgz":
+"typescript-to-lua@https://gist.github.com/ark120202/f3dde644322f6996f25dccf12ea70e4a/raw/9b1caf6e274aecf6c08093850094e27857722aff/typescript-to-lua-bbb0c8a.tgz":
   version "0.36.0"
-  resolved "https://gist.github.com/ark120202/f3dde644322f6996f25dccf12ea70e4a/raw/1436812fe4ffd8ef689c80bb412f54c0240be75c/typescript-to-lua-0.36.0.tgz#28f3b725b82b8b3b150105f50a95599b8bcce97e"
+  resolved "https://gist.github.com/ark120202/f3dde644322f6996f25dccf12ea70e4a/raw/9b1caf6e274aecf6c08093850094e27857722aff/typescript-to-lua-bbb0c8a.tgz#47289010d9362a1a0ad23fa67d69cbee5167db07"
   dependencies:
     enhanced-resolve "^5.2.0"
     source-map "^0.7.3"
