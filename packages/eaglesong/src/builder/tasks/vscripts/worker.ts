@@ -52,18 +52,21 @@ function emit(builderProgram: ts.SemanticDiagnosticsBuilderProgram) {
     customTransformers: { before: [createDotaTransformer()] },
   });
 
+  const tstlDiagnostics = [...configFileParsingDiagnostics, ...emitDiagnostics];
+  hadErrorLastTime = tstlDiagnostics.some((d) => d.category === ts.DiagnosticCategory.Error);
+
   const diagnostics = ts.sortAndDeduplicateDiagnostics([
-    ...configFileParsingDiagnostics,
+    ...tstlDiagnostics,
     ...program.getOptionsDiagnostics(),
     ...program.getSyntacticDiagnostics(),
     ...program.getGlobalDiagnostics(),
     ...program.getSemanticDiagnostics(),
-    ...emitDiagnostics,
   ]);
 
-  hadErrorLastTime = emitDiagnostics.some((d) => d.category === ts.DiagnosticCategory.Error);
-
-  return diagnostics.filter((diag) => diag.code !== 6059).map(convertDiagnosticToError);
+  return diagnostics
+    .filter((diag) => diag.code !== 6059) // File '{0}' is not under 'rootDir' '{1}'. 'rootDir' is expected to contain all source files.
+    .map(tstl.prepareDiagnosticForFormatting)
+    .map(convertDiagnosticToError);
 }
 
 createTsAutoWatch(
